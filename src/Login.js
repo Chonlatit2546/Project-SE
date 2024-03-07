@@ -1,43 +1,105 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const users = [
   {
-    userName: "aaaa",
-    password: "1234",
+    userName: "admin",
+    password: "admin",
   },
   {
-    userName: "bbbb",
-    password: "5678",
+    userName: "admin1",
+    password: "admin1",
   },
   {
-    userName: "cccc",
-    password: "mmmm",
+    userName: "admin2",
+    password: "admin2",
   },
 ];
 
 function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [inputs, setInputs] = useState({});
 
-  const check = () => {
-    const user = users.find((user) => user.userName === username);
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs((values) => ({...values, [name]: value}));
+  }
 
-    if (user && user.password === password) {
-      alert("Login successful!");
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    const user = users.find((user) => user.userName === inputs.username);
+
+  
+    if (user && user.password === inputs.password) {
+      console.log('Login successful!');
+      navigate('./Home')
     } else {
-      alert("Invalid username or password!");
+      console.log('Invalid username or password!');
     }
-  };
+
+    console.log(inputs)
+  }
+
+  // const [username, setUsername] = useState('');
+  // const [password, setPassword] = useState('');
+
+  
+
+  // const check = () => {
+  //   const user = users.find((user) => user.userName === username);
+
+  //   if (user && user.password === password) {
+  //     alert("Login successful!");
+  //   } else {
+  //     alert("Invalid username or password!");
+  //   }
+  // };
 
   return (
-    <div>
+    // <div>
+    //   <p>username</p>
+    //   <div className="input-box">
+    //     <input
+    //       type="text"
+    //       id="username"
+    //       value={username}
+    //       onChange={(e) => setUsername(e.target.value)}
+    //     />
+    //   </div>
+
+    //   <p>password</p>
+
+    //   <div className="password-box">
+    //     <input
+    //       type="password"
+    //       id="password"
+    //       value={password}
+    //       onChange={(e) => setPassword(e.target.value)}
+    //     />
+    //   </div>
+
+    //   <br />
+
+    //   <div>
+    //     <button type="submit" onClick={check}>
+    //       Login
+    //     </button>
+    //   </div>
+    // </div>
+
+
+
+    <form onSubmit= {handleSubmit}>
       <p>username</p>
       <div className="input-box">
         <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type = "text"
+          id = "username"
+          name="username"
+          value = {inputs.username || ''}
+          onChange= {handleChange}
         />
       </div>
 
@@ -45,21 +107,22 @@ function Login() {
 
       <div className="password-box">
         <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          type = "password"
+          id = "password"
+          name="password"
+          value = {inputs.password || ''}
+          onChange = {handleChange}
         />
       </div>
 
       <br />
 
       <div>
-        <button type="submit" onClick={check}>
+        <button type="submit" >
           Login
         </button>
       </div>
-    </div>
+    </form>
   );
 }
 
