@@ -4,12 +4,9 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Createquotation from './Createquotation';
 import Addvendor from './Addvendor';
-<<<<<<< HEAD
 import Navbar from './components/Navbar';
-
-=======
 import Editquotation from './Editquotation';
->>>>>>> 09016b78d75b2a971edaefd2a18a05bbdb006a1f
+
 function App() {
   return (
     <div >
