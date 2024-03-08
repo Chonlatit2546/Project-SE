@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Createquotation from './Createquotation';
 import Addvendor from './Addvendor';
+import Editquotation from './Editquotation';
 function App() {
   return (
     <div >
@@ -14,6 +15,7 @@ function App() {
           <Route path='/Home' element = {<Home/>}></Route>
           <Route path='/Createquotation' element = {<Createquotation/>}></Route>
           <Route path='/Addvendor' element = {<Addvendor/>}></Route>
+          <Route path='/Editquotation' element = {<Editquotation/>}></Route>
         </Routes>
     </div>
     
