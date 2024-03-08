@@ -4,6 +4,8 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Createquotation from './Createquotation';
 import Addvendor from './Addvendor';
+import Navbar from './components/Navbar';
+
 function App() {
   return (
     <div >
@@ -12,6 +14,7 @@ function App() {
         <Routes>
           <Route path='/' element = {<Login/>}></Route>
           <Route path='/Home' element = {<Home/>}></Route>
+          <Route path='/Navbar' element = {<Navbar/>}></Route>
           <Route path='/Createquotation' element = {<Createquotation/>}></Route>
           <Route path='/Addvendor' element = {<Addvendor/>}></Route>
         </Routes>
