@@ -3,6 +3,7 @@ import Login from './Login';
 import { Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Createquotation from './Createquotation';
+import Addvendor from './Addvendor';
 function App() {
   return (
     <div >
@@ -12,6 +13,7 @@ function App() {
           <Route path='/' element = {<Login/>}></Route>
           <Route path='/Home' element = {<Home/>}></Route>
           <Route path='/Createquotation' element = {<Createquotation/>}></Route>
+          <Route path='/Addvendor' element = {<Addvendor/>}></Route>
         </Routes>
     </div>
     
