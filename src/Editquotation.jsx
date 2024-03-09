@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Editquotation(){
+function EditQuotation(){
     const [items, setItems] = useState([]);
   
     const handleAddItem = () => {
@@ -216,4 +216,4 @@ function Editquotation(){
     );
   }
  
- export default Editquotation;
+ export default EditQuotation;
