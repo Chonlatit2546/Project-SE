@@ -5,7 +5,7 @@ import Home from './Home';
 import Createquotation from './Createquotation';
 import Addvendor from './Addvendor';
 import Navbar from './components/Navbar';
-import EditQuotation from './EditQuotation';
+import Editquotation from './Editquotation';
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
           <Route path='/Navbar' element = {<Navbar/>}></Route>
           <Route path='/Createquotation' element = {<Createquotation/>}></Route>
           <Route path='/Addvendor' element = {<Addvendor/>}></Route>
-          <Route path='/EditQuotation' element = {<EditQuotation/>}></Route>
+          <Route path='/Editquotation' element = {<Editquotation/>}></Route>
         </Routes>
     </div>
     
