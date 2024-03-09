@@ -1,20 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const users = [
-  {
-    userName: "admin",
-    password: "admin",
-  },
-  {
-    userName: "admin1",
-    password: "admin1",
-  },
-  {
-    userName: "admin2",
-    password: "admin2",
-  },
-];
+import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
@@ -29,19 +15,25 @@ function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     
-    const user = users.find((user) => user.userName === inputs.username);
+    try {
+      const response = await axios.post('http://192.168.1.114/sedb/login.php', {
+        username: inputs.username,
+        password: inputs.password,
+      });
 
-  
-    if (user && user.password === inputs.password) {
-      console.log('Login successful!');
-      navigate('./Home')
-    } else {
-      console.log('Invalid username or password!');
+      if (response.data === 'Login Successfully') {
+        console.log('Login successful!');
+        navigate('/Home');
+      } else {
+        console.log('Invalid username or password!');
+        alert("Invalid username or password");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }finally {
+      setInputs({ username: '', password: '' });
     }
-
-    console.log(inputs)
-  }
-
+  };
   // const [username, setUsername] = useState('');
   // const [password, setPassword] = useState('');
 
