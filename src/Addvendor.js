@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Form, useNavigate } from 'react-router-dom';
 
-function Addvendor(){
-  const navigate = useNavigate();
-    const [input,setInput] = useState({
-        VenId:'', VenType:'', VenPhone:'', VenName:'', VenEmail:'', VenAdd:'',
-        BName:'', BAccName:'', BAccNum:''
-    });
+const data ={
+  VenId:'', VenType:'', VenPhone:'', VenName:'', VenEmail:'', VenAdd:'',
+  BName:'', BAccName:'', BAccNum:''
+}
 
-    
+function Addvendor(){
+  // const navigate = useNavigate();
+  const [input,setInput] = useState(data);
   const [allInput, setallinput] = useState([]);
 
     function handleChange(event){
@@ -48,7 +48,8 @@ function Addvendor(){
                 onChange={handleChange}
                 />
               <label for="sel1" class="form-label">Vendor Type</label>
-              <select class="form-select" id="VenType" value={input.VenType} onChange={handleChange}>
+              <select class="form-select" aria-label="Default select example" id="VenType" onChange={handleChange}>
+              <option selected>Open this select menu</option>
               <option>Company</option>
               <option>Individuals</option>
             </select>
@@ -109,7 +110,8 @@ function Addvendor(){
                 Bank information
                 
               <label for="sel1" class="form-label">Bank Name</label>
-              <select class="form-select" id="BName" value={input.BName} onChange={handleChange}>
+              <select class="form-select" aria-label="Default select example" id="BName" onChange={handleChange}>
+              <option selected>Open this select menu</option>
               <option>KBank</option>
               <option>SCB</option>
               <option>BBL</option>
@@ -142,9 +144,9 @@ function Addvendor(){
           <br />
     
           <div>
-            <button type="button" >
+            <a button type="button" href = "./Vendorlist">
               Cancel
-            </button>
+            </a>
             <button type="submit" >
               Add Vendor
             </button>
