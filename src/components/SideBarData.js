@@ -25,7 +25,7 @@ export const SidebarData = [
   },
   {
     title: "Purchase Orders",
-    path: "",
+    path: "/Purchaseorder",
     icon: <IoIcons.IoMdPaper  />,
     cName: "nav-text",
   },
