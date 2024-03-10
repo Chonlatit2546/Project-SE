@@ -6,6 +6,7 @@ import Createquotation from './Createquotation';
 import Addvendor from './Addvendor';
 import Navbar from './components/Navbar';
 import Editquotation from './Editquotation';
+import Purchaseorder from './Purchaseorder';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path='/Createquotation' element = {<Createquotation/>}></Route>
           <Route path='/Addvendor' element = {<Addvendor/>}></Route>
           <Route path='/Editquotation' element = {<Editquotation/>}></Route>
+          <Route path='/Purchaseorder' element = {<Purchaseorder/>}></Route>
         </Routes>
     </div>
     
