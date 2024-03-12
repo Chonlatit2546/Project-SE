@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {db} from './firebase';
+import { collection, getDocs, query, where } from 'firebase/firestore'; // Add this import statement
 
 function Login() {
   const navigate = useNavigate();
@@ -11,26 +12,35 @@ function Login() {
     const value = event.target.value;
     setInputs((values) => ({...values, [name]: value}));
   }
-
+ 
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    try {
-      const response = await axios.post('http://192.168.1.114/sedb/login.php', {
-        username: inputs.username,
-        password: inputs.password,
-      });
 
-      if (response.data === 'Login Successfully') {
+    try {
+      const usersCollection = await collection(db, 'account');
+      const q = query(usersCollection, where('username', '==', inputs.username));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        console.log('User not found');
+        alert('Invalid username or password');
+        return;
+      }
+
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data();
+
+      if (userData.password === inputs.password) {
         console.log('Login successful!');
         navigate('/Home');
       } else {
-        console.log('Invalid username or password!');
-        alert("Invalid username or password");
+        console.log('Invalid password');
+        alert('Invalid username or password');
       }
     } catch (error) {
       console.error('Error:', error);
-    }finally {
+    } finally {
       setInputs({ username: '', password: '' });
     }
   };
