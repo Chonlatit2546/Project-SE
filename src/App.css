@@ -96,3 +96,11 @@
 span {
   margin-left: 16px;
 }
+
+
+input{
+  margin-left: 10px;
+  border-radius:25px;
+  border: 1px solid #d3d3d3;
+  height: 25px;
+}

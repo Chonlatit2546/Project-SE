@@ -1,13 +1,13 @@
 import './App.css';
-import Login from './Login';
 import { Routes, Route } from 'react-router-dom';
-import Home from './Home';
-import Createquotation from './Createquotation';
-import Addvendor from './Addvendor';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import Createquotation from './pages/Createquotation';
+import Addvendor from './pages/Addvendor';
 import Navbar from './components/Navbar';
-import Editquotation from './Editquotation';
-import Purchaseorder from './Purchaseorder';
-import AddProduct from './AddProduct';
+import Editquotation from './pages/Editquotation';
+import Purchaseorder from './pages/Purchaseorder';
+import AddProduct from './pages/AddProduct';
 
 function App() {
   return (

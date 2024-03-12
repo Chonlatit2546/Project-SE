@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "./components/Navbar";
-import "./AddProduct.css";
+import Navbar from "../components/Navbar";
+import "./css/AddProduct.css";
 import { IoIosAddCircle } from "react-icons/io";
 import { useState } from "react";
 
@@ -95,7 +95,7 @@ function AddProduct() {
 
           <div className="Submit-Button">
             <div className="Cancle">
-              <button>Cancle</button>
+              <button className="Cancel-Button">Cancle</button>
             </div>
             <div className="Add-Product-Button">
               <button type="Submit">Add Product</button>
