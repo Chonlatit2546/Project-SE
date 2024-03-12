@@ -1,0 +1,150 @@
+.Head-Topic{
+   margin:10px;
+   color: #1d438a;
+}
+
+.Product{
+   border: 1px solid;
+   height: 150px;
+   margin: 10px;
+}
+
+.Product-info {
+   display: flex;
+   margin: 20px;
+   padding-left: 10px;
+   
+}
+
+.Product-ID{
+   padding-left: 50px;
+}
+
+.Product-Name{
+   padding-left: 50px;
+}
+
+.Description {
+   display: flex;
+   margin: 20px;
+   padding-left: 10px;
+}
+
+.Material{
+   padding-left: 25px;
+}
+
+.Color{
+   padding-left: 10px;
+}
+
+.Size{
+   padding-left: 20px;
+}
+
+.Unit{
+   padding-left: 20px;
+}
+
+#size,#unit{
+   width: 70px;
+}
+
+.Product-Own{
+   border:1px solid;
+   height: 150px;
+   margin: 10px;
+   
+}
+
+.Product-Own-Info{
+   display: flex;
+   flex-wrap: wrap;
+   margin: 20px;
+}
+
+.VendorID{
+   padding-left: 30px ;
+}
+
+.SavedDate{
+   padding-left: 30px ;
+}
+
+.UnitPrice{
+   flex-basis: 100%;
+   margin-left: 125px;
+   margin-top: 20px;
+}
+
+input{
+   margin-left: 10px;
+   border-radius:25px;
+   border: 1px solid #d3d3d3;
+   height: 25px;
+}
+
+.AddmoreProductOwn{
+   margin-top: 20px;
+   display: flex;
+}
+
+.add{
+   font-size: 10px;
+   padding-left: 10px;
+   padding-top: 2px;
+   
+}
+
+.addVendor{
+   display: flex;
+   margin-left: 30px;
+   margin-top: -4px;
+}
+
+.AddSaveDate{
+   margin-left: 20px;
+}
+
+.AddUnitPrice{
+   margin-left: 20px;
+}
+
+.Footer{
+   position: fixed; /* หรือ position: absolute */
+   bottom: 0;
+   width: 100%;
+   height: 60px;
+}
+
+.footer-manage{
+   display: flex;
+   justify-content: space-between;
+   padding: 20px;
+}
+
+.Submit-Button {
+   display: flex;
+   gap: 10px; 
+ }
+
+.Cancle,.Add-Product-Button {
+  
+  display: flex;
+}
+
+button{
+   border:1px solid;
+   border-radius: 25px;
+   height: 30px;
+   width: 60px;
+   padding: 2px;
+}
+
+.Add-Product-Button button{
+   width: 100px;
+   background-color: rgb(62, 180, 88);
+   color:white
+   
+}
+
