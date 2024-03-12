@@ -17,6 +17,12 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!inputs.username || !inputs.password) {
+      console.log('Please enter username or password');
+      alert('Please enter username or password');
+      return;
+    }
+
     try {
       const usersCollection = await collection(db, 'account');
       const q = query(usersCollection, where('username', '==', inputs.username));
