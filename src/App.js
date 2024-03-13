@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Editquotation from './pages/Editquotation';
 import Purchaseorder from './pages/Purchaseorder';
 import AddProduct from './pages/AddProduct';
+import Editvendor from './pages/Editvendor';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path='/Editquotation' element = {<Editquotation/>}></Route>
           <Route path='/Purchaseorder' element = {<Purchaseorder/>}></Route>
           <Route path='/AddProduct' element = {<AddProduct/>}></Route>
+          <Route path='/Editvendor' element = {<Editvendor/>}></Route>
         </Routes>
     </div>
     
