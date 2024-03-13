@@ -4,7 +4,7 @@
 }
 
 .Product{
-   border: 1px solid;
+   border: 1px solid #d3d3d3;
    height: 150px;
    margin: 10px;
 }
@@ -51,10 +51,10 @@
 }
 
 .Product-Own{
-   border:1px solid;
+   border:1px solid #d3d3d3;
    height: 150px;
    margin: 10px;
-   
+   margin-top: -10px;
 }
 
 .Product-Own-Info{
@@ -144,4 +144,5 @@
    color:white;
    padding: 2px;
 }
+
 
