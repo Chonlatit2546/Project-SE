@@ -1,0 +1,432 @@
+
+
+.main{
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+.status .PO h2{
+    margin-top: 0px;
+    font-size: 30px;
+}
+
+.status .Receipt h2{
+    margin-top: 0px;
+    font-size: 30px;
+}
+
+.status .Cheque-Only-Cleared h2{
+    margin-top: 0px;
+    font-size: 30px;
+}
+
+.status .PO {
+    border: 1px solid rgb(75, 177, 121);
+    border-radius: 10px;
+    width: 100px;
+    height: 35px;
+    margin: 0;
+    margin-left: 30px;
+    margin-top: 20px;
+    background-color: rgb(208, 241, 216);
+    float: left;
+    text-align: center;
+    
+}
+
+.status .Receipt {
+    border: 1px solid rgb(125, 211, 218);
+    border-radius: 10px;
+    width: 150px;
+    height: 35px;
+    margin: 0;
+    margin-left: 30px;
+    margin-top: 20px;
+    background-color: rgb(218, 240, 240);
+    float: left;
+    text-align: center;
+    
+}
+
+.status .Cheque-Only-Cleared{
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    width: 300px;
+    height: 35px;
+    margin: 0;
+    margin-left: 30px;
+    margin-top: 20px;
+    background-color: rgb(255, 255, 255);
+    float: left;
+    text-align: center;
+    
+}
+
+.Quotation {
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 10px;
+    width: auto;
+    height: 170px;
+    margin-top: 79px;
+    margin-right: 20px;
+}
+
+.customer {
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 10px;
+    width: auto;
+    height: 170px;
+    margin-top: 0px;
+    margin-right: 20px;
+}
+
+.Quotation .p1{
+    margin: 10px;
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+.Quotation .p2{
+    margin: -30px;
+    margin-right: 800px;
+    font-size: 20px;
+    float: right;
+}
+
+.Quotation .PO-ID{
+    margin: -30px;
+    margin-right: 620px;
+    font-size: 20px;
+    float: right;
+    color: rgb(55, 80, 224);
+}
+
+.Quotation .p3{
+    margin: -30px;
+    margin-right: 400px;
+    font-size: 20px;
+    float: right;
+}
+
+.Quotation .Re-No{
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 30px;
+    width: 180px;
+    margin: -30px;
+    margin-right: 210px;
+    font-size: 20px;
+    float: right;
+    text-align: center;
+}
+
+.Quotation .Re-No p{
+    margin: 0;
+    color: rgb(55, 80, 224);
+}
+
+.Quotation .Re-No .p2{
+    margin-top: -28px;
+    margin-right: 5px;
+    color: rgb(248, 0, 0);
+}
+
+.Quotation .p4{
+    margin: -30px;
+    margin-top: 40px;
+    margin-right: 750px;
+    font-size: 20px;
+    float: right;
+}
+
+.Quotation .d{
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 30px;
+    width: 150px;
+    margin: 10px;
+    margin-top: 40px;
+    margin-right: -240px;
+    font-size: 20px;
+    float: right;
+    text-align: center;
+    color: rgb(55, 80, 224);
+}
+
+.cus-data {
+    position: relative;
+    left: 100px;
+}
+
+.customer .p1{
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+.customer .p2{
+    position: relative;
+    top: -45px;
+    margin-left: 580px;
+    font-size: 20px;
+}
+
+.customer .Name{
+    position: relative;
+    right: 0px;
+    top: -89px;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 30px;
+    width: 150px;
+    margin-right: 970px;
+    font-size: 20px;
+    float: right;
+    text-align: center;
+    color: rgb(55, 80, 224);
+}
+
+.customer .p3{
+    position: relative;
+    top: -136px;
+    margin-top: -24px;
+    margin-left: 1000px;
+    font-size: 20px;
+}    
+    
+.customer .Department{
+    position: relative;
+    top: -179px;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 30px;
+    width: 180px;
+    margin-left: 1120px;
+    font-size: 20px;
+    float: left;
+    text-align: center;
+    color: rgb(55, 80, 224);
+}
+
+.customer .p4{
+    position: relative;
+    top: -226px;
+    margin-left: 1400px;
+    font-size: 20px;
+    float: left;
+}
+
+.customer .Email{
+    position: relative;
+    top: -269px;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 30px;
+    width: 230px;
+    margin-left: 1460px;
+    font-size: 20px;
+    float: left;
+    text-align: center;
+    color: rgb(55, 80, 224);
+}
+
+.customer .p5{
+    position: relative;
+    top: -246px;
+    left: -20px;
+    margin-left: 600px;
+    font-size: 20px;
+    float: left;
+}
+
+.customer .address{
+    position: relative;
+    top: -246px;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 30px;
+    width: 490px;
+    margin-left: 12px;
+    font-size: 20px;
+    float: left;
+    text-align: center;
+    color: rgb(55, 80, 224);
+}
+
+.customer .p6{
+    position: relative;
+    top: -294px;
+    margin-left: 1350px;
+    font-size: 20px;
+    float: left;
+}
+
+.customer .phone{
+    position: relative;
+    top: -336px;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 30px;
+    width: 200px;
+    margin-left: 1500px;
+    font-size: 20px;
+    float: left;
+    text-align: center;
+    color: rgb(55, 80, 224);
+}
+
+.item {
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 10px;
+    width: auto;
+    height: auto;
+    margin: 0;
+    border-collapse: collapse;
+    margin-right: 20px;
+    
+}
+
+
+
+.item .p1{
+    position: relative;
+    top: 14px;
+    left: 20px;
+    font-size: 20px;
+    
+}
+.item .p2{
+    position: relative;
+    top: -30px;
+    left: -1000px;
+    font-size: 20px;
+    
+}
+.item .p3{
+    position: relative;
+    top: -70px;
+    left: -500px;
+    font-size: 20px;
+    
+}
+.item .p4{
+    position: relative;
+    top: -115px;
+    left: -450px;
+    font-size: 20px;
+}
+.item .p5{
+    position: relative;
+    top: -160px;
+    left: 200px;
+    font-size: 20px;
+}
+.item .p6{
+    position: relative;
+    top: -205px;
+    left: 200px;
+    font-size: 20px;
+}
+
+
+
+.summary  {
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 10px;
+    width: auto;
+    height: 110px;
+    margin-top: 0px;
+    margin-right: 20px;
+    
+    
+}
+
+.summary .p1 {
+    margin: 10px;
+    margin-left: 20px;
+    font-size: 20px;
+    float: left;
+}
+
+
+
+.summary .total {
+    margin-left: 730px;
+    margin-top: 10px;
+    font-size: 20px;
+
+}
+
+.summary .vat {
+    margin-left: 730px;
+    margin-top: 20px;
+    font-size: 20px;
+
+}
+
+.tab {
+    display: inline-block;
+    margin-left: 80px;
+}
+
+.tab2 {
+    display: inline-block;
+    margin-left: 75px;
+}
+
+.summary .grand-total {
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    width: 350px;
+    height: 40px;
+    margin-right: 380px;
+    background-color: rgb(255, 136, 0);
+    margin-top: -50px;
+    font-size: 30px;
+    float: right;
+    text-align: center;
+    color: rgb(252, 252, 252);
+
+}
+
+.item-row {
+    margin-top: 50px;
+    display: flex;
+    justify-content:space-around;
+    padding: 5px 0;
+    
+    font-size: 20px;
+}
+
+.item .i1{
+    margin-top: -250px;
+    position: relative;
+    left: -110px;
+}
+.item .i2{
+    margin-top: -250px;
+    position: relative;
+    left: -100px;
+}
+
+.item .i3{
+    margin-top: -250px;
+    position: relative;
+    left: 230px;
+}
+.item .i4{
+    margin-top: -250px;
+    position: relative;
+    left: 200px;
+}
+.item .i5{
+    margin-top: -250px;
+    position: relative;
+    left: -110px;
+    left: 130px;
+}
+.item .i6{
+    margin-top: -250px;
+    position: relative;
+    left: 30px;
+}

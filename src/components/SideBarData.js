@@ -31,7 +31,7 @@ export const SidebarData = [
   },
   {
     title: "Receipts",
-    path: "",
+    path: "/SearchReceipt",
     icon: <FaIcons.FaEnvelopeOpenText />,
     cName: "nav-text",
   },

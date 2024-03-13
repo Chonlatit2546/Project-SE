@@ -1,0 +1,68 @@
+.main .s1{
+
+    font-size: 50px;
+}
+
+.create-re-bt{
+    position: relative;
+    left: 200px;
+    top: -35px;
+}
+
+.search-box .input{
+    position: relative;
+    left: 10px;
+    width: 350px;
+    height: 30px;
+    border-radius: 10px;
+}
+
+.list-po {
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    width: auto;
+    height: auto;
+    margin-right: 20px;
+    margin-top: 40px;
+    font-size: 20px;
+    
+}
+
+.list-po .title {
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    width: auto;
+    height: 40px;
+    text-align: center;
+}
+
+.list-po .l1 {
+    float: left;
+    position: relative;
+    left: 100px;
+    top: 5px;
+}
+.list-po .l2 {
+    float: left;
+    position: relative;
+    left: 300px;
+    top: 5px;
+}
+.list-po .l3 {
+    float: left;
+    position: relative;
+    left: 600px;
+    top: 5px;
+}
+.list-po .l4 {
+    float: left;
+    position: relative;
+    left: 900px;
+    top: 5px;
+}
+.list-po .l5 {
+    float: left;
+    position: relative;
+    left: 1200px;
+    top: 5px;
+}

@@ -1,4 +1,5 @@
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -9,6 +10,8 @@ import Editquotation from './pages/Editquotation';
 import Purchaseorder from './pages/Purchaseorder';
 import AddProduct from './pages/AddProduct';
 import Editvendor from './pages/Editvendor';
+import SearchReceipt from './pages/SearchReceipt';
+import CreateReceipt from './pages/CreateReceipt';
 
 function App() {
   return (
@@ -25,6 +28,8 @@ function App() {
           <Route path='/Purchaseorder' element = {<Purchaseorder/>}></Route>
           <Route path='/AddProduct' element = {<AddProduct/>}></Route>
           <Route path='/Editvendor' element = {<Editvendor/>}></Route>
+          <Route path='/CreateReceipt' element = {<CreateReceipt/>}></Route>
+          <Route path='/SearchReceipt' element = {<SearchReceipt/>}></Route>
         </Routes>
     </div>
     
