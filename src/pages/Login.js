@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { getDoc, doc } from 'firebase/firestore';
 import "./css/Login.css";
 
 function Login() {
@@ -23,36 +23,33 @@ function Login() {
       return;
     }
 
-    try {
-      const usersCollection = await collection(db, "account");
-      const q = query(
-        usersCollection,
-        where("username", "==", inputs.username)
-      );
-      const querySnapshot = await getDocs(q);
+   const { username, password } = inputs;
+  try {
+    const userDocRef = doc(db, 'account', username);
+    const userDocSnapshot = await getDoc(userDocRef);
 
-      if (querySnapshot.empty) {
-        console.log("User not found");
-        alert("Invalid username or password");
-        return;
-      }
-
-      const userDoc = querySnapshot.docs[0];
-      const userData = userDoc.data();
-
-      if (userData.password === inputs.password) {
-        console.log("Login successful!");
-        navigate("/Home");
-      } else {
-        console.log("Invalid password");
-        alert("Invalid username or password");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setInputs({ username: "", password: "" });
+    if (!userDocSnapshot.exists()) {
+      console.log('User not found');
+      alert('Invalid username or password');
+      return;
     }
-  };
+
+    const userData = userDocSnapshot.data();
+
+    if (userData.password === password) {
+      console.log('Login successful!');
+      navigate('/Home');
+    } else {
+      console.log('Invalid password');
+      alert('Invalid username or password');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
+    setInputs({ username: '', password: '' });
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit} className="Form-Login">
