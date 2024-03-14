@@ -102,7 +102,7 @@ textarea{
     border:1px solid;
     border-radius: 25px;
     height: 30px;
-    width: 60px;
+    width: 80px;
     padding: 2px;
  }
  
@@ -115,5 +115,15 @@ textarea{
     color:white;
     padding: 2px;
  }
+
+.AddButton button{
+  height: 30px;
+  width: 100px;
+  border:1px solid;
+  border-radius: 25px;
+  background-color: #00CC66;
+  color:white;
+  padding: 2px;
+}
   
   
