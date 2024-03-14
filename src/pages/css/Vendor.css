@@ -37,7 +37,7 @@
     padding-left: 50px;
 }
 .BAccNum{
-    padding-left: 470px;
+    padding-left: 468px;
 }
 
 .app-section {
@@ -56,25 +56,19 @@
     
     padding: 16px;
   }
-  /* .but {
-    text-align: right;
-    margin-right: 60px;
-  
-  } */
   
 textarea{
     margin-left: 10px;
-    /* margin-top: 10px; เพิ่มมา */
     border-radius:25px;
     border: 1px solid #d3d3d3;
-    height: 100px;
+    text-align: center; 
   }
   .form-select{
     margin-left: 10px;
     border-radius:25px;
     border: 1px solid #d3d3d3;
     height: 25px;
-    margin-top: 10px;
+    text-align: center; 
   }
 
   /* .Footer{
@@ -97,18 +91,19 @@ textarea{
  
 .Cancle{
   display: flex;
- }.SaveButton {
+ }
+
+.SaveButton {
    display: flex;
    padding-left: 10px;
  }
- .CancelButton{
-  
+
+.CancelButton{  
     border:1px solid;
     border-radius: 25px;
     height: 30px;
     width: 60px;
     padding: 2px;
-  
  }
  
  .SaveButton button{
