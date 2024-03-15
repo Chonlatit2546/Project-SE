@@ -22,7 +22,7 @@ function Navbar() {
         <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
           <ul className="nav-menu-items" onClick={showSidebar}>
             <li className="navbar-toggle">
-               <h1>SupplyPro</h1>
+               <h1 className="toggle-text">SupplyPro</h1>
               <Link to="#" className="menu-bars">
                 <Mdicons.MdOutlineArrowBackIos />
               </Link>

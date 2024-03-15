@@ -3,6 +3,10 @@
    color: #1d438a;
 }
 
+.addProduct-form label{
+   padding-right: 10px;
+}
+
 .Product{
    border: 1px solid #d3d3d3;
    height: 150px;
@@ -18,6 +22,7 @@
 
 .Product-ID{
    padding-left: 50px;
+   
 }
 
 .Product-Name{
@@ -52,9 +57,10 @@
 
 .Product-Own{
    border:1px solid #d3d3d3;
-   height: 150px;
+   height: auto;
    margin: 10px;
    margin-top: -10px;
+   overflow: hidden;
 }
 
 .Product-Own-Info{
@@ -77,10 +83,18 @@
    margin-top: 20px;
 }
 
+.Delete-addvendor{
+   border:1px solid;
+   border-radius: 25px;
+   height: 25px;
+   width: 60px;
+   margin-left: 20px;
+}
 
 .AddmoreProductOwn{
    margin-top: 20px;
    display: flex;
+   
 }
 
 .add{
@@ -90,11 +104,17 @@
    
 }
 
+.more-vendor{
+   margin-top: -10px;
+}
+
 .addVendor{
    display: flex;
    margin-left: 30px;
-   margin-top: -4px;
+   margin-top: 4px;
+
 }
+
 
 .AddSaveDate{
    margin-left: 20px;
@@ -105,16 +125,22 @@
 }
 
 .Footer{
-   position: fixed; 
+   position: fixed;
    bottom: 0;
    width: 100%;
-   height: 60px;
+   height: 70px;
+   border-top: 1px solid #ccc;
+   background-color: white;
+   justify-content: space-between;
 }
 
 .footer-manage{
    display: flex;
    justify-content: space-between;
-   padding: 20px;
+   margin:20px;
+   height: 100%;
+   
+   
 }
 
 .Submit-Button {
