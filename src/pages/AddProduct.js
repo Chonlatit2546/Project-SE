@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 
 function AddProduct() {
   const navigate = useNavigate();
-  const [AddProductOwn, setAddProductOwn] = useState(false);
 
   const [product, setProduct] = useState({
     productID: "",
@@ -25,6 +24,8 @@ function AddProduct() {
 
   const [newProductID, setNewProductID] = useState("");
   const [newProductOwnID, setNewProductOwnID] = useState("");
+
+  const [AddProductOwn, setAddProductOwn] = useState([]);
 
   useEffect(() => {
     const checkAmountofProductDoc = async () => {
@@ -63,6 +64,35 @@ function AddProduct() {
     try {
       if ((product.saveDate || product.unitPrice) && !product.vendorID) {
         throw new Error("Please fill in vendorID");
+      }
+
+      if (product.vendorID && AddProductOwn) {
+        const productOwnCollectionRef = collection(db, "productOwn");
+
+        const productDocRef = doc(db, "product", newProductID);
+        // เพิ่มข้อมูลของ Product Own ที่ถูกเพิ่มเข้ามาผ่านอินพุตฟิลด์
+        await Promise.all(
+          AddProductOwn.map(async (productOwn, index) => {
+            const nextNewProductOwnID = `pdv${String(
+              Number(newProductOwnID.slice(3)) + index + 1
+            ).padStart(4, "0")}`;
+            console.log("addmore", nextNewProductOwnID);
+            console.log(productOwn);
+            console.log(productOwn.vendorID);
+            console.log(productOwn.saveDate);
+            console.log(productOwn.unitPrice);                
+            
+            
+            const vendorDocRef = doc(db, "vendor", productOwn.vendorID);
+
+            await setDoc(doc(productOwnCollectionRef, nextNewProductOwnID), {
+              prodID: productDocRef,
+              venID: vendorDocRef,
+              savedDate: productOwn.saveDate || "",
+              unitPrice: productOwn.unitPrice || ""
+            });
+          })
+        );
       }
 
       const productCollectionRef = collection(db, "product");
@@ -104,6 +134,23 @@ function AddProduct() {
 
       checkAmountofProductDoc();
 
+      const checkAmountofProductOwnDoc = async () => {
+        try {
+          const productOwnDoc = await getDocs(collection(db, "productOwn"));
+          const prodOwn_docCount = productOwnDoc.size;
+          const newProductOwnID = `pdv${String(prodOwn_docCount + 1).padStart(
+            4,
+            "0"
+          )}`;
+          setNewProductOwnID(newProductOwnID);
+          console.log("amount of productOwn", newProductOwnID);
+        } catch (e) {
+          console.log("Error", e);
+        }
+      };
+
+      checkAmountofProductOwnDoc();
+
       setProduct({
         productID: "",
         productName: "",
@@ -115,6 +162,8 @@ function AddProduct() {
         saveDate: "",
         unitPrice: "",
       });
+
+      setAddProductOwn([]);
 
       navigate("/AddProduct");
       alert("add successful");
@@ -136,6 +185,8 @@ function AddProduct() {
       saveDate: "",
       unitPrice: "",
     });
+
+    setAddProductOwn([]);
   };
 
   const handleChange = (e) => {
@@ -146,13 +197,31 @@ function AddProduct() {
     }));
   };
 
+  const addProductOwn = () => {
+    setAddProductOwn([...AddProductOwn, {}]);
+  };
+
+  const handleAddProductOwnChange = (e, index) => {
+    const { id, value } = e.target;
+    const updatedProductOwns = [...AddProductOwn];
+    updatedProductOwns[index][id] = value;
+
+    setAddProductOwn(updatedProductOwns);
+  };
+
+  const deleteProductOwn = (index) => {
+    const updatedProductOwns = [...AddProductOwn];
+    updatedProductOwns.splice(index, 1);
+    setAddProductOwn(updatedProductOwns);
+  };
+
   return (
     <div>
       <Navbar />
       <h1 className="Head-Topic"> Add product</h1>
 
       <div className="addProduct-form">
-        <form >
+        <form>
           <div className="Product">
             <div className="Product-info">
               Product
@@ -246,24 +315,44 @@ function AddProduct() {
                 ></input>
               </div>
               <div className="AddmoreProductOwn">
-                <IoIosAddCircle onClick={() => setAddProductOwn(true)} />
+                <IoIosAddCircle onClick={addProductOwn} />
                 <label className="add">Add more Product Own</label>
-                {AddProductOwn && (
-                  <div className="addVendor">
-                    <div className="addVendorID">
-                      <label htmlFor="vendorID">VendorID</label>
-                      <input type="text" id="vendorID"></input>
+                
+                <div className="more-vendor">
+                  {AddProductOwn.map((productOwn, index) => (
+                    <div key={index} className="addVendor">
+                      <div className="addVendorID">
+                        <label htmlFor= "vendorID">VendorID</label>
+                        <input
+                          type="text"
+                          id= "vendorID"
+                          onChange={(e) => handleAddProductOwnChange(e, index)}
+                          value= {productOwn.vendorID}
+                        ></input>
+                      </div>
+                      <div className="AddSaveDate">
+                        <label htmlFor= "saveDate">Saved Date</label>
+                        <input
+                          type="date"
+                          id= "saveDate"
+                          onChange={(e) => handleAddProductOwnChange(e, index)}
+                          value= {productOwn.saveDate}
+                        ></input>
+                      </div>
+                      <div className="AddUnitPrice">
+                        <label htmlFor= "unitPrice">Unit Price</label>
+                        <input
+                          type="text"
+                          id="unitPrice"
+                          onChange={(e) => handleAddProductOwnChange(e, index)}
+                          value= {productOwn.unitPrice}
+                        ></input>
+                      </div>
+                      <button className="Delete-addvendor" type="button" onClick={() => deleteProductOwn(index)}>Delete</button>
+                      <br />
                     </div>
-                    <div className="AddSaveDate">
-                      <label htmlFor="addSaveDate">Saved Date</label>
-                      <input type="date" id="saveDate"></input>
-                    </div>
-                    <div className="AddUnitPrice">
-                      <label htmlFor="addUnitPrice">Unit Price</label>
-                      <input type="text" id="unitPrice"></input>
-                    </div>
-                  </div>
-                )}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -271,19 +360,23 @@ function AddProduct() {
       </div>
 
       <footer className="Footer">
-        <hr></hr>
+        
         <div className="footer-manage">
+        
           <div>
             <label>ProductID: {newProductID}</label>
           </div>
 
           <div className="Submit-Button">
             <div className="Cancle">
-              <button className="Cancel-Button" onClick={Cancel}>Cancle</button>
+              <button className="Cancel-Button" onClick={Cancel}>
+                Cancle
+              </button>
             </div>
             <div className="Add-Product-Button" onClick={addProduct}>
               <button type="Submit">Add Product</button>
             </div>
+            
           </div>
         </div>
       </footer>
