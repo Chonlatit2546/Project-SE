@@ -66,10 +66,17 @@ function AddProduct() {
         throw new Error("Please fill in vendorID");
       }
 
+      const hasEmptyVendorID = AddProductOwn.some(
+        (productOwn) => (!productOwn.vendorID) && (productOwn.saveDate || productOwn.unitPrice)
+      );
+
+      if (hasEmptyVendorID) {
+        throw new Error("Please fill in vendorID for each Product Own");
+      }
+
       if (product.vendorID && AddProductOwn) {
         const productOwnCollectionRef = collection(db, "productOwn");
-
-        const productDocRef = doc(db, "product", newProductID);
+        
         // เพิ่มข้อมูลของ Product Own ที่ถูกเพิ่มเข้ามาผ่านอินพุตฟิลด์
         await Promise.all(
           AddProductOwn.map(async (productOwn, index) => {
@@ -80,16 +87,16 @@ function AddProduct() {
             console.log(productOwn);
             console.log(productOwn.vendorID);
             console.log(productOwn.saveDate);
-            console.log(productOwn.unitPrice);                
+            console.log(productOwn.unitPrice);
             
-            
+            const productDocRef = doc(db, "product", newProductID);
             const vendorDocRef = doc(db, "vendor", productOwn.vendorID);
 
             await setDoc(doc(productOwnCollectionRef, nextNewProductOwnID), {
               prodID: productDocRef,
               venID: vendorDocRef,
               savedDate: productOwn.saveDate || "",
-              unitPrice: productOwn.unitPrice || ""
+              unitPrice: productOwn.unitPrice || "",
             });
           })
         );
@@ -198,6 +205,8 @@ function AddProduct() {
   };
 
   const addProductOwn = () => {
+
+  
     setAddProductOwn([...AddProductOwn, {}]);
   };
 
@@ -317,38 +326,44 @@ function AddProduct() {
               <div className="AddmoreProductOwn">
                 <IoIosAddCircle onClick={addProductOwn} />
                 <label className="add">Add more Product Own</label>
-                
+
                 <div className="more-vendor">
                   {AddProductOwn.map((productOwn, index) => (
                     <div key={index} className="addVendor">
                       <div className="addVendorID">
-                        <label htmlFor= "vendorID">VendorID</label>
+                        <label htmlFor="vendorID">VendorID</label>
                         <input
                           type="text"
-                          id= "vendorID"
+                          id="vendorID"
                           onChange={(e) => handleAddProductOwnChange(e, index)}
-                          value= {productOwn.vendorID}
+                          value={productOwn.vendorID}
                         ></input>
                       </div>
                       <div className="AddSaveDate">
-                        <label htmlFor= "saveDate">Saved Date</label>
+                        <label htmlFor="saveDate">Saved Date</label>
                         <input
                           type="date"
-                          id= "saveDate"
+                          id="saveDate"
                           onChange={(e) => handleAddProductOwnChange(e, index)}
-                          value= {productOwn.saveDate}
+                          value={productOwn.saveDate}
                         ></input>
                       </div>
                       <div className="AddUnitPrice">
-                        <label htmlFor= "unitPrice">Unit Price</label>
+                        <label htmlFor="unitPrice">Unit Price</label>
                         <input
                           type="text"
                           id="unitPrice"
                           onChange={(e) => handleAddProductOwnChange(e, index)}
-                          value= {productOwn.unitPrice}
+                          value={productOwn.unitPrice}
                         ></input>
                       </div>
-                      <button className="Delete-addvendor" type="button" onClick={() => deleteProductOwn(index)}>Delete</button>
+                      <button
+                        className="Delete-addvendor"
+                        type="button"
+                        onClick={() => deleteProductOwn(index)}
+                      >
+                        Delete
+                      </button>
                       <br />
                     </div>
                   ))}
@@ -360,9 +375,7 @@ function AddProduct() {
       </div>
 
       <footer className="Footer">
-        
         <div className="footer-manage">
-        
           <div>
             <label>ProductID: {newProductID}</label>
           </div>
@@ -376,7 +389,6 @@ function AddProduct() {
             <div className="Add-Product-Button" onClick={addProduct}>
               <button type="Submit">Add Product</button>
             </div>
-            
           </div>
         </div>
       </footer>
