@@ -151,8 +151,8 @@ function AddProduct() {
       <Navbar />
       <h1 className="Head-Topic"> Add product</h1>
 
-      <div className="">
-        <form>
+      <div className="addProduct-form">
+        <form >
           <div className="Product">
             <div className="Product-info">
               Product
@@ -274,7 +274,7 @@ function AddProduct() {
         <hr></hr>
         <div className="footer-manage">
           <div>
-            <label>ProductID {}</label>
+            <label>ProductID: {newProductID}</label>
           </div>
 
           <div className="Submit-Button">
