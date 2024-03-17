@@ -302,6 +302,7 @@ const handleQuotationNoChange = (event) => {
 
   return (
     <div>
+      <Navbar />
       <header style={{ backgroundColor: '#9faed2', color: '#fff', padding: '10px' }}>
         <h1>SupplyPro</h1>
       </header>
