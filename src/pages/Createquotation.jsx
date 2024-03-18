@@ -182,11 +182,8 @@ const handleQuotationNoChange = (event) => {
 };*/
 const handleItemChange = async(event, index) => {
   const { name, value } = event.target;
-  // Check if the name is 'description' to handle product selection
-  if (name === 'description') {
-    // Find the selected product based on its id
+   if (name === 'description') {
     const selectedProduct = products.find(product => product.id === value);
-    // If the selected product exists and has a unit, set the unit in the state
     const unit = selectedProduct && selectedProduct.unit ? selectedProduct.unit : '';
     setQuotation((prevQuotation) => ({
       ...prevQuotation,
@@ -195,7 +192,6 @@ const handleItemChange = async(event, index) => {
       ),
     }));
   } else {
-    // If the changed field is not 'description', update the item value directly
     setQuotation((prevQuotation) => ({
       ...prevQuotation,
       items: prevQuotation.items.map((item, i) =>
@@ -250,19 +246,27 @@ const handleItemChange = async(event, index) => {
 
   const handleSaveDraft = async () => {
     try {
+      if (
+        !quotation.issuedDate ||
+        !quotation.expiredDate ||
+        !quotation.cusName ||
+        !quotation.cusAddress ||
+        !quotation.cusPhoneNo
+      ) {
+        alert('Please fill in all required fields before saving the draft.');
+        return;
+      }
 
-      const isEmptyItem = quotation.items.some(item => (
-        item.description === '' || item.quantity === '' || item.unitPrice === ''
-      ));
-
-      const isEmptyRequiredField = Object.entries(requiredFields).some(
-        ([field, isRequired]) => isRequired && !quotation[field]
+      const isEmptyItem = quotation.items.some(
+        (item) =>
+          item.description === '' ||
+          item.quantity === '' ||
+          item.unitPrice === ''
       );
   
-
-      if (isEmptyItem || isEmptyRequiredField) {
+      if (isEmptyItem) {
         alert('Please fill in all item details before saving the draft.');
-        return; // Exit the function if any item is empty
+        return; 
       }
 
       const userDocRef = doc(db, 'account', username);
