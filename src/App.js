@@ -10,6 +10,7 @@ import Editquotation from './pages/Editquotation';
 import Purchaseorder from './pages/Purchaseorder';
 import AddProduct from './pages/AddProduct';
 import Editvendor from './pages/Editvendor';
+import Vendorlist from './pages/Vendorlist';
 import SearchReceipt from './pages/SearchReceipt';
 import CreateReceipt from './pages/CreateReceipt';
 
@@ -28,6 +29,7 @@ function App() {
           <Route path='/Purchaseorder' element = {<Purchaseorder/>}></Route>
           <Route path='/AddProduct' element = {<AddProduct/>}></Route>
           <Route path='/Editvendor' element = {<Editvendor/>}></Route>
+          <Route path='/Vendorlist' element = {<Vendorlist/>}></Route>
           <Route path='/CreateReceipt' element = {<CreateReceipt/>}></Route>
           <Route path='/SearchReceipt' element = {<SearchReceipt/>}></Route>
         </Routes>

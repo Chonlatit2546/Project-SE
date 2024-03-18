@@ -10,7 +10,7 @@ function Vendorlist (){
     const [vendor, setVendor] = useState([]);
     useEffect(() => {
 
-        const unsub = onSnapshot(
+        const addtolist = onSnapshot(
           collection(db, "vendor"),
           (snapShot) => {
             let list = [];
@@ -25,7 +25,7 @@ function Vendorlist (){
         );
      
         return () => {
-          unsub();
+          addtolist();
         };
       }, []);
     

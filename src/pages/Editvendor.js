@@ -117,7 +117,7 @@ function Editvendor(){
                   <div className='VenAdd'>
                     <label htmlFor=''>Address</label>
                     <textarea
-                    rows='5'
+                    rows='3'
                     cols={40}
                     type='text'
                     name='VenAdd'

@@ -4,6 +4,7 @@ import { collection, getDocs, doc, deleteDoc, setDoc, addDoc } from "firebase/fi
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
+import "./css/Vendor.css"
 
 function Addvendor() {
   const navigate = useNavigate();

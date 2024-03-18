@@ -37,7 +37,7 @@ export const SidebarData = [
   },
   {
     title: "Vendor List",
-    path: "/Addvendor",
+    path: "/Vendorlist",
     icon: <IoIcons.IoMdPeople  />,
     cName: "nav-text",
   },
