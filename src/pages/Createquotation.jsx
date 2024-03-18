@@ -1,190 +1,501 @@
-import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
+import React, { useState, useEffect } from 'react';
+import { getDocs, collection, addDoc, setDoc, doc, getDoc, query, where } from 'firebase/firestore';
+import { db } from '../firebase'; 
+import Navbar from "../components/Navbar";
+import { useUser } from './UserContext';
+
 function CreateQuotation() {
-  const [items, setItems] = useState([]);
+  const { username } = useUser(); 
+  console.log("Username in Quo:", username);
+  const { user, setUser } = useState(); 
+  const [productPOData, setProductPOData] = useState([]);
+  const [approved, setApproved] = useState(false);
+  const [requiredFields, setRequiredFields] = useState({
+    issuedDate: false,
+    expiredDate: false,
+    cusName: false,
+    cusAddress: false,
+    cusPhoneNo: false,
+  });
+  const [quotation, setQuotation] = useState({
+    empUser: '',
+    issuedDate: '',
+    expiredDate: '',
+    cusName: '',
+    cusDepartment: '',
+    cusEmail: '',
+    cusAddress: '',
+    cusPhoneNo: '',
+    quotationNo: '',
+    items: [{
+      description: '',
+      quantity: '',
+      unit: '',
+      unitPrice: '',
+    }],
+  });
+  
+  /*const fetchQuotationByNumber = async (quotationNumber) => {
+    try {
+      const quotationQuery = query(collection(db, 'productPO'), where('quotationNo', '==', quotationNumber));
+      const querySnapshot = await getDocs(quotationQuery);
+      
+      if (!querySnapshot.empty) {
+        const productPOData = querySnapshot.docs[0].data();
+  
+        // Extract product information references from productPOData
+        const productReferences = [];
+        for (let key in productPOData) {
+          if (key.startsWith('productNo')) {
+            productReferences.push(productPOData[key][0]); // Assuming the reference is at index 0
+          }
+        }
+  
+        // Fetch product documents using the references
+        const products = await Promise.all(productReferences.map(async (productRef) => {
+          const productDoc = await getDoc(productRef);
+          return productDoc.exists() ? productDoc.data() : null;
+        }));
+  
+        console.log('Product Information:', products);
+      } else {
+        console.log('Quotation not found.');
+      }
+    } catch (error) {
+      console.error('Error fetching quotation: ', error);
+    }
+  };*/
+
+  useEffect(() => {
+    const fetchProductPOData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'productPO'));
+        const documentCount = querySnapshot.size;
+        const nextProductPONo = `pdPO${String(documentCount + 1).padStart(4, '0')}`; 
+        setProductPOData((prevQuotation) => ({
+          ...prevQuotation,
+          quotationNo: nextProductPONo,
+        }));
+      } catch (error) {
+          console.error('Error fetching productPO data:', error);
+        }
+      };
+  
+  fetchProductPOData();
+}, []);
+  
+  useEffect(() => {
+    const fetchLatestDocumentId = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'quotation'));
+        const documentCount = querySnapshot.size;
+        const nextQuotationNo = `Q${String(documentCount + 1).padStart(8, '0')}`;
+        setQuotation((prevQuotation) => ({
+          ...prevQuotation,
+          quotationNo: nextQuotationNo,
+        }));
+      } catch (error) {
+        console.error('Error fetching latest document ID: ', error);
+      }
+    };
+    fetchLatestDocumentId();
+  }, []);
+
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'product'));
+        const productsData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setProducts(productsData);
+      } catch (error) {
+        console.error('Error fetching products: ', error);
+      }
+    };
+    fetchProducts();
+  }, []);
+/*
+  useEffect(() => {
+    const fetchQuotationByNumber = async (quotationNumber) => {
+      try {
+        const quotationQuery = query(collection(db, 'quotation'), where('quotationNo', '==', quotationNumber));
+        const querySnapshot = await getDocs(quotationQuery);
+        if (!querySnapshot.empty) {
+          const productPOData = querySnapshot.docs[0].data();
+          const quotationRef = productPOData.quotation;
+          const quotationDoc = await getDoc(quotationRef);
+          if (quotationDoc.exists()) {
+            const quotationData = quotationDoc.data();
+            setQuotation(quotationData);
+          } else {
+            console.log('Quotation not found.');
+          }
+        } else {
+          console.log('Quotation not found.');
+        }
+      } catch (error) {
+        console.error('Error fetching quotation: ', error);
+      }
+    };
+    
+
+    if (quotation.quotationNo) {
+      fetchQuotationByNumber(quotation.quotationNo);
+    }
+  }, [quotation.quotationNo]);
+ */
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        if (username) {
+          const userDoc = await getDoc(doc(db, 'account', username));
+          if (userDoc.exists()) {
+            setUser(userDoc.data());
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUser();
+  }, [username]);
+
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setQuotation((prevQuotation) => ({ ...prevQuotation, [name]: value }));
+    if (requiredFields.hasOwnProperty(name)) {
+      setRequiredFields((prevFields) => ({ ...prevFields, [name]: !!value }));
+    }
+  };
+/*
+const handleQuotationNoChange = (event) => {
+  const { value } = event.target;
+  setQuotation(prevQuotation => ({
+    ...prevQuotation,
+    quotationNo: value
+  }));
+  fetchQuotationByNumber(value); // Fetch quotation data when quotation number changes
+};*/
+const handleItemChange = async(event, index) => {
+  const { name, value } = event.target;
+   if (name === 'description') {
+    const selectedProduct = products.find(product => product.id === value);
+    const unit = selectedProduct && selectedProduct.unit ? selectedProduct.unit : '';
+    setQuotation((prevQuotation) => ({
+      ...prevQuotation,
+      items: prevQuotation.items.map((item, i) =>
+        i === index ? { ...item, [name]: value, unit: unit } : item
+      ),
+    }));
+  } else {
+    setQuotation((prevQuotation) => ({
+      ...prevQuotation,
+      items: prevQuotation.items.map((item, i) =>
+        i === index ? { ...item, [name]: value } : item
+      ),
+    }));
+  }
+};
+
 
   const handleAddItem = () => {
     const newItem = {
-      itemNumber: items.length + 1,
-      quantity: 1.00,
-      unit: 'Pcs.',
-      unitPrice: 100.00
+      description: '',
+      quantity: '',
+      unit: '',
+      unitPrice: '',
     };
-
-    setItems([...items, newItem]);
+    setQuotation((prevQuotation) => ({
+      ...prevQuotation,
+      items: [...prevQuotation.items, newItem],
+    }));
   };
 
-  const updateTotal = () => {
-    let total = 0;
-    items.forEach(item => {
-      total += item.quantity * item.unitPrice;
-    });
+  const handleDeleteItem = (index) => {
+    setQuotation((prevQuotation) => ({
+      ...prevQuotation,
+      items: prevQuotation.items.filter((item, i) => i !== index),
+    }));
+  };
 
+  const calculateTotal = () => {
+    let total = 0;
+    if (quotation.items) {
+      quotation.items.forEach((item) => {
+        total += item.quantity * item.unitPrice;
+      });
+    }
     return total.toFixed(2);
   };
+  
+  const calculateVAT = () => {
+    const total = calculateTotal();
+    const vat = total * 0.07;
+    return vat.toFixed(2);
+  };
+
+  const calculateGrandTotal = () => {
+    const total = parseFloat(calculateTotal());
+    const vat = parseFloat(calculateVAT());
+    return (total + vat).toFixed(2);
+  };
+
+  const handleSaveDraft = async () => {
+    try {
+      if (
+        !quotation.issuedDate ||
+        !quotation.expiredDate ||
+        !quotation.cusName ||
+        !quotation.cusAddress ||
+        !quotation.cusPhoneNo
+      ) {
+        alert('Please fill in all required fields before saving the draft.');
+        return;
+      }
+
+      const isEmptyItem = quotation.items.some(
+        (item) =>
+          item.description === '' ||
+          item.quantity === '' ||
+          item.unitPrice === ''
+      );
+  
+      if (isEmptyItem) {
+        alert('Please fill in all item details before saving the draft.');
+        return; 
+      }
+
+      const userDocRef = doc(db, 'account', username);
+      const querySnapshot = await getDocs(collection(db, 'productPO'));
+      const documentCount = querySnapshot.size;
+      const currProductPONo = `pdPO${String(documentCount).padStart(4, '0')}`;
+      const nextProductPONo = `pdPO${String(documentCount + 1).padStart(4, '0')}`;
+      const nextQuotationNo = `Q${String(documentCount + 1).padStart(8, '0')}`;
+      
+
+    const productPOData = quotation.items.map((item, index) => {
+    return {
+    [`productNo${index + 1}`]: {
+      description: doc(db, 'product', item.description), // Assuming productId is the ID of the product
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+    },
+    quotationNo: quotation.quotationNo,
+  };
+}).reduce((acc, curr) => ({ ...acc, ...curr }), {});
+    const quotationData = {
+      ...quotation,
+      empUser: userDocRef,
+    };
+    delete quotationData.quotationNo;
+    delete quotationData.items;
+    if (quotation.quotationNo !== nextQuotationNo) {
+      await setDoc(doc(db, 'quotation', quotation.quotationNo), quotationData);
+      await setDoc(doc(db, 'productPO', currProductPONo), productPOData);
+      console.log('Draft updated with ID: ', quotation.quotationNo);
+      alert('Draft updated successfully');
+    } else {
+      await setDoc(doc(db, 'quotation', nextQuotationNo), quotationData);
+      await setDoc(doc(db, 'productPO', nextProductPONo), productPOData);
+      console.log('New draft saved with ID: ', nextQuotationNo);
+      alert('Draft saved successfully');
+    }
+  } catch (error) {
+    console.error('Error saving draft: ', error);
+  }
+};
+
+  const handleApproveQuotation = async () => {
+    try {
+      await handleSaveDraft();
+      setApproved(true);
+      alert('Quotation approved successfully');
+  } catch (error) {
+    console.error('Error saving draft: ', error);
+  }
+};
+
+  const handleCancel = () => {
+    const confirmCancel = window.confirm("Are you sure you want to cancel this quotation?");
+    if (confirmCancel) {
+      setQuotation({
+        issuedDate: '',
+    expiredDate: '',
+    cusName: '',
+    cusDepartment: '',
+    cusEmail: '',
+    cusAddress: '',
+    cusPhoneNo: '',
+    quotationNo: '',
+    items: [{
+      description: '',
+      quantity: '',
+      unit: '',
+      unitPrice: '',
+        }],
+      });
+    }
+  };
+
+  const isEditable = !approved;
 
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <header style={{ backgroundColor: '#9faed2', color: '#fff', padding: '10px' }}>
         <h1>SupplyPro</h1>
       </header>
       <main style={{ padding: '20px' }}>
         <h2 style={{ marginTop: '0' }}>Create Quotation</h2>
-        
-        <section style={{ border: '1px solid #ccc', padding: '10px', display: 'flex', flexDirection: 'column' }} className="quotation-info">
-  <div style={{ textAlign: 'left' }}>
-    <label>Quotation</label>
-    <div style={{ textAlign: 'right', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-  <div style={{ marginLeft: '10px' }}>
-    <label>Refer To </label>
-    <input type="text" placeholder="" />
-  </div>
-  <div>
-    <label>Quotation No. </label>
-    <input type="text" placeholder="" />
-  </div>
-</div>
-  
-</div>
-  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-    <div style={{ textAlign: 'right', marginRight: '10px' }}>
-      <label>Issued Date</label>
-      <input type="text" placeholder="" />
-    </div>
-    <div style={{ textAlign: 'right' }}>
-      <label>Expired Date</label>
-      <input type="text" placeholder="" />
-    </div>
-  </div>
-</section>
-         {/* Customer Section */}
-         <section style={{ border: '1px solid #ccc', padding: '10px', display: 'flex', flexDirection: 'column' }} className="customer-info">
-          <div style={{ textAlign: 'left' }}>
-            <label>Customer</label>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <div style={{ textAlign: 'right', marginRight: '10px' }}>
-              <label>Customer Name </label>
-              <input type="text" id="customerName" placeholder="" />
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <label>Department </label>
-              <input type="text" id="department " placeholder="" />
-            </div>
-            <div style={{ textAlign: 'right', marginRight: '10px' }}>
-              <label>Email </label>
-              <input type="text" id="email" placeholder="" />
-            </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <div style={{ textAlign: 'right', marginRight: '10px' }}>
-              <label>Customer Address </label>
-              <input type="text" id="email" placeholder="" />
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <label>Phone Number </label>
-              <input type="text" id="phone" placeholder="" />
-            </div>
-          </div>
-        </section>
-        <section style={{ border: '1px solid #ccc', padding: '10px' }} className="item-list">
-  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-    <thead>
-      <tr>
-        <th>Item</th>
-        <th>Description</th>
-        <th>Quantity</th>
-        <th>Unit</th>
-        <th>Unit Price</th>
-        <th>Amount</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {items.map((item, index) => (
-        <tr key={index}>
-          <td>{index + 1}</td>
-          <td>
-            <input type="text" placeholder="Description" />
-          </td>
-          <td>
-            <input
-              type="number"
-              value={item.quantity}
-              onChange={(e) => {
-                const updatedItems = [...items];
-                updatedItems[index].quantity = parseFloat(e.target.value);
-                setItems(updatedItems);
-              }}
-            />
-          </td>
-          <td>
+
+        {/* Quotation Info */}
+        <section className="quotation-info">
+        <div>
+            <label>Quotation No.</label>
             <input
               type="text"
-              value={item.unit}
-              onChange={(e) => {
-                const updatedItems = [...items];
-                updatedItems[index].unit = e.target.value;
-                setItems(updatedItems);
-              }}
+              name="quotationNo"
+              value={quotation.quotationNo}
+              onChange={handleChange}
+              readOnly
             />
-          </td>
-          <td>
-            <input
-              type="number"
-              value={item.unitPrice}
-              onChange={(e) => {
-                const updatedItems = [...items];
-                updatedItems[index].unitPrice = parseFloat(e.target.value);
-                setItems(updatedItems);
-              }}
-            />
-          </td>
-          <td>{(item.quantity * item.unitPrice).toFixed(2)}</td>
-          <td>
-            <button
-              onClick={() => {
-                const updatedItems = [...items];
-                updatedItems.splice(index, 1);
-                setItems(updatedItems);
-              }}
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-  <button className="add-item-btn" onClick={handleAddItem}>
-    Add Item
-  </button>
-</section>
-
-
-
-
-
-<section style={{ border: '1px solid #ccc', padding: '10px' }} className="summary">
-  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-  <div style={{ textAlign: 'left' }}>
-            <label>Summary</label>
           </div>
-    <tbody>
-      <tr>
-        <td>Total:</td>
-        <td>{updateTotal()} THB</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
-     
-        
-        <section style={{ marginTop: '10px' }} className="actions">
-          <button className="cancel-btn">Cancel</button>
-          <button className="save-draft-btn">Save Draft</button>
-          <button className="approve-btn">Approve Quotation</button>
+          <div>
+            <label>Issued Date</label>
+            <input
+              type="date"
+              name="issuedDate"
+              value={quotation.issuedDate}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Expired Date</label>
+            <input
+              type="date"
+              name="expiredDate"
+              value={quotation.expiredDate}
+              onChange={handleChange}
+            />
+          </div>
+        </section>
+
+        {/* Customer Section */}
+        <section className="customer-info">
+          <div>
+            <label>Customer Name</label>
+            <input
+              type="text"
+              name="cusName"
+              value={quotation.cusName}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Department</label>
+            <input
+              type="text"
+              name="cusDepartment"
+              value={quotation.cusDepartment}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Email</label>
+            <input
+              type="email"
+              name="cusEmail"
+              value={quotation.cusEmail}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Address</label>
+            <input
+              type="text"
+              name="cusAddress"
+              value={quotation.cusAddress}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Phone Number</label>
+            <input
+              type="text"
+              name="cusPhoneNo"
+              value={quotation.cusPhoneNo}
+              onChange={handleChange}
+            />
+          </div>
+        </section>
+
+        {/* Item List */}
+        <section className="item-list">
+          {quotation.items.map((item, index) => (
+            <div key={index}>
+              <label>{index + 1}</label> {/* Number in front of description box */}
+            <select
+                name="description"
+                value={item.description}
+                onChange={(e) => handleItemChange(e, index)}
+              >
+                <option value="">Select Product</option>
+                {products.map((product, idx) => (
+                  <option key={idx} value={product.id}>{`${product.id}${product.productName}${product.material ? ' - ' + product.material : ''}${product.color ? ', ' + product.color : ''}${product.size ? ', ' + product.size : ''}`}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="number"
+                name="quantity"
+                placeholder="Quantity"
+                value={item.quantity}
+                onChange={(e) => handleItemChange(e, index)}
+              />
+              <input
+                type="text"
+                name="unit"
+                placeholder="Unit"
+                value={item.unit}
+                onChange={(e) => handleItemChange(e, index)}
+              />
+    <input
+      type="number"
+      name="unitPrice"
+      placeholder="Unit Price"
+      value={item.unitPrice}
+      onChange={(e) => handleItemChange(e, index)}
+    />
+    <button onClick={() => handleDeleteItem(index)}>Delete</button>
+  </div>
+))}
+          <button onClick={handleAddItem}>Add Item</button>
+        </section>
+        {/* Summary */}
+        <section className="summary">
+        <div>
+            <label>Total:</label>
+            <span>{calculateTotal()} THB</span>
+        </div>
+        <div>
+            <label>VAT (7%):</label>
+            <span>{calculateVAT()} THB</span>
+          </div>
+          <div>
+            <label>Grand Total:</label>
+            <span>{calculateGrandTotal()} THB</span>
+          </div>
+
+        </section>
+        {/* Actions */}
+        <section className="actions">
+        <button className="cancel-btn"onClick={handleCancel}>Cancel</button>
+        {isEditable && (<button className="save-draft-btn"onClick={handleSaveDraft}>Save Draft</button>)}
+        {!approved && <button className="approve-btn" onClick={handleApproveQuotation}>Approve Quotation</button>}
         </section>
       </main>
     </div>
