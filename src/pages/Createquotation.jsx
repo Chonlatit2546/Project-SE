@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { getDocs, collection, addDoc, setDoc, doc, getDoc, query, where } from 'firebase/firestore';
 import { db } from '../firebase'; 
-import { useParams } from 'react-router-dom';
+import Navbar from "../components/Navbar";
+import { useUser } from './UserContext';
 
 function CreateQuotation() {
-  const { username } = useParams();
-  const [user, setUser] = useState(null);
+  const { username } = useUser(); 
+  console.log("Username in Quo:", username);
+  const { user, setUser } = useState(); 
   const [productPOData, setProductPOData] = useState([]);
   const [approved, setApproved] = useState(false);
+  const [requiredFields, setRequiredFields] = useState({
+    issuedDate: false,
+    expiredDate: false,
+    cusName: false,
+    cusAddress: false,
+    cusPhoneNo: false,
+  });
   const [quotation, setQuotation] = useState({
     empUser: '',
     issuedDate: '',
@@ -25,7 +34,7 @@ function CreateQuotation() {
       unitPrice: '',
     }],
   });
-
+  
   /*const fetchQuotationByNumber = async (quotationNumber) => {
     try {
       const quotationQuery = query(collection(db, 'productPO'), where('quotationNo', '==', quotationNumber));
@@ -141,9 +150,11 @@ function CreateQuotation() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userDoc = await getDoc(doc(db, 'account', username)); // Fetch user data from "account" collection
-        if (userDoc.exists()) {
-          setUser(userDoc.data()); // Update user state with user data
+        if (username) {
+          const userDoc = await getDoc(doc(db, 'account', username));
+          if (userDoc.exists()) {
+            setUser(userDoc.data());
+          }
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -156,7 +167,10 @@ function CreateQuotation() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setQuotation((prevQuotation) => ({ ...prevQuotation, [name]: value }));
-};
+    if (requiredFields.hasOwnProperty(name)) {
+      setRequiredFields((prevFields) => ({ ...prevFields, [name]: !!value }));
+    }
+  };
 /*
 const handleQuotationNoChange = (event) => {
   const { value } = event.target;
@@ -166,16 +180,30 @@ const handleQuotationNoChange = (event) => {
   }));
   fetchQuotationByNumber(value); // Fetch quotation data when quotation number changes
 };*/
-  const handleItemChange = async(event, index) => {
-    const { name, value } = event.target;
-      setQuotation((prevQuotation) => ({
-        ...prevQuotation,
-        items: prevQuotation.items.map((item, i) =>
-          i === index ? { ...item, [name]: value } : item
-        ),
-      }));
-    
-  };
+const handleItemChange = async(event, index) => {
+  const { name, value } = event.target;
+  // Check if the name is 'description' to handle product selection
+  if (name === 'description') {
+    // Find the selected product based on its id
+    const selectedProduct = products.find(product => product.id === value);
+    // If the selected product exists and has a unit, set the unit in the state
+    const unit = selectedProduct && selectedProduct.unit ? selectedProduct.unit : '';
+    setQuotation((prevQuotation) => ({
+      ...prevQuotation,
+      items: prevQuotation.items.map((item, i) =>
+        i === index ? { ...item, [name]: value, unit: unit } : item
+      ),
+    }));
+  } else {
+    // If the changed field is not 'description', update the item value directly
+    setQuotation((prevQuotation) => ({
+      ...prevQuotation,
+      items: prevQuotation.items.map((item, i) =>
+        i === index ? { ...item, [name]: value } : item
+      ),
+    }));
+  }
+};
 
 
   const handleAddItem = () => {
@@ -222,10 +250,21 @@ const handleQuotationNoChange = (event) => {
 
   const handleSaveDraft = async () => {
     try {
-      if (!user) {
-        console.error('User is not authenticated.');
-        return;
+
+      const isEmptyItem = quotation.items.some(item => (
+        item.description === '' || item.quantity === '' || item.unitPrice === ''
+      ));
+
+      const isEmptyRequiredField = Object.entries(requiredFields).some(
+        ([field, isRequired]) => isRequired && !quotation[field]
+      );
+  
+
+      if (isEmptyItem || isEmptyRequiredField) {
+        alert('Please fill in all item details before saving the draft.');
+        return; // Exit the function if any item is empty
       }
+
       const userDocRef = doc(db, 'account', username);
       const querySnapshot = await getDocs(collection(db, 'productPO'));
       const documentCount = querySnapshot.size;
@@ -318,12 +357,13 @@ const handleQuotationNoChange = (event) => {
               name="quotationNo"
               value={quotation.quotationNo}
               onChange={handleChange}
+              readOnly
             />
           </div>
           <div>
             <label>Issued Date</label>
             <input
-              type="text"
+              type="date"
               name="issuedDate"
               value={quotation.issuedDate}
               onChange={handleChange}
@@ -332,7 +372,7 @@ const handleQuotationNoChange = (event) => {
           <div>
             <label>Expired Date</label>
             <input
-              type="text"
+              type="date"
               name="expiredDate"
               value={quotation.expiredDate}
               onChange={handleChange}
@@ -401,7 +441,7 @@ const handleQuotationNoChange = (event) => {
               >
                 <option value="">Select Product</option>
                 {products.map((product, idx) => (
-                  <option key={idx} value={product.id}>{`${product.id}${product.name}${product.material ? ' - ' + product.material : ''}${product.color ? ', ' + product.color : ''}${product.size ? ', ' + product.size : ''}`}
+                  <option key={idx} value={product.id}>{`${product.id}${product.productName}${product.material ? ' - ' + product.material : ''}${product.color ? ', ' + product.color : ''}${product.size ? ', ' + product.size : ''}`}
                   </option>
                 ))}
               </select>
@@ -412,15 +452,13 @@ const handleQuotationNoChange = (event) => {
                 value={item.quantity}
                 onChange={(e) => handleItemChange(e, index)}
               />
-              {item.unit && ( 
-                <input
-                    type="text"
-                    name="unit"
-                    placeholder="Unit"
-                    value={item.unit}
-                    onChange={(e) => handleItemChange(e, index)}
-                />
-      )}
+              <input
+                type="text"
+                name="unit"
+                placeholder="Unit"
+                value={item.unit}
+                onChange={(e) => handleItemChange(e, index)}
+              />
     <input
       type="number"
       name="unitPrice"
