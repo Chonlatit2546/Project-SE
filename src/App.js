@@ -12,12 +12,13 @@ import AddProduct from './pages/AddProduct';
 import Editvendor from './pages/Editvendor';
 import SearchReceipt from './pages/SearchReceipt';
 import CreateReceipt from './pages/CreateReceipt';
+import { UserProvider } from './pages/UserContext'; 
 
 function App() {
   return (
     <div >
         {/* <Login/> */}
-
+      <UserProvider>
         <Routes>
           <Route path='/' element = {<Login/>}></Route>
           <Route path='/Home' element = {<Home/>}></Route>
@@ -31,6 +32,7 @@ function App() {
           <Route path='/CreateReceipt' element = {<CreateReceipt/>}></Route>
           <Route path='/SearchReceipt' element = {<SearchReceipt/>}></Route>
         </Routes>
+    </UserProvider>
     </div>
     
   );
