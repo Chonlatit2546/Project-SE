@@ -437,7 +437,7 @@ const handleItemChange = async(event, index) => {
         <section className="item-list">
           {quotation.items.map((item, index) => (
             <div key={index}>
-              <label>{index + 1}</label> {/* Number in front of description box */}
+              <label>{index + 1}</label> 
             <select
                 name="description"
                 value={item.description}
