@@ -1,6 +1,5 @@
 .list {
     display: flex;
-    width: 95%;
     padding-left: 55px;
     
 }
@@ -11,11 +10,8 @@
 }
 
 .datatable {
-    height: 600px;
-    /* padding: 15px; */
-
+  width: 95%;
 }
-
 .datatableTitle{
   width: 100%;
   color: #1d438a;
@@ -46,6 +42,7 @@
   height: 27px;
   
     &.Company {
+      padding: 3px;
       background-color: #dbd2ff;
       color: #6A5ACD;
     }

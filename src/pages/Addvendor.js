@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
 import { collection, getDocs, doc, deleteDoc, setDoc, addDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
@@ -44,28 +43,6 @@ function Addvendor() {
     };
     fetchLatestDocumentId();
   }, []);
-
-  const handleSaveDraft = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'vendor'));
-      const documentCount = querySnapshot.size;
-      const nextVenId = `ven${String(documentCount + 1).padStart(4, '0')}`;
-      const VendorData = { ...vendor };
-      delete VendorData.VenId;
-
-      if (vendor.VenId !== nextVenId) {
-        await setDoc(doc(db, 'vendor', vendor.VenId), VendorData);
-        console.log('Draft updated with ID: ', vendor.VenId);
-        alert('Draft updated successfully');
-      } else {
-        await setDoc(doc(db, 'vendor', nextVenId), VendorData);
-        console.log('New draft saved with ID: ', nextVenId);
-        alert('Draft saved successfully');
-      }
-    } catch (error) {
-      console.error('Error saving draft: ', error);
-    }
-  };
 
 
   const addVendor = async (e) => {
@@ -114,7 +91,7 @@ function Addvendor() {
         bankAccNo: '',
       });
 
-      navigate("/Addvendor");
+      navigate("/Vendorlist");
       alert("add successful");
     } catch (e) {
       alert("add fail");
@@ -148,7 +125,7 @@ function Addvendor() {
           <div className='app-container'>
             <div className='box'>
               <div className="ven-in">
-                Vendor
+              <b>Vendor</b>
                 <div className="VenId">
                   <label htmlFor="VenId">VendorID</label>
                   <input
@@ -197,7 +174,6 @@ function Addvendor() {
                     type='email'
                     name='email'
                     value={vendor.email}
-                    //   onChange={handleChange} 
                     onChange={handleChange}
                   />
                 </div>
@@ -221,7 +197,7 @@ function Addvendor() {
           <div className='app-container'>
             <div className='box'>
               <div className="Bank-in">
-                Bank information
+              <b>Bank information</b>
                 <div className="BName">
                   <label htmlFor="bankName">Bank Name</label>
                   <select
@@ -260,31 +236,12 @@ function Addvendor() {
         </section>
       </form>
 
-      {/* <footer className="Footer">
-          <hr></hr>
-          <div className="footer-manage">
-            <div>
-              <label>VendorID </label>
-            </div>
-
-            <div className="Button">
-              <div className="Cancle">
-                <button className="Cancel-Button">Cancle</button>
-              </div>
-              <div className="AddButton">
-                <button type="Submit">Save</button>
-              </div>
-            </div>
-          </div> */}
-      {/* </footer> */}
-
       <section className='app-section'>
         <div className='app-container'>
           <div className='box'>
             <div className="vid">
               <div>
-                <label>VendorID: {nextVenId}</label>
-
+              <label><b>VendorID :</b> {nextVenId}</label>
               </div>
 
               <div className="Button" text>
