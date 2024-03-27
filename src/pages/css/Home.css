@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    transition: margin-left 0.3s; 
+}
+ 
+.container.menu-active {
+    margin-left: -310px; 
+}
+
+.content {
+    margin-left: 50px;
+    color: #1d438a;
+}
+
+.container.menu-active .content {
+    margin-left: 0; 
+}
