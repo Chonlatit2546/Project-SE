@@ -126,7 +126,7 @@ function QuotationDetails() {
       <Navbar />
       <header style={{ backgroundColor: '#9faed2', color: '#fff', padding: '10px' }}>
         <h1>Quotations - {quotationData.id} </h1>
-        <div style={{ marginBottom: '20px' }}>
+        <div className="button-container">
         <PDFDownloadLink className="download-btn"
           document={<FormPDF 
             quotationData={quotationData} 
