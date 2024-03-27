@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase'; 
+import Navbar from "../components/Navbar";
 
 function Quotation() {
   const [quotations, setQuotations] = useState([]);
@@ -77,6 +78,7 @@ function Quotation() {
 
   return (
     <div>
+      <Navbar />
       <h1>Quotation</h1>
       <table>
         <thead>
