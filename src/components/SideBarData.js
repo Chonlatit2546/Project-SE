@@ -19,7 +19,7 @@ export const SidebarData = [
   },
   {
     title: "Quotations",
-    path: "/Createquotation",
+    path: "/Quotation",
     icon: <IoIcons.IoIosPaper />,
     cName: "nav-text",
   },
@@ -37,7 +37,7 @@ export const SidebarData = [
   },
   {
     title: "Vendor List",
-    path: "/Vendorlist",
+    path: "/Addvendor",
     icon: <IoIcons.IoMdPeople  />,
     cName: "nav-text",
   },
