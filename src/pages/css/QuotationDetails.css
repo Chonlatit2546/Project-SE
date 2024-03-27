@@ -1,16 +1,24 @@
+.button-container {
+  display: flex;
+  align-items: center; 
+}
+.download-btn,
 .options-btn {
-  background-color: #42b8d0; 
+  background-color: #42b8d0;
   border: none;
   color: white;
   padding: 10px 24px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
   margin: 4px 2px;
   transition-duration: 0.4s;
   cursor: pointer;
-  border-radius: 20px; /* Make it oval-shaped */
+  border-radius: 20px;
+}
+
+.options-btn {
+  margin-left: 20px; 
 }
 .download-btn {
   background-color: #223283; 
@@ -24,7 +32,15 @@
   margin: 4px 2px;
   transition-duration: 0.4s;
   cursor: pointer;
-  border-radius: 20px; /* Make it oval-shaped */
+  border-radius: 20px; 
+}
+.options-btn {
+  margin-right: 10px; 
+}
+
+.download-btn:hover,
+.options-btn:hover {
+  background-color: #0a384e;
 }
 
 .edit-btn,
@@ -39,7 +55,7 @@
   margin: 4px 2px;
   transition-duration: 0.4s;
   cursor: pointer;
-  border-radius: 20px; /* Make it oval-shaped */
+  border-radius: 20px;
 }
 
 .options-dropdown-content {
