@@ -1,42 +1,54 @@
 import React, { useState } from "react";
 import * as FaIcons from "react-icons/fa";
-import  * as Mdicons from "react-icons/md";
+import * as Mdicons from "react-icons/md";
 import { Link } from "react-router-dom";
 import { SidebarData } from "./SideBarData";
 import "../App.css";
+import "./css/Navbar.css";
 import { IconContext } from "react-icons";
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
+  const [activeLink, setActiveLink] = useState("");
 
-  const showSidebar = () => setSidebar(!sidebar);
+  const toggleSidebar = () => setSidebar(!sidebar);
+  const handleItemClick = (title) => {
+    setActiveLink(title);
+    toggleSidebar();
+  };
 
   return (
     <>
       <IconContext.Provider value={{ color: "undefined" }}>
-        <div className="navbar">
-          <Link to="#" className="menu-bars">
-            <FaIcons.FaBars onClick={showSidebar} />
-          </Link>
-        </div>
         <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
-          <ul className="nav-menu-items" onClick={showSidebar}>
+          <ul className="nav-menu-items">
             <li className="navbar-toggle">
-               <h1 className="toggle-text">SupplyPro</h1>
-              <Link to="#" className="menu-bars">
-                <Mdicons.MdOutlineArrowBackIos />
-              </Link>
-            </li>
-            {SidebarData.map((item, index) => {
-              return (
-                <li key={index} className={item.cName}>
-                  <Link to={item.path}>
-                    {item.icon}
-                    <span>{item.title}</span>
+              <div className="supply-pro-container">
+                <div className="supply-pro">
+                  <span className="supply">Supply</span>
+                  <span className="pro">Pro</span>
+                  <Link to="#" className="menu-bars" onClick={toggleSidebar}>
+                    {sidebar ? (
+                      <Mdicons.MdOutlineArrowBackIos />
+                    ) : (
+                      <Mdicons.MdOutlineArrowForwardIos />
+                    )}
                   </Link>
-                </li>
-              );
-            })}
+                </div>
+              </div>
+            </li>
+            {SidebarData.map((item, index) => (
+              <li key={index} className={item.cName}>
+                <Link
+                  to={item.path}
+                  className={item.title === activeLink ? "active" : ""}
+                  onClick={() => handleItemClick(item.title)}
+                >
+                  {item.icon}
+                  <span>{item.title}</span>
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </IconContext.Provider>
