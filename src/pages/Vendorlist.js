@@ -8,6 +8,8 @@ import "./css/Vendorlist.css"
 
 function Vendorlist() {
   const [vendor, setVendor] = useState([]);
+  const [menuActive, setMenuActive] = useState(true);
+
   useEffect(() => {
 
     const addtolist = onSnapshot(
@@ -90,7 +92,8 @@ function Vendorlist() {
 
 
   return (
-    <><Navbar />
+    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+    <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
       <div className="list">
         <div className="listContainer">
           <div className="datatable">
@@ -111,7 +114,8 @@ function Vendorlist() {
           </div>
 
         </div>
-      </div></>
+      </div>
+      </div>
   );
 }
 
