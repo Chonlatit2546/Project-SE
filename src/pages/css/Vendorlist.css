@@ -1,15 +1,12 @@
 .list {
     display: flex;
-    padding-left: 55px;
+    padding-left: 40px;
 }
 
 .listContainer {
     flex: 6;
 }
 
-.datatable {
-  width: 95%;
-}
 .datatableTitle{
   width: 100%;
   color: #1d438a;
@@ -37,7 +34,7 @@
   padding: 3px;
   border-radius: 25px;
   width: 100px;
-  height: 27px;
+  height: 40px;;
   
     &.Company {
       padding: 3px;
@@ -63,6 +60,7 @@
   color: darkblue;
   border: 1px dotted rgba(0, 0, 139, 0.596);
   cursor: pointer;
+  text-decoration: none;
 }
       
 .deleteButton {
