@@ -1,0 +1,104 @@
+
+
+.list {
+  display: flex;
+  padding-left: 55px;
+}
+
+.listContainer {
+  flex: 6;
+}
+
+.datatable {
+  width: 95%;
+}
+
+.datatableTitle {
+  width: 100%;
+  color: #1d438a;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.link {
+  text-decoration: none;
+  text-align: center;
+  color: rgb(255, 255, 255);
+  border: 1px solid;
+  background-color: #1d438a;
+  padding: 5px;
+  border-radius: 25px;
+  cursor: pointer;
+  width: 120px;
+}
+
+.quotation-table {
+  margin-top: 20px; /* Adjust as needed */
+  width: calc(100% - 320px); /* Adjust as needed */
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 10px; /* Add padding to the top of the table */
+}
+
+.quotation-table th,
+.quotation-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+.quotation-table th {
+  background-color: #193e72;
+  color: #fff;
+}
+
+.quotation-table td {
+  background-color: #f9f9f9;
+}
+
+.quotation-table a {
+  text-decoration: none;
+  color: #193e72;
+  font-weight: bold;
+}
+
+.quotation-table a:hover {
+  text-decoration: underline;
+}
+.datatableTitle{
+  width: 100%;
+  color: #1d438a;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}  
+
+.link{
+  text-decoration: none;
+  text-align: center;
+  color: rgb(255, 255, 255);
+  border: 1px solid ;
+  background-color: #1d438a;
+  padding: 5px;
+  border-radius: 25px;
+  cursor: pointer;
+  width: 150px;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.2rem;
+  color: #193e72;
+}
+
+.error {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.2rem;
+  color: red;
+}
