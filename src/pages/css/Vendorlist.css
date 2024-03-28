@@ -1,12 +1,10 @@
 .list {
     display: flex;
     padding-left: 55px;
-    
 }
 
 .listContainer {
     flex: 6;
-    
 }
 
 .datatable {
@@ -80,3 +78,13 @@
 .MuiDataGrid-columnHeaders.MuiDataGrid-withBorderColor.css-1iyq7zh-MuiDataGrid-columnHeaders {
   background-color: #F5F5F5;
 }
+.canva {
+  margin-top: 80px;
+}
+.container.menu-active {
+  margin-left: -310px;
+}
+.container.menu-inactive {
+  margin-left: 310px; 
+}
+
