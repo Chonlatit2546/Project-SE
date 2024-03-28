@@ -45,7 +45,7 @@ function Product_list() {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="#" style={{ textDecoration: "none" }}>
+            <Link to={`/ViewProduct/${params.row.id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
             <div
@@ -56,6 +56,8 @@ function Product_list() {
             </div>
           </div>
         );
+
+        
       },
     },
   ];
@@ -82,7 +84,7 @@ function Product_list() {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="list">
         <div className="listContainer">
           <div className="datatable">

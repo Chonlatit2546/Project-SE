@@ -16,6 +16,8 @@ import CreateReceipt from './pages/CreateReceipt';
 import { UserProvider } from './pages/UserContext'; 
 import QuotationDetails from './pages/QuotationDetails';
 import VendorDetails from './pages/VendorDetails';
+import Product_list from './pages/Product_list';
+import ViewProduct from './pages/ViewProduct';
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           <Route path='/SearchReceipt' element = {<SearchReceipt/>}></Route>
           <Route path='/QuotationDetails/:id' element={<QuotationDetails />}></Route>
           <Route path='/VendorDetails/:id' element={<VendorDetails/>}></Route>
+          <Route path='/Product_list' element={<Product_list/>}></Route>
+          <Route path='/ViewProduct/:id' element={<ViewProduct/>}></Route>
         </Routes>
     </UserProvider>
     </div>

@@ -36,7 +36,7 @@ function VendorDetails() {
 
     return (
 
-        <div><Navbar /><h1 className='Head'>Vendor list - {id}</h1><section className='app-section'>
+        <div><h1 className='Head'>Vendor list - {id}</h1><section className='app-section'>
             <div className='app-container'>
                 <div className='box'>
                     <div className="ven-in">
