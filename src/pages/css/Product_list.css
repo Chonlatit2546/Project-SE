@@ -1,0 +1,89 @@
+.list {
+   display: flex;
+   width: 95%;
+   padding-left: 55px;
+   
+}
+
+.listContainer {
+   flex: 6;
+   
+}
+
+.datatable {
+   height: 600px;
+   /* padding: 15px; */
+
+}
+
+.datatableTitle{
+ width: 100%;
+ color: #1d438a;
+ padding: 10px;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ 
+}  
+
+.link{
+       text-decoration: none;
+       text-align: center;
+       color: rgb(255, 255, 255);
+       border: 1px solid ;
+       background-color: #1d438a;
+       padding: 5px;
+       border-radius: 25px;
+       cursor: pointer;
+       width: 120px;
+}
+ 
+.cellWithType {
+ text-align: center;
+ padding: 3px;
+ border-radius: 25px;
+ width: 100px;
+ height: 27px;
+ 
+   &.Company {
+     background-color: #dbd2ff;
+     color: #6A5ACD;
+   }
+   &.Individuals {
+     background-color: #eeffb3;
+     color: #9cc026;
+   }
+}
+ 
+.cellAction {
+ display: flex;
+ align-items: center;
+ gap: 15px;
+ 
+}  
+
+.viewButton {
+ padding: 2px 5px;
+ width: 60px;
+ height: 40px; /* เพิ่ม*/
+ text-align: center;
+ border-radius: 25px;
+ color: darkblue;
+ border: 1px dotted rgba(0, 0, 139, 0.596);
+ cursor: pointer;
+ 
+}
+     
+.deleteButton {
+ padding: 2px 5px;
+ width: 60px;
+ text-align: center;
+ border-radius: 25px;
+ color: crimson;
+ border: 1px dotted rgba(220, 20, 60, 0.6);
+ cursor: pointer;
+}
+
+.MuiDataGrid-columnHeaders.MuiDataGrid-withBorderColor.css-1iyq7zh-MuiDataGrid-columnHeaders {
+ background-color: #F5F5F5;
+}

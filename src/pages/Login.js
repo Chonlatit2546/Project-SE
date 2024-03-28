@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import { getDoc, doc } from 'firebase/firestore';
 import './css/Login.css';
 
+
 function Login() {
   const navigate = useNavigate();
   const { setUsername } = useUser();

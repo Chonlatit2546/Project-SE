@@ -98,7 +98,7 @@ function AddProduct() {
               savedDate: productOwn.saveDate || "",
               unitPrice: productOwn.unitPrice || "",
             });
-          })
+          }) 
         );
       }
 
