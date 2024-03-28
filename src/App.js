@@ -36,6 +36,7 @@ function App() {
           <Route path='/Editvendor' element = {<Editvendor/>}></Route>
           <Route path='/Vendorlist' element = {<Vendorlist/>}></Route>
           <Route path='/CreateReceipt' element = {<CreateReceipt/>}></Route>
+          <Route path='/CreateReceipt/:id' element = {<CreateReceipt/>}></Route>
           <Route path='/SearchReceipt' element = {<SearchReceipt/>}></Route>
           <Route path='/QuotationDetails/:id' element={<QuotationDetails />}></Route>
           <Route path='/VendorDetails/:id' element={<VendorDetails/>}></Route>
