@@ -1,99 +1,67 @@
-.supply-pro-container {
-  background-color: #a2b3d1; 
-  margin-bottom: 10px;
-  padding: 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 270px; 
-}
+import React, { useState } from "react";
+import * as FaIcons from "react-icons/fa";
+import * as Mdicons from "react-icons/md";
+import { Link } from "react-router-dom";
+import { SidebarData } from "./SideBarData";
+import "../App.css";
+import "./css/Navbar.css";
+import { IconContext } from "react-icons";
 
-.other-container {
-  background-color: #D8D8D8;
-  padding: 39.5px;
-  position: fixed;
-  width: calc(100% - 270px);
-  top: 0;
-  left: 310px;
-}
-.supply-pro {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; 
-}
+function Navbar({ setMenuActive }) {
+   const [sidebar, setSidebar] = useState(true);
+   const [activeLink, setActiveLink] = useState("");
 
-.supply {
-  color: #fff; 
-  font-size: 30px;
-  font-weight: bold; 
-  margin-left: 10px;
-}
-
-.pro {
-  color: #193e72; 
-  font-size: 30px;
-  font-weight: bold; 
-}
-
-.nav-menu {
-  background-color: #193e72;
-  width: 310px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  position: fixed;
-  top: 45px;
-  left: -310px;
-  transition: 350ms;
-  z-index: 1;
-}
-
-.nav-menu.active {
-  left: 0;
-}
-
-.nav-menu-items {
-  width: 100%;
-  padding: 0;
-  list-style: none;
-}
-.nav-menu-items a {
-  text-decoration: none;
-  color: #fff;
-  display: block;
-  padding: 10px 20px;
-  transition: background-color 0.3s, color 0.3s; 
-  font-size: 21px;
-  font-weight: bold; 
-  margin: 10px;
-}
-.nav-menu-items a:hover {
-  background-color: #a2b3d1;
-  color: #193e72;
-}
-.nav-menu-items a.active {
-  background-color: #a2b3d1;
-  color: #193e72;
-}
+   const toggleSidebar = () => {
+      setSidebar(!sidebar);
+      setMenuActive(!sidebar);
+   };
+   const handleItemClick = (title) => {
+      setActiveLink(title);
+      toggleSidebar();
+      setMenuActive(!sidebar);
+   };
 
 
-.navbar-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  cursor: pointer;
-  color: #fff;
+   return (
+      <>
+         <IconContext.Provider value={{ color: "undefined" }}>
+            <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
+               <ul className="nav-menu-items">
+                  <li className="navbar-toggle">
+                     <div className="supply-pro-container">
+                        <div className="supply-pro">
+                           <span className="supply">Supply</span>
+                           <span className="pro">Pro</span>
+                           <Link to="#" className="menu-bars" onClick={toggleSidebar}>
+                              {sidebar ? (
+                                 <Mdicons.MdOutlineArrowBackIos />
+                              ) : (
+                                 <Mdicons.MdOutlineArrowForwardIos />
+                              )}
+                           </Link>
+                        </div>
+                     </div>
+                     <div className="other-container">
+                        {/* Content for the other container */}
+                     </div>
+                  </li>
+                  {SidebarData.map((item, index) => (
+                     <li key={index} className={item.cName}>
+                        <Link
+                           to={item.path}
+                           className={item.title === activeLink ? "active" : ""}
+                           onClick={() => handleItemClick(item.title)}
+                        >
+                           {item.icon}
+                           <span>{item.title}</span>
+                        </Link>
+                     </li>
+                  ))}
+               </ul>
+            </nav>
+         </IconContext.Provider>
+      </>
+   );
 }
 
-.toggle-text {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.menu-bars {
-  position: absolute;
-  right: 30px;
-  font-size: 2rem;
-}
+export default Navbar;
