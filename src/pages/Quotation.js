@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase'; 
+import { DataGrid } from "@mui/x-data-grid";
 import Navbar from "../components/Navbar";
+import './css/Quotation.css';
 
 function Quotation() {
   const [quotations, setQuotations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [menuActive, setMenuActive] = useState(true);
 
   useEffect(() => {
     const fetchQuotations = async () => {
@@ -69,41 +72,45 @@ function Quotation() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div className="error">Error: {error.message}</div>;
   }
 
   return (
-    <div>
-      <Navbar />
-      <h1>Quotation</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>QuotationNo</th>
-            <th>Customer Name</th>
-            <th>Issued Date</th>
-            <th>Expired Date</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {quotations.map(quotation => (
-            <tr key={quotation.id}>
-              <td>
-                <Link to={`/QuotationDetails/${quotation.id}`}>{quotation.quotationNo}</Link>
-              </td>
-              <td>{quotation.cusName}</td>
-              <td>{quotation.issuedDate}</td>
-              <td>{quotation.expiredDate}</td>
-              <td>{quotation.grandTotal}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+      <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+      <div className="list">
+        <div className="listContainer">
+          <div className="datatable">
+            <div className="datatableTitle">
+              <h1>Quotation</h1>
+              <Link to="/Createquotation" className="link">
+                  Create Quotation
+              </Link>
+              </div>
+              <DataGrid
+              className="quotation-table"
+              rows={quotations}
+              columns={[
+                { field: 'quotationNo', headerName: 'QuotationNo', width: 230, renderCell: (params) => (
+                  <Link to={`/QuotationDetails/${params.row.id}`}>{params.value}</Link>
+                )
+                },
+                { field: 'cusName', headerName: 'Customer Name', width: 230 },
+                { field: 'issuedDate', headerName: 'Issued Date', width: 230 },
+                { field: 'expiredDate', headerName: 'Expired Date', width: 230 },
+                { field: 'grandTotal', headerName: 'Amount', width: 230 },
+              ]}
+              pageSize={10}
+              rowsPerPageOptions={[10]}
+              checkboxSelection
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
