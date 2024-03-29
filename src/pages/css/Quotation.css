@@ -32,37 +32,38 @@
   width: 120px;
 }
 
-.quotation-table {
+.po-table {
   margin-top: 20px; 
-  width: 95%; 
+  width: 80%;
+  
   margin-left: auto;
   margin-right: auto;
   padding-top: 10px; 
 }
 
-.quotation-table th,
-.quotation-table td {
+.po-table th,
+.po-table td {
   padding: 10px;
   border-bottom: 1px solid #ccc;
   text-align: left;
 }
 
-.quotation-table th {
+.po-table th {
   background-color: #193e72;
   color: #fff;
 }
 
-.quotation-table td {
+.po-table td {
   background-color: #f9f9f9;
 }
 
-.quotation-table a {
+.po-table a {
   text-decoration: none;
   color: #193e72;
   font-weight: bold;
 }
 
-.quotation-table a:hover {
+.po-table a:hover {
   text-decoration: underline;
 }
 .datatableTitle{

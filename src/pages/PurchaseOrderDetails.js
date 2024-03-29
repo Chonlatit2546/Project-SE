@@ -219,7 +219,7 @@ function PurchaseOrderDetails() {
           </div>
           <div className='approval-container'>
           <div className="footer">
-            {status !== 'Waiting for Response' && status !== 'Waiting for receipt creation' && (
+            {status === 'Waiting for receipt creation' && (
               <button className="CreateReceipt-btn" onClick={handleCreateReceipt}>Create Receipt</button>
             )}
           </div>

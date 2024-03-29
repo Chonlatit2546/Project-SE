@@ -5,7 +5,7 @@ import { db } from "../firebase";
 import { DataGrid } from "@mui/x-data-grid";
 import Navbar from '../components/Navbar';
 
-import './css/searchpo.css'; 
+import './css/Purchaseorders.css'; 
 
 function Purchaseorder() {
   const [purchaseOrders, setPurchaseOrders] = useState([]);
