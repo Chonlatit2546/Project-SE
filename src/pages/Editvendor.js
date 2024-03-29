@@ -9,8 +9,9 @@ import "./css/Vendor.css";
 
 
 function Editvendor() {
-  const { id } = useParams();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [menuActive, setMenuActive] = useState(true);
   const [vendor, setVendor] = useState(null);
   const [formData, setFormData] = useState(null);
 
@@ -56,7 +57,7 @@ function Editvendor() {
     return <div>Loading...</div>;
   }
 
-  const Cancel = () => {
+  const CancelVendor = () => {
     setVendor({
       VenId: '',
       name: '',
@@ -72,23 +73,24 @@ function Editvendor() {
 
 
   return (
-    <div>
-      {/* <Navbar /> */}
-      <h1 className='Head'>Edit vendor-{id}</h1>
+    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+      <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
       <form>
+        <h1 className='HeadVendor'>Edit vendor - {id}</h1>
         <section className='app-section'>
           <div className='app-container'>
             <div className='box'>
               <div className="ven-in">
                 <b>Vendor</b>
                 <div className="VenId">
-                  <label htmlFor="VenId">VendorID  <br />{id}</label>
+                  <label htmlFor="VenId">VendorID</label>
+                </div>
+                <div className='Idedit'>
+                <label htmlFor='Idedit'>{id}</label>
                 </div>
                 <div className="VenType">
                   <label htmlFor="type">Vendor Type</label>
                   <select
-                    class="form-select"
-                    aria-label="Default select example"
                     name="type"
                     value={formData.type}
                     onChange={handleChange} >
@@ -150,12 +152,10 @@ function Editvendor() {
                 <div className="BName">
                   <label htmlFor="bankName">Bank Name</label>
                   <select
-                    class="form-select"
-                    aria-label="Default select example"
                     name="bankName"
                     value={formData.bankName}
                     onChange={handleChange} >
-                    <option selected>Select bank name</option>
+                    <option selected>Select Bank name</option>
                     <option>KBank</option>
                     <option>SCB</option>
                     <option>BBL</option>
@@ -179,36 +179,25 @@ function Editvendor() {
                   value={formData.bankAccNo}
                   onChange={handleChange} />
               </div>
-
             </div>
           </div>
         </section>
-      </form>
+        </form>
+      <footer className="FooterVendor">
+          <div className="footer-manageVendor">
+            <div>
+              <label><b>VendorID :</b> {id}</label>
+            </div>
 
-
-      <section className='app-section'>
-        <div className='app-container'>
-          <div className='box'>
-            <div className="vid">
-              <div>
-                <label><b>VendorID :</b> {id}</label>
-
-              </div>
-
-              <div className="Button" text>
-                <div className="Cancle">
-                  <button className="CancelButton" onClick={Cancel}>Cancle</button>
-                </div>
-                <div className="SaveButton">
-                  <button type="Submit" onClick={handleSubmit}>Save</button>
-                </div>
-              </div>
+            <div className="CancleVendorfoot">
+              <button className="CancelButtonVendor" onClick={CancelVendor}>Cancle</button>
+            </div>
+            <div className="SaveButtonVendor">
+              <button type="Submit" onClick={handleSubmit}>Save vendor</button>
             </div>
           </div>
-        </div>
-      </section>
-
-    </div>
+        </footer>
+    </div >
   );
 };
 

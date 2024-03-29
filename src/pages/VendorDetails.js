@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import "./css/Vendor.css"
+import "./css/VendorDetails.css"
 
 function VendorDetails() {
+    const [menuActive, setMenuActive] = useState(true);
     const [vendor, setVendor] = useState(null);
     const { id } = useParams();
     useEffect(() => {
@@ -34,80 +35,102 @@ function VendorDetails() {
     }
 
     const handleDelete = async (id) => {
-        try {
-            await deleteDoc(doc(db, "vendor", id));
-            setVendor(vendor.filter((item) => item.id !== id));
-        } catch (err) {
-            console.log(err);
+        const confirmDelete = window.confirm("Are you sure you want to delete this Vendor?");
+        if (confirmDelete) {
+            try {
+                await deleteDoc(doc(db, "vendor", id));
+                setVendor(vendor.filter((item) => item.id !== id));
+            } catch (err) {
+                console.log(err);
+            }
         }
     };
 
     return (
 
-        <div>
-            {/* <Navbar /> */}
-            <h1 className='Head'>Vendor list - {id}</h1><section className='app-section'>
-                <div className="options-dropdown">
-                    <button className="options-btn">Options</button>
-                    <div className="options-dropdown-content">
-                        <Link to={`/Editvendor/${id}`} className="options-btn edit-btn">Edit Vendor</Link>
-                        <button onClick={() => handleDelete(id)} className="options-btn cancel-btn">Delete Vendor</button>
-                    </div>
-                </div>
-                <div className='app-container'>
-                    <div className='box'>
-                        <div className="ven-in">
-                            Vendor
-                            <div className="VenId">
-                                <label htmlFor="VenId">VendorID  <br />{id}</label>
-                            </div>
-                            <div className="VenType">
-                                <label htmlFor="type">Vendor Type {vendor.type}</label>
-                            </div>
-                            <div className="VenPhone">
-                                <label htmlFor="phone">Phone Number {vendor.phone}</label>
-                            </div>
-                        </div>
+        <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+            <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+            <div>
+                <h1 className='HeadVendorDe'>Vendor list - {id}</h1>
 
-                        <div className="ven-in2">
-                            <div className="VenName">
-                                <label htmlFor="name">Name: {vendor.name}</label>
-                            </div>
-                            <div className='VenEmail'>
-                                <label htmlFor="email">Email {vendor.email}</label>
-                            </div>
-
-                            <div className='VenAdd'>
-                                <label htmlFor='address'>Address {vendor.address}</label>
-                            </div>
+                <section className='app-sectionDe'>
+                <div className="button-container-vendor">
+                    <div className="options-dropdown-vendor">
+                        <button className="options-btn-vendor">Options</button>
+                        <div className="options-dropdown-content-vendor">
+                            <Link to={`/Editvendor/${id}`} className="options-btn-vendor edit-btn-vendor">Edit Vendor</Link>
+                            <button onClick={() => handleDelete(id)} className="options-btn-vendor delete-btn-vendor">Delete Vendor</button>
                         </div>
                     </div>
-                </div>
-            </section>
+                    </div>
+                    <div className="ID-Vendor">
+                        VendorID {id}</div>
+                    <div className='app-containerDe'>
+                        <div className='boxDe'>
+                            <div className="ven-inDe">
+                                <b>Vendor</b>
+                                <div className="VenIdDe">
+                                    <label htmlFor="VenId">VendorID : </label>
+                                    <label className='IdD'>{id}</label>
+                                </div>
 
-            <section className='app-section'>
-                <div className='app-container'>
-                    <div className='box'>
-                        <div className="Bank-in">
-                            Bank information
-                            <div className="BName">
-                                <label htmlFor="bankName">Bank Name {vendor.bankName}</label>
-
+                                <div className="VenTypeDe">
+                                    <label htmlFor="type">Vendor Type : </label>
+                                    <label className='VenTypeD'>{vendor.type}</label>
+                                </div>
+                                <div className="VenPhoneDe">
+                                    <label htmlFor="phone">Phone Number : </label>
+                                    <label className='VenPhoneD'>{vendor.phone}</label>
+                                </div>
                             </div>
-                            <div className='BAccName'>
-                                <label htmlFor='bankAccName'>Bank Account Name{vendor.bankAccName}</label>
 
+                            <div className="ven-in2De">
+                                <div className="VenNameDe">
+                                    <label htmlFor="name">Name : </label>
+                                    <label className='NameD'>
+                                        {vendor.name}
+                                    </label>
+                                </div>
+                                <div className='VenEmailDe'>
+                                    <label htmlFor="email">Email : </label>
+                                    <label className='VenEmailD'>{vendor.email}</label>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className='BAccNo'>
-                            <label htmlFor='bankAccNo'>Bank Account Number  {vendor.bankAccNo}</label>
-
+                            <div className='VenAddDe'>
+                                <label htmlFor='address'>Address : </label>
+                                <label className='VenAddD'>{vendor.address}</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+                <section className='app-sectionDe'>
+                    <div className='app-containerDe'>
+                        <div className='boxDe2'>
+                            <div className="Bank-inDe">
+                                <b>Bank information</b>
+                                <div className="BNameDe">
+                                    <label htmlFor="bankName">Bank Name : </label>
+                                    <label className='BNameD'>{vendor.bankName}</label>
 
+                                </div>
+                                <div className='BAccNameDe'>
+                                    <label htmlFor='bankAccName'>Bank Account Name : </label>
+                                    <label className='BAccNameD'>{vendor.bankAccName}</label>
+
+                                </div>
+                            </div>
+                            <div className='BAccNoDe'>
+                                <label htmlFor='bankAccNo'>Bank Account Number : </label>
+                                <label className='BAccNoD'>
+                                    {vendor.bankAccNo}
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     );
 };

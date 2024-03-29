@@ -1,159 +1,283 @@
-.Head{
-    color: #1d438a;
-    margin:  15px;;
+.ven-in,
+.ven-in2,
+.Bank-in,
+.Venid2 {
+  display: flex;
+  margin: 10px;
+  padding-left: 10px;
+
 }
 
-.ven-in,.ven-in2,.Bank-in{
-    display: flex;
-    margin: 15px;
-    padding-left: 10px;
-    
+.VenIdAdd {
+  padding-left: 40px;
 }
 
-.VenId{
-    padding-left: 100px;
-}
-.VenType{
-    padding-left: 50px;
-}
-.VenPhone{
-    padding-left: 50px;
-    text-align: right;
-}
-.VenName{
-    padding-left: 150px;
-}
-.VenEmail{
-    padding-left: 50px;
+.VenTypeAdd {
+  padding-left: 40px;
 }
 
-.VenAdd{
-    margin-left: 180px;
+.VenPhoneAdd {
+  padding-left: 40px;
 }
-.BName{
-    padding-left: 30px;
+
+
+.VenId {
+  padding-left: 50px;
 }
-.BAccName{
-    padding-left: 50px;
+
+.VenType {
+  padding-left: 65px;
 }
-.BAccNum{
-    padding-left: 468px;
+
+.VenPhone {
+  padding-left: 65px;
+}
+
+.VenName {
+  padding-left: 100px;
+}
+
+.VenEmail {
+  padding-left: 65px;
+}
+
+.VenAdd {
+  margin-left: 125px;
+}
+
+.BName {
+  padding-left: 30px;
+}
+
+.BAccName {
+  padding-left: 50px;
+}
+
+.BAccNo {
+  padding-left: 487px;
+}
+
+.HeadVendor {
+  color: #1d438a;
+  /* margin-top:  15px; */
+  padding-bottom: 10px;
+  padding-left: 22px;
 }
 
 .app-section {
-    padding: 0px;
-    
-  }
-  
-  .app-container {
-    max-width: 95%;
-    margin-top: 0px;
-    margin-left: 25px;
-    
-  }
-  .box {
-    border: 1px solid rgb(220, 220, 220);
-    
-    padding: 16px;
-  }
-  
-textarea{
-    margin-left: 10px;
-    border-radius:25px;
-    border: 1px solid #d3d3d3;
-    text-align: center; 
-  }
-  .form-select{
-    margin-left: 10px;
-    border-radius:25px;
-    border: 1px solid #d3d3d3;
-    height: 25px;
-    text-align: center; 
-  }
+  padding: 0px;
+}
 
-  .Footer{
-    position: fixed;
-    bottom: 0;
-    width: 80%;
-    height: 70px;
-    border-top: 1px solid #ccc;
-    background-color: white;
-    justify-content: space-between;
- }
- 
- .footer-manage{
-    display: flex;
-    justify-content: space-between;
-    margin:20px;
-    height: 100%;
-      
- }
-/*  
- 
- .vid{
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
- }  */
-
- /* .Button {
-    display: flex;
-
-  } */
- 
-.Cancle{
-  display: flex;
- }
-
-.SaveButton {
-   display: flex;
-   padding-left: 10px;
- }
-
-.CancelButton{  
-    border:1px solid;
-    border-radius: 25px;
-    height: 30px;
-    width: 80px;
-    padding: 2px;
- }
- 
- .SaveButton button{
-    height: 30px;
-    width: 100px;
-    border:1px solid;
-    border-radius: 25px;
-    background-color: #1d438a;
-    color:white;
-    padding: 2px;
- }
-
-.AddButtonVen button{
-  height: 30px;
-  width: 100px;
-  border:1px solid;
-  border-radius: 25px;
-  background-color: #00CC66;
-  color:white;
+.app-container {
+  /* max-width: 100%; */
+  margin-top: 0px;
+  margin-left: 25px;
 
 }
-  
-  
+
+.box {
+  border: 1px solid rgb(220, 220, 220);
+  padding: 16px;
+}
+
+.VenAdd textarea {
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+  text-align: center;
+  color: #42b8d0;
+  align-content: center;
+}
+
+.VenId input {
+  text-align: center;
+  color: #42b8d0;
+  margin-left: 3px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+
+.VenIdAdd
+ input {
+  text-align: center;
+  color: #42b8d0;
+  margin-left: 3px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+
+.VenType select {
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+  height: 25px;
+  width: 150px;
+  text-align: center;
+  color: #42b8d0;
+}
+
+.VenTypeAdd select {
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+  height: 25px;
+  width: 150px;
+  text-align: center;
+  color: #42b8d0;
+}
+
+.VenPhone input {
+  text-align: center;
+  color: #42b8d0;
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+.VenPhoneAdd input {
+  text-align: center;
+  color: #42b8d0;
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+
+.VenName input {
+  text-align: center;
+  color: #42b8d0;
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+
+.VenEmail input {
+  text-align: center;
+  color: #42b8d0;
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+
+.BName select {
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+  height: 25px;
+  width: 180px;
+  text-align: center;
+  color: #42b8d0;
+}
+
+.BAccName input {
+  text-align: center;
+  color: #42b8d0;
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+
+.BAccNo input {
+  text-align: center;
+  color: #42b8d0;
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+
+
+.FooterVendor {
+  position: fixed;
+  bottom: 0;
+  width: 95%;
+  height: 70px;
+  border-top: 1px solid #ccc;
+  background-color: white;
+  justify-content: space-between;
+}
+
+.footer-manageVendor {
+  display: flex;
+  /* justify-content: space-between; */
+  margin: 20px;
+  height: 100%;
+
+}
+
+
+.ButtonVendor {
+  display: flex;
+
+}
+
+.CancleVendor {
+  display: flex;
+}
+
+.CancleVendorfoot {
+  display: flex;
+  padding-left: 50px;
+}
+
+.SaveButtonVendor {
+  display: flex;
+  padding-left: 15px;
+}
+
+.CancelButtonVendor {
+  border: 1px solid;
+  border-radius: 25px;
+  height: 30px;
+  width: 80px;
+  padding: 2px;
+  margin-left: 560px;
+}
+
+.SaveButtonVendor button {
+  height: 30px;
+  width: 100px;
+  border: 1px solid;
+  border-radius: 25px;
+  background-color: #1d438a;
+  color: white;
+  padding: 2px;
+}
+
+.AddButtonVendor button {
+  height: 30px;
+  width: 100px;
+  border: 1px solid;
+  border-radius: 25px;
+  margin-left: 15px;
+  background-color: #00CC66;
+  color: white;
+
+}
+
+/* css editVendor */
+.Idedit label {
+  margin-left: 5px;
+  margin-right: 15px;
+  color: #42b8d0;
+}
+
 .canva {
   margin-top: 80px;
 }
+
 .container.menu-active {
   margin-left: -310px;
 }
+
 .container.menu-inactive {
-  margin-left: 310px; 
+  margin-left: 310px;
 }
+
 @media (max-width: 1200px) {
   .container.menu-active {
     margin-left: -260px;
   }
+
   .container.menu-inactive {
-    margin-left: 260px; 
+    margin-left: 260px;
   }
 }
 
@@ -161,8 +285,9 @@ textarea{
   .container.menu-active {
     margin-left: -210px;
   }
+
   .container.menu-inactive {
-    margin-left: 210px; 
+    margin-left: 210px;
   }
 }
 
@@ -170,8 +295,9 @@ textarea{
   .container.menu-active {
     margin-left: -160px;
   }
+
   .container.menu-inactive {
-    margin-left: 160px; 
+    margin-left: 160px;
   }
 }
 
@@ -179,8 +305,9 @@ textarea{
   .container.menu-active {
     margin-left: -120px;
   }
+
   .container.menu-inactive {
-    margin-left: 120px; 
+    margin-left: 120px;
   }
 }
 
@@ -188,13 +315,13 @@ textarea{
   .container.menu-active {
     margin-left: -100px;
   }
+
   .container.menu-inactive {
-    margin-left: 100px; 
+    margin-left: 100px;
   }
 }
 
-
-.Headtablevendor{
+.Headtablevendor {
   background: #D8D8D8;
   width: 300px;
   margin-left: 25px;
