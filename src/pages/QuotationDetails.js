@@ -47,13 +47,6 @@ function QuotationDetails() {
   
         const quotationNoData = { id: quotationNoRef.id, ...quotationNoDoc.data() };
         setQuotationData(quotationNoData);
-        const poId = quotationNoData.poId;
-        const poDoc = await getDoc(poId);
-        console.log(poDoc.id);
-        if (!poDoc.exists()) {
-          throw new Error('PO document does not exist');
-        }
-        setPoDocumentName(poDoc.id);
 
         const productDataPromises = Object.values(productPOData)
           .filter(product => typeof product === 'object' && product.description)
@@ -68,7 +61,13 @@ function QuotationDetails() {
   
         const resolvedProductData = await Promise.all(productDataPromises);
         setProductData(resolvedProductData);
-  
+        const poId = quotationNoData.poId;
+        const poDoc = await getDoc(poId);
+        console.log(poDoc.id);
+        if (!poDoc.exists()) {
+          throw new Error('PO document does not exist');
+        }
+        setPoDocumentName(poDoc.id);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data: ', error);
@@ -155,11 +154,12 @@ function QuotationDetails() {
         const querySnapshot = await getDocs(collection(db, 'po'));
         const documentCount = querySnapshot.size;
         const documentId = `pud${String(documentCount+1).padStart(4, '0')}`;
-        setDocumentIdValue(documentId);
+        const productPODocRef = doc(db, 'productPO', id);
+        setPoDocumentName(poDocumentName);
         const purchaseOrderData = {
           expiredDate: formattedExpiredDate,
           issuedDate: formattedCurrentDate,
-          productPO: `/productPO/${id}`,
+          productPO: productPODocRef ,
           status: 'Waiting for receipt creation',
         };
         const poRef = doc(db, 'po', documentId);
@@ -211,15 +211,16 @@ function QuotationDetails() {
             </div>
           </div>
           <div className="quotation-details">
-            <h2>Quotation No. {quotationData.id}</h2>
-            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+            <h2>Quotation No. {quotationData.id}</h2><br />
+            <p>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
             <p><span className="custom-c">๐ {status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 
             <span className="custom-colors">Refer To: {poDocumentName} &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
              Issued Date: {quotationData.issuedDate} &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
              Expired Date: {quotationData.expiredDate}</span>
             </p>
-             <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
-            <h3>Customer</h3>
+             <p>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+             <br /><h3>Customer</h3>
+            <br />
             <p>
               <strong className="custom-color">Customer Name:</strong> &nbsp;&nbsp;&nbsp;<span className="custom-colors">{quotationData.cusName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;
               <strong className="custom-color">Department:</strong> &nbsp;&nbsp;&nbsp;<span className="custom-colors">{quotationData.cusDepartment || "-"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -227,9 +228,9 @@ function QuotationDetails() {
               <br /><strong className="custom-color">Customer Address:</strong> &nbsp;&nbsp;&nbsp;<span className="custom-colors">{quotationData.cusAddress || "-"}</span><br />
               <br /><strong className="custom-color">Phone Number:</strong> &nbsp;&nbsp;&nbsp;<span className="custom-colors">{quotationData.cusPhoneNo}</span>
             </p>
-            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+            <p>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
              <table>
-              <thead>
+              <thead><br />
                 <tr>
                   <th className="custom-color">Item No.&nbsp;&nbsp;&nbsp;</th>
                   <th className="custom-color">&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;Description&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;</th>
@@ -238,7 +239,7 @@ function QuotationDetails() {
                   <th className="custom-color">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unit Price</th>
                   <th className="custom-color">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount</th>
                 </tr>
-              </thead>
+              </thead><br />
               <tbody>
               <br />
                 {productData.map((product, index) => (
@@ -255,8 +256,8 @@ function QuotationDetails() {
                 ))}
               </tbody>
             </table>
-            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
-            <h3>Summary</h3>
+            <p>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+            <br /><h3>Summary</h3><br />
             <div className="part1">
             <p>
               <strong className="custom-color">Total:</strong> <span className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{total} &nbsp;&nbsp;&nbsp;THB</span><br />
