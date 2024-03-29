@@ -15,6 +15,7 @@ import SearchReceipt from './pages/SearchReceipt';
 import CreateReceipt from './pages/CreateReceipt';
 import { UserProvider } from './pages/UserContext'; 
 import QuotationDetails from './pages/QuotationDetails';
+import Quotation from './pages/Quotation';
 import VendorDetails from './pages/VendorDetails';
 import Product_list from './pages/Product_list';
 import ViewProduct from './pages/ViewProduct';
@@ -38,7 +39,8 @@ function App() {
           <Route path='/CreateReceipt' element = {<CreateReceipt/>}></Route>
           <Route path='/CreateReceipt/:id' element = {<CreateReceipt/>}></Route>
           <Route path='/SearchReceipt' element = {<SearchReceipt/>}></Route>
-          <Route path='/QuotationDetails/:id' element={<QuotationDetails />}></Route>
+          <Route path='/QuotationDetails/:id' element={<QuotationDetails/>}></Route>
+          <Route path='/Quotation' element={<Quotation/>}></Route>
           <Route path='/VendorDetails/:id' element={<VendorDetails/>}></Route>
           <Route path='/Product_list' element={<Product_list/>}></Route>
           <Route path='/ViewProduct/:id' element={<ViewProduct/>}></Route>
