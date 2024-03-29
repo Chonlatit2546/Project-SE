@@ -8,6 +8,7 @@ import "./css/Product_list.css";
 
 function Product_list() {
   const [product, setProduct] = useState([]);
+  const [menuActive, setMenuActive] = useState(true);
   useEffect(() => {
     const addtolist = onSnapshot(
       collection(db, "product"),
@@ -83,8 +84,8 @@ function Product_list() {
   ];
 
   return (
-    <>
-      {/* <Navbar /> */}
+    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+      <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
       <div className="list">
         <div className="listContainer">
           <div className="datatable">
@@ -105,7 +106,7 @@ function Product_list() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

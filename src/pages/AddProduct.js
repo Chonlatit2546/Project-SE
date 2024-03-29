@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 function AddProduct() {
   const navigate = useNavigate();
 
+   const [menuActive, setMenuActive] = useState(true);
   const [product, setProduct] = useState({
     productID: "",
     productName: "",
@@ -224,12 +225,14 @@ function AddProduct() {
     setAddProductOwn(updatedProductOwns);
   };
 
+      
   return (
-    <div>
-      <Navbar />
-      <h1 className="Head-Topic"> Add product</h1>
+    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+      <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+      
 
       <div className="addProduct-form">
+      <h1 className="Head-Topic"> Add product</h1>
         <form>
           <div className="Product">
             <div className="Product-info">
@@ -374,7 +377,7 @@ function AddProduct() {
         </form>
       </div>
 
-      <footer className="Footer">
+      <footer className="add-product-Footer">
         <div className="footer-manage">
           <div>
             <label>ProductID: {newProductID}</label>
@@ -383,11 +386,11 @@ function AddProduct() {
           <div className="Submit-Button">
             <div className="Cancle">
               <button className="Cancel-Button" onClick={Cancel}>
-                Cancle
+                Cancel
               </button>
             </div>
-            <div className="Add-Product-Button" onClick={addProduct}>
-              <button type="Submit">Add Product</button>
+            <div className="Add-Product-Button" >
+              <button type="Submit-product" onClick={addProduct}>Add Product</button>
             </div>
           </div>
         </div>
