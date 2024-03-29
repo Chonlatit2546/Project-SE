@@ -72,7 +72,7 @@ function Purchaseorder() {
           if(status === "Closed"){
             return(
               <div>
-                <Link to={`/QuotationDetails/${id}`}>Details</Link>
+                <Link to={`/PurchaseOrderDetails/${id}`}>Details</Link>
               </div>
             );
           }
@@ -90,30 +90,30 @@ function Purchaseorder() {
   const columns = [
     { field: "id",
      headerName: "PO Number",
-      width: 150 
+      width: 230 
     },
 
     { field: "customerId",
      headerName: "Customer", 
-     width: 200 
+     width: 230 
     },
 
     { field: "issuedDate", 
     headerName: "Issued Date", 
-    width: 200 
+    width: 230 
     },
 
     { field: "expiredDate",
      headerName: "Expired Date", 
-     width: 200 },
+     width: 230 },
 
     { field: "amount", 
     headerName: "Amount", 
-    width: 150 
+    width: 230 
     },
     { field: "status"
     , headerName: "Status"
-    , width: 150,
+    , width: 320,
       renderCell: (params) => {
         const status = params.row.status;
 
@@ -133,7 +133,7 @@ function Purchaseorder() {
   return (
     
       <div>
-        <Navbar/>
+        
         <div className="list">
           <div className="listContainer">
             <div className="datatable">
