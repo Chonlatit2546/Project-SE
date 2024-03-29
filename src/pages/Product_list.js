@@ -68,7 +68,7 @@ function Product_list() {
     {
       field: "productName",
       headerName: "Name",
-      width: 230,
+      width: 300,
     },
     {
       field: "size",
