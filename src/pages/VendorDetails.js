@@ -1,15 +1,14 @@
 import Navbar from '../components/Navbar';
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import "./css/Vendor.css"
 
 function VendorDetails() {
-    const { id } = useParams();
-
     const [vendor, setVendor] = useState(null);
-
+    const { id } = useParams();
     useEffect(() => {
         const fetchVendor = async () => {
             try {
@@ -34,39 +33,57 @@ function VendorDetails() {
         return <div>Loading...</div>;
     }
 
+    const handleDelete = async (id) => {
+        try {
+            await deleteDoc(doc(db, "vendor", id));
+            setVendor(vendor.filter((item) => item.id !== id));
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
 
-        <div><h1 className='Head'>Vendor list - {id}</h1><section className='app-section'>
-            <div className='app-container'>
-                <div className='box'>
-                    <div className="ven-in">
-                        Vendor
-                        <div className="VenId">
-                            <label htmlFor="VenId">VendorID  <br />{id}</label>
-                        </div>
-                        <div className="VenType">
-                            <label htmlFor="type">Vendor Type {vendor.type}</label>
-                        </div>
-                        <div className="VenPhone">
-                            <label htmlFor="phone">Phone Number {vendor.phone}</label>
-                        </div>
+        <div>
+            {/* <Navbar /> */}
+            <h1 className='Head'>Vendor list - {id}</h1><section className='app-section'>
+                <div className="options-dropdown">
+                    <button className="options-btn">Options</button>
+                    <div className="options-dropdown-content">
+                        <Link to={`/Editvendor/${id}`} className="options-btn edit-btn">Edit Vendor</Link>
+                        <button onClick={() => handleDelete(id)} className="options-btn cancel-btn">Delete Vendor</button>
                     </div>
-
-                    <div className="ven-in2">
-                        <div className="VenName">
-                            <label htmlFor="name">Name: {vendor.name}</label>
+                </div>
+                <div className='app-container'>
+                    <div className='box'>
+                        <div className="ven-in">
+                            Vendor
+                            <div className="VenId">
+                                <label htmlFor="VenId">VendorID  <br />{id}</label>
+                            </div>
+                            <div className="VenType">
+                                <label htmlFor="type">Vendor Type {vendor.type}</label>
+                            </div>
+                            <div className="VenPhone">
+                                <label htmlFor="phone">Phone Number {vendor.phone}</label>
+                            </div>
                         </div>
-                        <div className='VenEmail'>
-                            <label htmlFor="email">Email {vendor.email}</label>
-                        </div>
 
-                        <div className='VenAdd'>
-                            <label htmlFor='address'>Address {vendor.address}</label>
+                        <div className="ven-in2">
+                            <div className="VenName">
+                                <label htmlFor="name">Name: {vendor.name}</label>
+                            </div>
+                            <div className='VenEmail'>
+                                <label htmlFor="email">Email {vendor.email}</label>
+                            </div>
+
+                            <div className='VenAdd'>
+                                <label htmlFor='address'>Address {vendor.address}</label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
             <section className='app-section'>
                 <div className='app-container'>

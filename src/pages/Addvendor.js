@@ -3,9 +3,10 @@ import { collection, getDocs, doc, deleteDoc, setDoc, addDoc } from "firebase/fi
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
-import "./css/Vendor.css"
+// import "./css/Vendor.css"
 
 function Addvendor() {
+  const [menuActive, setMenuActive] = useState(true);
   const navigate = useNavigate();
   const [nextVenId, setNextvenid] = useState('');
   const [vendor, setVendor] = useState({
@@ -117,23 +118,25 @@ function Addvendor() {
 
 
   return (
-    <div>
-      <Navbar />
-      <h1 className='Head'>Add vendor</h1>
-      <form>
+    
+      // <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+      // <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+      
+      <>
+      
+      <h1 className='Head'>Add vendor</h1><form>
         <section className='app-section'>
           <div className='app-container'>
             <div className='box'>
               <div className="ven-in">
-              <b>Vendor</b>
+                <b>Vendor</b>
                 <div className="VenId">
                   <label htmlFor="VenId">VendorID</label>
                   <input
                     type='text'
                     name='VenId'
                     value={nextVenId}
-                    onChange={handleChange}
-                  />
+                    onChange={handleChange} />
                 </div>
                 <div className="VenType">
                   <label htmlFor="type">Vendor Type</label>
@@ -142,7 +145,7 @@ function Addvendor() {
                     aria-label="Default select example"
                     name="type"
                     value={vendor.type}
-                    onChange={handleChange} >
+                    onChange={handleChange}>
                     <option selected>Open this select menu</option>
                     <option>Company</option>
                     <option>Individuals</option>
@@ -174,8 +177,7 @@ function Addvendor() {
                     type='email'
                     name='email'
                     value={vendor.email}
-                    onChange={handleChange}
-                  />
+                    onChange={handleChange} />
                 </div>
               </div>
               <div className='VenAdd'>
@@ -197,7 +199,7 @@ function Addvendor() {
           <div className='app-container'>
             <div className='box'>
               <div className="Bank-in">
-              <b>Bank information</b>
+                <b>Bank information</b>
                 <div className="BName">
                   <label htmlFor="bankName">Bank Name</label>
                   <select
@@ -205,7 +207,7 @@ function Addvendor() {
                     aria-label="Default select example"
                     name="bankName"
                     value={vendor.bankName}
-                    onChange={handleChange} >
+                    onChange={handleChange}>
                     <option selected>Open this select menu</option>
                     <option>KBank</option>
                     <option>SCB</option>
@@ -234,30 +236,24 @@ function Addvendor() {
             </div>
           </div>
         </section>
-      </form>
+      </form><footer className="Footer">
+        <div className="footer-manage">
+          <div>
+            <label>VendorID: {nextVenId}</label>
+          </div>
 
-      <section className='app-section'>
-        <div className='app-container'>
-          <div className='box'>
-            <div className="vid">
-              <div>
-              <label><b>VendorID :</b> {nextVenId}</label>
-              </div>
-
-              <div className="Button" text>
-                <div className="Cancle">
-                  <button className="CancelButton" onClick={Cancel}>Cancle</button>
-                </div>
-                <div className="AddButton">
-                  <button type="Submit" onClick={addVendor}>Add vendor</button>
-                </div>
-              </div>
+            <div className="Cancle">
+              <button className="CancelButton" onClick={Cancel}>Cancle</button>
+            </div>
+            <div className="AddButtonVen">
+              <button type="Submit" onClick={addVendor}>Add vendor</button>
             </div>
           </div>
-        </div>
-      </section>
+      </footer></>
+        
+      
 
-    </div>
+    // </div>
   );
 };
 

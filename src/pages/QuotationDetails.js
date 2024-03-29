@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getDoc, doc, deleteDoc } from 'firebase/firestore';
+import { getDoc, doc, deleteDoc, getDocs, collection, setDoc, updateDoc, documentId } from 'firebase/firestore';
 import './css/QuotationDetails.css';
 import { db } from '../firebase'; 
 import Navbar from "../components/Navbar";
@@ -10,7 +10,7 @@ import FormPDF from './FormPDF';
 function QuotationDetails() {
   const { id } = useParams();
   const [productPOData, setProductPOData] = useState(null);
-  const [quotationData, setQuotationData] = useState(null);
+  const [quotationData, setQuotationData] = useState();
   const [productData, setProductData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,12 +19,15 @@ function QuotationDetails() {
   const [grandTotal, setGrandTotal] = useState(0);
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [quotationToDelete, setQuotationToDelete] = useState(null);
-
+  const [menuActive, setMenuActive] = useState(true);
+  const [status, setStatus] = useState('');
+  const [isApproved, setIsApproved] = useState(false);
+  const [documentIdValue, setDocumentIdValue] = useState('');
+  const [poDocumentName, setPoDocumentName] = useState('');
 
   useEffect(() => {
     const fetchQuotationAndProductPOData = async () => {
       try {
-        // Fetch product PO data
         const productPODocRef = doc(db, 'productPO', id);
         const productPOSnapshot = await getDoc(productPODocRef);
   
@@ -34,20 +37,24 @@ function QuotationDetails() {
   
         const productPOData = productPOSnapshot.data();
         setProductPOData(productPOData);
-  
-        // Fetch quotation data
+
         const quotationNoRef = productPOData.quotationNo;
         const quotationNoDoc = await getDoc(quotationNoRef);
         
-  
         if (!quotationNoDoc.exists()) {
           throw new Error('Quotation document does not exist');
         }
   
         const quotationNoData = { id: quotationNoRef.id, ...quotationNoDoc.data() };
         setQuotationData(quotationNoData);
-  
-        // Fetch product data for each product in product PO
+        const poId = quotationNoData.poId;
+        const poDoc = await getDoc(poId);
+        console.log(poDoc.id);
+        if (!poDoc.exists()) {
+          throw new Error('PO document does not exist');
+        }
+        setPoDocumentName(poDoc.id);
+
         const productDataPromises = Object.values(productPOData)
           .filter(product => typeof product === 'object' && product.description)
           .map(async (product) => {
@@ -112,62 +119,180 @@ function QuotationDetails() {
   const cancelDelete = () => {
     setConfirmationDialogOpen(false);
   };
+  useEffect(() => {
+    if (quotationData) {
+      setStatus(quotationData.status);
+      setIsApproved(quotationData.status === 'Waiting for Response');
+    }
+  }, [quotationData]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
+  const handleApproved = async () => {
+    try {
+      setStatus('Waiting for Response'); // Optimistically update the status
+      setIsApproved(true);
+      await updateDoc(doc(db, 'quotation', quotationData.id), {status: 'Waiting for Response' });
+      setIsApproved(false);
+      alert('Quotation approved successfully.');
+    } catch (error) {
+      console.error('Error approving quotation:', error);
+      // Revert the state if the operation fails
+      setStatus(quotationData.status);
+      setIsApproved(quotationData.status === 'Waiting for Response');
+    }
+  };
+    const handleAccepted = async () => {
+      try {
+        await updateDoc(doc(db, 'quotation', quotationData.id), { status: 'Waiting for receipt creation' });
+        setStatus('Waiting for receipt creation');
+        setIsApproved(true); 
+        alert('Quotation accepted successfully.');
+        console.log(quotationData.status);
+        const currentDate = new Date();
+        const formattedCurrentDate = currentDate.toISOString().split('T')[0];
+        const expiredDate = new Date(currentDate.getTime() + 32 * 24 * 60 * 60 * 1000);
+        const formattedExpiredDate = expiredDate.toISOString().split('T')[0];
+    
+        const querySnapshot = await getDocs(collection(db, 'po'));
+        const documentCount = querySnapshot.size;
+        const documentId = `pud${String(documentCount+1).padStart(4, '0')}`;
+        setDocumentIdValue(documentId);
+        const purchaseOrderData = {
+          expiredDate: formattedExpiredDate,
+          issuedDate: formattedCurrentDate,
+          productPO: `/productPO/${id}`,
+          status: 'Waiting for receipt creation',
+        };
+        const poRef = doc(db, 'po', documentId);
+        await setDoc(doc(db, 'po', documentId), purchaseOrderData);
+        await updateDoc(doc(db, 'quotation', quotationData.id), { poId: poRef });
+      } catch (error) {
+        console.error('Error updating status and creating purchase order:', error);
+      }
+    };
+    
+    const handleGoBack = () => {
+        window.location.href = '/quotation';
+    };
+  
   return (
-    <div>
-      <Navbar />
-      <header style={{ backgroundColor: '#9faed2', color: '#fff', padding: '10px' }}>
-        <h1>Quotations - {quotationData.id} </h1>
-        <div className="button-container">
-        <PDFDownloadLink className="download-btn"
-          document={<FormPDF 
-            quotationData={quotationData} 
-            productData={productData} 
-            productPOData={productPOData} 
-            total={total}
-            vat={vat}
-            grandTotal={grandTotal}
-          />}fileName={`quotation_${quotationData.id}.pdf`}
-        >
-          {({ blob, url, loading, error }) =>
-            loading ? 'Loading document...' : 'Download'
-          }
-        </PDFDownloadLink>
-        <div className="options-dropdown">
-          <button className="options-btn">Options</button>
-          <div className="options-dropdown-content">
-            <Link to={`/EditQuotation/${quotationData.id}`} className="options-btn edit-btn">Edit Quotation</Link>
-            <button onClick={() => handleConfirmation(quotationData.id)} className="options-btn cancel-btn">Cancel Quotation</button>
+    <div class="main-content">
+    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+  <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+  {quotationData ? (
+    <>
+      <div className="header">
+            <button className="back-btn" onClick={handleGoBack}>&lt;</button>
+            <h1>Quotations - {quotationData.id}</h1>
           </div>
-        </div>
-      </div>
-      </header>
-      <div>
-        <h1>Quotation No. {quotationData.id}</h1>
-        <p>Refer To: Issued Date: {quotationData.issuedDate} Expired Date: {quotationData.expiredDate}</p>
-        <h3>Customer</h3> 
-        <p>Customer Name: {quotationData.cusName} Customer Address: {quotationData.cusAddress || "-"} Customer Email: {quotationData.cusEmail || "-"}</p>
-        <p>Customer Department: {quotationData.cusDepartment || "-"} Customer PhoneNumnber: {quotationData.cusPhoneNo}</p>
-        <h3>Item | Description | Quantity | Unit | Unit Price | Amount</h3>
-        {productData.map((product, index) => (
-          <div key={index}>
-            <p>{index + 1} {product.id} {product.productName} Color: {product.color} Material: {product.material} {productPOData[`productNo${index + 1}`].quantity} {product.unit} {productPOData[`productNo${index + 1}`].unitPrice} {productPOData[`productNo${index + 1}`].quantity * productPOData[`productNo${index + 1}`].unitPrice}</p>
+          <div className="button-container">
+            <PDFDownloadLink
+              className="download-btn"
+              document={<FormPDF
+                quotationData={quotationData}
+                productData={productData}
+                productPOData={productPOData}
+                total={total}
+                vat={vat}
+                grandTotal={grandTotal}
+              />}
+              fileName={`quotation_${quotationData.id}.pdf`}
+            >
+              {({ blob, url, loading, error }) =>
+                loading ? 'Loading document...' : 'Download'
+              }
+            </PDFDownloadLink>
+            <div className="options-dropdown">
+              <button className="options-btn">Options</button>
+              <div className="options-dropdown-content">
+                {(!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation') && (
+                  <Link to={`/Editquotation/${quotationData.id}`} className="options-btn edit-btn">Edit Quotation</Link>
+                )}<button onClick={() => handleConfirmation(quotationData.id)} className="options-btn cancel-btn">Cancel Quotation</button>
+              </div>
+            </div>
           </div>
-        ))}
-        <h3>Summary</h3>
-        <p>Total: {total} </p><p>VAT (7%): {vat}</p>
-        <p> Grand Total: {grandTotal}</p>
-      </div>
+          <div className="quotation-details">
+            <h2>Quotation No. {quotationData.id}</h2>
+            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+            <p><span className="custom-c">๐ {status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 
+            <span className="custom-colors">Refer To: {poDocumentName} &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             Issued Date: {quotationData.issuedDate} &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+             Expired Date: {quotationData.expiredDate}</span>
+            </p>
+             <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+            <h3>Customer</h3>
+            <p>
+              <strong className="custom-color">Customer Name:</strong> &nbsp;&nbsp;&nbsp;<span className="custom-colors">{quotationData.cusName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;
+              <strong className="custom-color">Department:</strong> &nbsp;&nbsp;&nbsp;<span className="custom-colors">{quotationData.cusDepartment || "-"}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <strong className="custom-color">Email:</strong> &nbsp;&nbsp;&nbsp;<span className="custom-colors">{quotationData.cusEmail || "-"}</span><br />
+              <br /><strong className="custom-color">Customer Address:</strong> &nbsp;&nbsp;&nbsp;<span className="custom-colors">{quotationData.cusAddress || "-"}</span><br />
+              <br /><strong className="custom-color">Phone Number:</strong> &nbsp;&nbsp;&nbsp;<span className="custom-colors">{quotationData.cusPhoneNo}</span>
+            </p>
+            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+             <table>
+              <thead>
+                <tr>
+                  <th className="custom-color">Item No.&nbsp;&nbsp;&nbsp;</th>
+                  <th className="custom-color">&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;Description&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;</th>
+                  <th className="custom-color">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quantity</th>
+                  <th className="custom-color">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unit</th>
+                  <th className="custom-color">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unit Price</th>
+                  <th className="custom-color">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+              <br />
+                {productData.map((product, index) => (
+                  <tr key={index}>
+                    <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{index + 1}</td>
+                    <td className="custom-colors">{product.productName}&nbsp; ({product.color})<br />
+                      Material: {product.material}
+                    </td>
+                    <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{productPOData[`productNo${index + 1}`].quantity}</td>
+                    <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{product.unit}</td>
+                    <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{productPOData[`productNo${index + 1}`].unitPrice}</td>
+                    <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{(productPOData[`productNo${index + 1}`].quantity * productPOData[`productNo${index + 1}`].unitPrice).toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+            <h3>Summary</h3>
+            <div className="part1">
+            <p>
+              <strong className="custom-color">Total:</strong> <span className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{total} &nbsp;&nbsp;&nbsp;THB</span><br />
+              <br /><strong className="custom-color">VAT (7%):</strong> <span className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vat} &nbsp;&nbsp;&nbsp;THB</span><br />
+            </p>
+            </div>
+            <div className="part2">
+            <div className="grand-total">Grand Total: {grandTotal} ฿</div>
+            </div>
+            <div className="part3">
+            <div className="payment-details">
+              <h3 className="custom-color">Payment</h3>
+              <p>
+              <strong className="custom-colors">Payment: &nbsp;&nbsp;&nbsp;Paying by cheque</strong> {/* Payment term value */}<br />
+              <strong className="custom-colors">Payment Term: &nbsp;&nbsp;&nbsp;60 DAYS FROM END OF RECEIPT MONTH</strong> {/* Payment details */}
+              </p>
+              </div>
+              </div>
+          </div>
+          <div className='approval-container'>
+          <div className="footer">
+          {!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation' ? (
+            <button className="Approve-btn" onClick={handleApproved}>Approve</button>
+          ) : (
+            status !== 'Waiting for receipt creation' && (
+            <button className="Accept-btn" onClick={handleAccepted}>Accept</button>
+            )
+          )}
+          </div>
+          </div>
+        </>
+      ) : (
+        <div>Loading...</div>
+      )}
+    </div>
     </div>
   );
 }
-
 export default QuotationDetails;

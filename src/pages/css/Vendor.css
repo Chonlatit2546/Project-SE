@@ -71,23 +71,35 @@ textarea{
     text-align: center; 
   }
 
-  /* .Footer{
-    position: fixed; 
+  .Footer{
+    position: fixed;
     bottom: 0;
-    width: 100%;
-    height: 60px;
- }*/
+    width: 80%;
+    height: 70px;
+    border-top: 1px solid #ccc;
+    background-color: white;
+    justify-content: space-between;
+ }
+ 
+ .footer-manage{
+    display: flex;
+    justify-content: space-between;
+    margin:20px;
+    height: 100%;
+      
+ }
+/*  
  
  .vid{
     display: flex;
     justify-content: space-between;
     padding: 20px;
- } 
+ }  */
 
- .Button {
+ /* .Button {
     display: flex;
-    gap: 10px; 
-  }
+
+  } */
  
 .Cancle{
   display: flex;
@@ -116,14 +128,76 @@ textarea{
     padding: 2px;
  }
 
-.AddButton button{
+.AddButtonVen button{
   height: 30px;
   width: 100px;
   border:1px solid;
   border-radius: 25px;
   background-color: #00CC66;
   color:white;
-  padding: 2px;
+
 }
   
   
+.canva {
+  margin-top: 80px;
+}
+.container.menu-active {
+  margin-left: -310px;
+}
+.container.menu-inactive {
+  margin-left: 310px; 
+}
+@media (max-width: 1200px) {
+  .container.menu-active {
+    margin-left: -260px;
+  }
+  .container.menu-inactive {
+    margin-left: 260px; 
+  }
+}
+
+@media (max-width: 992px) {
+  .container.menu-active {
+    margin-left: -210px;
+  }
+  .container.menu-inactive {
+    margin-left: 210px; 
+  }
+}
+
+@media (max-width: 768px) {
+  .container.menu-active {
+    margin-left: -160px;
+  }
+  .container.menu-inactive {
+    margin-left: 160px; 
+  }
+}
+
+@media (max-width: 576px) {
+  .container.menu-active {
+    margin-left: -120px;
+  }
+  .container.menu-inactive {
+    margin-left: 120px; 
+  }
+}
+
+@media (max-width: 480px) {
+  .container.menu-active {
+    margin-left: -100px;
+  }
+  .container.menu-inactive {
+    margin-left: 100px; 
+  }
+}
+
+
+.Headtablevendor{
+  background: #D8D8D8;
+  width: 300px;
+  margin-left: 25px;
+  margin-bottom: 0;
+  text-align: center;
+}

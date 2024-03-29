@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { getDocs, collection, addDoc, setDoc, doc, getDoc, query, where } from 'firebase/firestore';
+import { getDocs, collection, addDoc, setDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase'; 
 import Navbar from "../components/Navbar";
 import { useUser } from './UserContext';
+import "./css/Createquotation.css"
 
 function CreateQuotation() {
-  const { username } = useUser(); 
-  console.log("Username in Quo:", username);
   const { user, setUser } = useState(); 
   const [productPOData, setProductPOData] = useState([]);
   const [approved, setApproved] = useState(false);
+  const [menuActive, setMenuActive] = useState(true);
+  const isEditable = !approved;
+  const [storedUsername, setStoredUsername] = useState('');
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setStoredUsername(storedUsername);
+    }
+    console.log("Username in Homew:", storedUsername);
+  }, []);
   const [requiredFields, setRequiredFields] = useState({
     issuedDate: false,
     expiredDate: false,
@@ -35,37 +44,6 @@ function CreateQuotation() {
     }],
   });
   
-  /*const fetchQuotationByNumber = async (quotationNumber) => {
-    try {
-      const quotationQuery = query(collection(db, 'productPO'), where('quotationNo', '==', quotationNumber));
-      const querySnapshot = await getDocs(quotationQuery);
-      
-      if (!querySnapshot.empty) {
-        const productPOData = querySnapshot.docs[0].data();
-  
-        // Extract product information references from productPOData
-        const productReferences = [];
-        for (let key in productPOData) {
-          if (key.startsWith('productNo')) {
-            productReferences.push(productPOData[key][0]); // Assuming the reference is at index 0
-          }
-        }
-  
-        // Fetch product documents using the references
-        const products = await Promise.all(productReferences.map(async (productRef) => {
-          const productDoc = await getDoc(productRef);
-          return productDoc.exists() ? productDoc.data() : null;
-        }));
-  
-        console.log('Product Information:', products);
-      } else {
-        console.log('Quotation not found.');
-      }
-    } catch (error) {
-      console.error('Error fetching quotation: ', error);
-    }
-  };*/
-
   useEffect(() => {
     const fetchProductPOData = async () => {
       try {
@@ -117,41 +95,12 @@ function CreateQuotation() {
     };
     fetchProducts();
   }, []);
-/*
-  useEffect(() => {
-    const fetchQuotationByNumber = async (quotationNumber) => {
-      try {
-        const quotationQuery = query(collection(db, 'quotation'), where('quotationNo', '==', quotationNumber));
-        const querySnapshot = await getDocs(quotationQuery);
-        if (!querySnapshot.empty) {
-          const productPOData = querySnapshot.docs[0].data();
-          const quotationRef = productPOData.quotation;
-          const quotationDoc = await getDoc(quotationRef);
-          if (quotationDoc.exists()) {
-            const quotationData = quotationDoc.data();
-            setQuotation(quotationData);
-          } else {
-            console.log('Quotation not found.');
-          }
-        } else {
-          console.log('Quotation not found.');
-        }
-      } catch (error) {
-        console.error('Error fetching quotation: ', error);
-      }
-    };
-    
 
-    if (quotation.quotationNo) {
-      fetchQuotationByNumber(quotation.quotationNo);
-    }
-  }, [quotation.quotationNo]);
- */
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        if (username) {
-          const userDoc = await getDoc(doc(db, 'account', username));
+        if (storedUsername) {
+          const userDoc = await getDoc(doc(db, 'account', storedUsername));
           if (userDoc.exists()) {
             setUser(userDoc.data());
           }
@@ -161,7 +110,7 @@ function CreateQuotation() {
       }
     };
     fetchUser();
-  }, [username]);
+  }, [storedUsername]);
 
 
   const handleChange = (event) => {
@@ -171,15 +120,7 @@ function CreateQuotation() {
       setRequiredFields((prevFields) => ({ ...prevFields, [name]: !!value }));
     }
   };
-/*
-const handleQuotationNoChange = (event) => {
-  const { value } = event.target;
-  setQuotation(prevQuotation => ({
-    ...prevQuotation,
-    quotationNo: value
-  }));
-  fetchQuotationByNumber(value); // Fetch quotation data when quotation number changes
-};*/
+
 const handleItemChange = async(event, index) => {
   const { name, value } = event.target;
    if (name === 'description') {
@@ -269,7 +210,7 @@ const handleItemChange = async(event, index) => {
         return; 
       }
 
-      const userDocRef = doc(db, 'account', username);
+      const userDocRef = doc(db, 'account', storedUsername);
       const querySnapshot = await getDocs(collection(db, 'productPO'));
       const documentCount = querySnapshot.size;
       const currProductPONo = `pdPO${String(documentCount).padStart(4, '0')}`;
@@ -280,16 +221,17 @@ const handleItemChange = async(event, index) => {
     const productPOData = quotation.items.map((item, index) => {
     return {
     [`productNo${index + 1}`]: {
-      description: doc(db, 'product', item.description), // Assuming productId is the ID of the product
+      description: doc(db, 'product', item.description), 
       quantity: item.quantity,
       unitPrice: item.unitPrice,
     },
-    quotationNo: quotation.quotationNo,
+    quotationNo: doc(db, 'quotation', quotation.quotationNo),
   };
 }).reduce((acc, curr) => ({ ...acc, ...curr }), {});
     const quotationData = {
       ...quotation,
       empUser: userDocRef,
+      status: 'Pending Approval',
     };
     delete quotationData.quotationNo;
     delete quotationData.items;
@@ -304,6 +246,7 @@ const handleItemChange = async(event, index) => {
       console.log('New draft saved with ID: ', nextQuotationNo);
       alert('Draft saved successfully');
     }
+    
   } catch (error) {
     console.error('Error saving draft: ', error);
   }
@@ -312,12 +255,32 @@ const handleItemChange = async(event, index) => {
   const handleApproveQuotation = async () => {
     try {
       await handleSaveDraft();
+
+    const quotationRef = doc(db, 'quotation', quotation.quotationNo);
+    const quotationSnapshot = await getDoc(quotationRef);
+
+    const userDocRef = doc(db, 'account', storedUsername);
+    if (quotationSnapshot.exists()) {
+      await updateDoc(quotationRef, { status: 'Waiting for Response' });
       setApproved(true);
       alert('Quotation approved successfully');
-  } catch (error) {
-    console.error('Error saving draft: ', error);
-  }
-};
+    } else {
+       const quotationData = {
+        ...quotation,
+        empUser: userDocRef,
+        status: 'Waiting for Response',
+      };
+      delete quotationData.quotationNo;
+      delete quotationData.items;
+
+      await setDoc(quotationRef, quotationData);
+      setApproved(true);
+      alert('New quotation created and approved successfully');
+    }
+    }   catch (error) {
+      console.error('Error approving quotation: ', error);
+    }
+  };
 
   const handleCancel = () => {
     const confirmCancel = window.confirm("Are you sure you want to cancel this quotation?");
@@ -341,17 +304,22 @@ const handleItemChange = async(event, index) => {
     }
   };
 
-  const isEditable = !approved;
+  const handleGoBack = () => {
+    const confirmGoBack = window.confirm("Are you sure you want to quit from creating the quotation?");
+    if (confirmGoBack) {
+      window.location.href = '/quotation';
+    }
+  };
 
   return (
-    <div>
-      <Navbar />
-      <header style={{ backgroundColor: '#9faed2', color: '#fff', padding: '10px' }}>
-        <h1>SupplyPro</h1>
-      </header>
-      <main style={{ padding: '20px' }}>
-        <h2 style={{ marginTop: '0' }}>Create Quotation</h2>
-
+    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+    <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+    <div className="main-container">
+      <div className="header-wrapper">
+        <button className="back-btn" onClick={handleGoBack}>&lt;</button>
+        <h1 className='cq'>Create Quotation</h1>
+      </div>
+      <div className='data-contain'>
         {/* Quotation Info */}
         <section className="quotation-info">
         <div>
@@ -473,7 +441,7 @@ const handleItemChange = async(event, index) => {
     <button onClick={() => handleDeleteItem(index)}>Delete</button>
   </div>
 ))}
-          <button onClick={handleAddItem}>Add Item</button>
+          <button className="item-btn" onClick={handleAddItem}>Add Item</button>
         </section>
         {/* Summary */}
         <section className="summary">
@@ -497,7 +465,8 @@ const handleItemChange = async(event, index) => {
         {isEditable && (<button className="save-draft-btn"onClick={handleSaveDraft}>Save Draft</button>)}
         {!approved && <button className="approve-btn" onClick={handleApproveQuotation}>Approve Quotation</button>}
         </section>
-      </main>
+      </div>
+    </div>
     </div>
   );
 }

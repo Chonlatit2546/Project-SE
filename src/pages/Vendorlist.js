@@ -92,31 +92,34 @@ function Vendorlist() {
 
 
   return (
-    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
-    <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
-      <div className="list">
-        <div className="listContainer">
-          <div className="datatable">
-            <div className="datatableTitle">
-              <h1>Vendor list</h1>
-              <Link to="/Addvendor" className="link">
-                Add Vendor
-              </Link>
+    // <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+    //     <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+        <div className="list">
+            <div className="listContainer">
+                <div className="datatable">
+                    <div className="datatableTitle">
+                        <h1>Vendor list</h1>
+                        <Link to="/Addvendor" className="link">
+                            Add Vendor
+                        </Link>
+                    </div>
+                    <div style={{height: 550, width: '100%' }}>
+                        <DataGrid
+                            rows={vendor}
+                            columns={vendorColumns.concat(actionColumn)}
+                            initialState={{
+                                pagination: {
+                                    paginationModel: { page: 0, pageSize: 10 },
+                                },
+                            }}     
+                            checkboxSelection
+                        />
+                    </div>
+                </div>
             </div>
-            <DataGrid
-              className="datagrid"
-              rows={vendor}
-              columns={vendorColumns.concat(actionColumn)}
-              pageSize={10}
-              rowsPerPageOptions={[10]}
-              checkboxSelection
-            />
-          </div>
-
         </div>
-      </div>
-      </div>
-  );
+    // </div>
+);
 }
 
 export default Vendorlist;

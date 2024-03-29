@@ -4,13 +4,21 @@ import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase'; 
 import { DataGrid } from "@mui/x-data-grid";
 import Navbar from "../components/Navbar";
-import './css/Quotation.css';
+import './css/Quotation.css'; 
 
 function Quotation() {
   const [quotations, setQuotations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [menuActive, setMenuActive] = useState(true);
+  const [storedUsername, setStoredUsername] = useState('');
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setStoredUsername(storedUsername);
+    }
+    console.log("Username in Homew:", storedUsername);
+  }, []);
 
   useEffect(() => {
     const fetchQuotations = async () => {

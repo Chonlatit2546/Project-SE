@@ -1,212 +1,215 @@
 import React, { useState } from 'react';
-import { Form, useNavigate } from 'react-router-dom';
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import Navbar from '../components/Navbar';
+import { useNavigate } from "react-router-dom";
 import "./css/Vendor.css";
 
-const data ={
-  VenId:'', VenType:'', VenPhone:'', VenName:'', VenEmail:'', VenAdd:'',
-  BName:'', BAccName:'', BAccNum:''
 
-}
-function Editvendor(){
+function Editvendor() {
+  const { id } = useParams();
   const navigate = useNavigate();
-    const [input,setInput] = useState(data);
+  const [vendor, setVendor] = useState(null);
+  const [formData, setFormData] = useState(null);
 
-    
-  const [allInput, setallinput] = useState([]);
+  useEffect(() => {
+    const fetchVendor = async () => {
+      try {
+        const docRef = doc(db, "vendor", id);
+        const docSnap = await getDoc(docRef);
 
-    function handleChange(event){
-        const{name, value} = event.target;
-        setInput((prevInput) =>{
-            return{
-                ...prevInput,[name]:value
-            }
-        });
+        if (docSnap.exists()) {
+          setVendor(docSnap.data());
+          setFormData(docSnap.data());
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching document:", error);
+      }
+    };
+
+    fetchVendor();
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const docRef = doc(db, "vendor", id);
+      await updateDoc(docRef, formData);
+      setVendor(formData);
+      navigate("/Vendorlist");
+      alert("Update successful");
+    } catch (e) {
+      alert("Update fail");
+      console.log("error", e);
     }
+  };
 
-    function oninputSubmit (event){
-      event.preventDefault();
-      // var myHeaders = new Headers();
-      // myHeaders.append("Content-Type","application/json");
-      // var raw = JSON.stringify({
-      //   "VenId": VenId,
-      //   "VenType": VenType,
-      //   "VenPhone": VenPhone,
-      //   "VenName":VenName,
-      //   "VenEmail":VenEmail,
-      //   "VenAdd":VenAdd,
-      //   "BName":BName,
-      //   "BAccName":BAccName,
-      //   "BAccNum":BAccNum
+  if (!vendor) {
+    return <div>Loading...</div>;
+  }
 
-      // });
-      // var requestOptions ={
-      //   method: 'POST',
-      //   headers: myHeaders,
-      //   body: raw,
-      //   redirect:'follow'
-      // }
+  const Cancel = () => {
+    setVendor({
+      VenId: '',
+      name: '',
+      phone: '',
+      type: '',
+      email: '',
+      address: '',
+      bankName: '',
+      bankAccName: '',
+      bankAccNo: '',
+    });
+  };
 
-      setallinput((prevallinput) =>{
-        return [input, ...prevallinput];
 
-        
-      });
-
-      // setInput(data);
-      console.log(input);
-    }
-
-   
-
-    return (
-        <div>
-          <Navbar />
-          <h1 className='Head'>Edit vendor</h1>
-          <form onSubmit={oninputSubmit}>
-          <section className='app-section'>
-            <div className='app-container'>
-              <div className='box'>
-
+  return (
+    <div>
+      {/* <Navbar /> */}
+      <h1 className='Head'>Edit vendor-{id}</h1>
+      <form>
+        <section className='app-section'>
+          <div className='app-container'>
+            <div className='box'>
               <div className="ven-in">
-              Vendor
-              <div className="VenId">
-                <label htmlFor="VenId">VendorID</label>
-                <input
-                      type='text'
-                      name='VenId'
-                      value={input.VenId}
-                      onChange={handleChange} />
-              </div>
-              <div className="VenType">
-                <label htmlFor="VenType">Vendor Type</label>
-                <select class="form-select" aria-label="Default select example" id="VenType" onChange={handleChange}>
-                      <option selected>Open this select menu</option>
-                      <option>Company</option>
-                      <option>Individuals</option>
-                    </select>
-              </div>
-              <div className="VenPhone">
-                <label htmlFor="VenPhone">Phone Number</label>
-                <input
+                <b>Vendor</b>
+                <div className="VenId">
+                  <label htmlFor="VenId">VendorID  <br />{id}</label>
+                </div>
+                <div className="VenType">
+                  <label htmlFor="type">Vendor Type</label>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleChange} >
+                    <option selected>Select Type</option>
+                    <option>Company</option>
+                    <option>Individuals</option>
+                  </select>
+                </div>
+                <div className="VenPhone">
+                  <label htmlFor="phone">Phone Number</label>
+                  <input
                     type='tel'
-                    name='VenPhone'
-                    value={input.VenPhone}
+                    name='phone'
+                    value={formData.phone}
                     onChange={handleChange} />
+                </div>
               </div>
-            </div>
-            <div className="ven-in2">
-              
-              <div className="VenName">
-                <label htmlFor="VenName">Name</label>
-                <input
-                    type='text'
-                    name='VenName'
-                    value={input.VenName}
-                    onChange={handleChange} />
-              </div>
-              <div className='VenEmail'>
-                    <label htmlFor="VenEmail">Email</label>
-                    <input
-                      type='email'
-                      name='VenEmail'
-                      value={input.VenEmail}
-                      onChange={handleChange} />
-              </div>
-            </div>
-                  <div className='VenAdd'>
-                    <label htmlFor=''>Address</label>
-                    <textarea
-                    rows='3'
-                    cols={40}
-                    type='text'
-                    name='VenAdd'
-                    value={input.VenAdd}
-                    onChange={handleChange} />
-                  </div>
-              </div>
-            </div>
-          </section>
 
-          <section className='app-section'>
-            <div className='app-container'>
-              <div className='box'>
+
+              <div className="ven-in2">
+                <div className="VenName">
+                  <label htmlFor="name">Name</label>
+                  <input
+                    type='text'
+                    name='name'
+                    value={formData.name}
+                    onChange={handleChange} />
+                </div>
+                <div className='VenEmail'>
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type='email'
+                    name='email'
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+              <div className='VenAdd'>
+                <label htmlFor='address'>Address</label>
+                <textarea
+                  rows='4'
+                  cols={40}
+                  type='text'
+                  name='address'
+                  value={formData.address}
+                  onChange={handleChange} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <section className='app-section'>
+          <div className='app-container'>
+            <div className='box'>
               <div className="Bank-in">
-              Bank information
-              <div className="BName">
-                <label htmlFor="BName">Bank Name</label>
-                <select class="form-select" aria-label="Default select example" id="BName" onChange={handleChange}>
-                    <option selected>Open this select menu</option>
+                <b>Bank information</b>
+                <div className="BName">
+                  <label htmlFor="bankName">Bank Name</label>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    name="bankName"
+                    value={formData.bankName}
+                    onChange={handleChange} >
+                    <option selected>Select bank name</option>
                     <option>KBank</option>
                     <option>SCB</option>
                     <option>BBL</option>
                   </select>
-              </div>
-              <div className='BAccName'>
-                    <label htmlFor=''>Bank Account Name</label>
-                    <input
+                </div>
+                <div className='BAccName'>
+                  <label htmlFor='bankAccName'>Bank Account Name</label>
+                  <input
                     type='text'
-                    name='BAccName'
-                    value={input.BAccName}
+                    name='bankAccName'
+                    value={formData.bankAccName}
                     onChange={handleChange} />
-                  </div>
-            </div>
-              
-                  <div className='BAccNum'>
-                    <label htmlFor=''>Bank Account Number</label>
-                    <input
-                      type='text'
-                      name='BAccNum'
-                      value={input.BAccNum}
-                      onChange={handleChange} />
-                  </div>
-                
+                </div>
               </div>
-            </div>
-          </section>
-          </form>
-          
-          {/* <footer className="Footer">
-          <hr></hr>
-          <div className="footer-manage">
-            <div>
-              <label>VendorID </label>
-            </div>
 
-            <div className="Button">
-              <div className="Cancle">
-                <button className="Cancel-Button">Cancle</button>
+              <div className='BAccNo'>
+                <label htmlFor='bankAccNo'>Bank Account Number</label>
+                <input
+                  type='text'
+                  name='bankAccNo'
+                  value={formData.bankAccNo}
+                  onChange={handleChange} />
               </div>
-              <div className="AddButton">
-                <button type="Submit">Save</button>
-              </div>
-            </div>
-          </div> */}
-        {/* </footer> */}
 
-<section className='app-section'>
-            <div className='app-container'>
-              <div className='box'>
-              <div className="vid">
+            </div>
+          </div>
+        </section>
+      </form>
+
+
+      <section className='app-section'>
+        <div className='app-container'>
+          <div className='box'>
+            <div className="vid">
               <div>
-            <label>VendorID {}</label>
-          </div>
+                <label><b>VendorID :</b> {id}</label>
 
-          <div className="Button">
-            <div className="Cancle">
-              <button className="CancelButton">Cancle</button>
-            </div>
-            <div className="SaveButton">
-              <button type="Submit">Save</button>
+              </div>
+
+              <div className="Button" text>
+                <div className="Cancle">
+                  <button className="CancelButton" onClick={Cancel}>Cancle</button>
+                </div>
+                <div className="SaveButton">
+                  <button type="Submit" onClick={handleSubmit}>Save</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-          </div>
-          </div>
-          </section>
+      </section>
 
-        </div>
-      );
-}
+    </div>
+  );
+};
 
 export default Editvendor;
