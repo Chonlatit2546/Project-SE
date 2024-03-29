@@ -1,6 +1,7 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
+// Create styles
 const styles = StyleSheet.create({
     page: {
       flexDirection: 'column',
@@ -51,11 +52,11 @@ const styles = StyleSheet.create({
     },
   });
 
-  const FormPDF = ({ quotationData, productData, productPOData, total, vat, grandTotal }) => (
+  const PurchaseOrderPDF = ({ purchaseOrderID, purchaseOrderData, quotationData, productData, productPOData, total, vat, grandTotal }) => (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
-          <Text style={styles.headerText}>Quotation No: {quotationData.id}      Issued Date: {quotationData.issuedDate}      Expired Date: {quotationData.expiredDate}</Text>
+          <Text style={styles.headerText}>Purchase Order No: {purchaseOrderID}      Issued Date: {purchaseOrderData.issuedDate}      Expired Date: {purchaseOrderData.expiredDate}</Text>
           <Text style={styles.headerText}>Customer Name: {quotationData.cusName}</Text>
           <Text style={styles.headerText}>Customer Address: {quotationData.cusAddress || "-"}</Text>
           <Text style={styles.headerText}>Customer Email: {quotationData.cusEmail || "-"}</Text>
@@ -79,4 +80,4 @@ const styles = StyleSheet.create({
     </Document>
   );
   
-  export default FormPDF;
+  export default PurchaseOrderPDF;

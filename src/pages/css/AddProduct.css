@@ -7,6 +7,13 @@
    padding-right: 10px;
 }
 
+.addProduct-form{
+   margin-left: 200px;
+   margin-right: 200px;
+   width: 2000px;
+   
+}
+
 .Product{
    border: 1px solid #d3d3d3;
    height: 150px;
@@ -124,7 +131,7 @@
    margin-left: 20px;
 }
 
-.Footer{
+.add-product-Footer{
    position: fixed;
    bottom: 0;
    width: 100%;
@@ -132,6 +139,7 @@
    border-top: 1px solid #ccc;
    background-color: white;
    justify-content: space-between;
+   
 }
 
 .footer-manage{
@@ -139,19 +147,14 @@
    justify-content: space-between;
    margin:20px;
    height: 100%;
-   
-   
 }
 
 .Submit-Button {
    display: flex;
    gap: 10px; 
+   
  }
 
-.Cancle,.Add-Product-Button {
-  
-  display: flex;
-}
 
 .Cancel-Button{
    border:1px solid;
@@ -159,15 +162,29 @@
    height: 30px;
    width: 60px;
    padding: 2px;
+   
+
+   position: fixed;
+   bottom: 20px;
+   left: 1700px; /* ระบุตำแหน่งที่ต้องการแสดงบนแกน X */
+}
+
+.Add-Product-Button{
+   position: fixed;
+   bottom: 20px;
+   right: 30px; /* ระบุตำแหน่งที่ต้องการแสดงบนแกน X */
 }
 
 .Add-Product-Button button{
    height: 30px;
    width: 100px;
-   border:1px solid;
+   border:1px solid; 
    border-radius: 25px;
    background-color: rgb(62, 180, 88);
    color:white;
    padding: 2px;
+   
+
+   
 }
 
