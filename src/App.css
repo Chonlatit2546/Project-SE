@@ -1,12 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: "Lato", sans-serif;
 }
-
 /* .home,
 .reports,
 .products {
@@ -20,24 +18,41 @@
 } */
 
 /* Navbar CSS */
-.navbar {
-  background-color: #ececec;
-  height: 80px;
+.supply-pro-container {
+  background-color: #a2b3d1; 
+  margin-bottom: 10px;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 270px; 
+}
+
+.other-container {
+  background-color: #d8d8d8;
+  padding: 39.5px;
+  position: fixed;
+  width: calc(100% - 270px);
+  top: 0;
+  left: 310px;
+}
+.supply-pro {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  justify-content: flex-start; 
 }
 
-.menu-bars {
-  margin-left: 1rem;
-  font-size: 2rem;
-  background: none;
-  color: #000;
-  margin-top: -5px;
-}
-
-.toggle-text {
+.supply {
+  color: #fff; 
   font-size: 30px;
+  font-weight: bold; 
+  margin-left: 10px;
+}
+
+.pro {
+  color: #193e72; 
+  font-size: 30px;
+  font-weight: bold; 
 }
 
 .nav-menu {
@@ -63,27 +78,25 @@
   padding: 0;
   list-style: none;
 }
-
 .nav-menu-items a {
   text-decoration: none;
   color: #fff;
   display: block;
   padding: 10px 20px;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s; 
   font-size: 21px;
-  font-weight: bold;
+  font-weight: bold; 
   margin: 10px;
 }
-
 .nav-menu-items a:hover {
   background-color: #a2b3d1;
   color: #193e72;
 }
-
 .nav-menu-items a.active {
   background-color: #a2b3d1;
   color: #193e72;
 }
+
 
 .navbar-toggle {
   display: flex;
@@ -105,40 +118,15 @@
   font-size: 2rem;
 }
 
-.supply-pro-container {
-  background-color: #a2b3d1;
-  margin-bottom: 10px;
-  padding: 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 310px;
+
+span {
+  margin-left: 16px;
 }
 
-.other-container {
-  background-color: #d8d8d8;
-  padding: 42px;
-  position: fixed;
-  width: calc(100% - 270px);
-  top: 0;
-  left: 310px;
-}
 
-.supply-pro {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.supply {
-  color: #fff;
-  font-size: 30px;
-  font-weight: bold;
+input{
   margin-left: 10px;
-}
-
-.pro {
-  color: #193e72;
-  font-size: 30px;
-  font-weight: bold;
+  border-radius:25px;
+  border: 1px solid #d3d3d3;
+  height: 25px;
 }
