@@ -1,0 +1,159 @@
+.container {
+    transition: margin-left 0.5s ease;
+  }
+  
+  .container.menu-active {
+    margin-left: -310px;
+  }
+  
+  .container.menu-inactive {
+    margin-left: 310px;
+  }
+  .quotation-info,
+  .customer-info,
+  .item-list,
+  .summary,
+  .actions {
+    margin: 20px;
+  }
+  
+  .quotation-info > div,
+  .customer-info > div,
+  .item-list > div,
+  .summary > div,
+  .actions > button {
+    margin-bottom: 10px;
+  }
+  
+  .quotation-info label,
+  .customer-info label,
+  .item-list label,
+  .summary label {
+    display: inline-block;
+    width: 120px;
+  }
+  
+  .quotation-info input,
+  .customer-info input,
+  .item-list input,
+  .summary span {
+    width: 200px;
+    height: 25px;
+    padding: 5px;
+    margin-left: 10px;
+  }
+  
+  .item-list select {
+    width: 220px;
+    height: 35px;
+    padding: 5px;
+    margin-left: 10px;
+  }
+  .header-wrapper {
+    display: flex;
+    align-items: center;     
+  }
+  .back-btn {
+    order: 0;
+    color: #1d438a;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 35px;
+    font-weight: bolder;
+    width: 60px;
+    margin-right: 50px;
+    margin-top: 40px;
+  }
+  
+  .item-list button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .item-list button.item-btn {
+    background-color: #1d438a;
+  }
+  .actions button {
+    margin-top: 20px;
+  }
+  .actions button.cancel-btn {
+    background-color: #d9534f;
+  }
+  
+  .actions button.save-draft-btn {
+    background-color: #f0ad4e;
+  }
+  
+  .actions button.approve-btn {
+    background-color: #5cb85c;
+  }
+  
+  .actions button {
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  h1.cq {
+    color: #1d438a;
+    margin-left: 10px;
+    margin-top: -510px;
+  }
+  .data-contain {
+    margin-top: -530px;
+    margin-left: 50px;
+  }
+  @media (max-width: 1200px) {
+    .container.menu-active {
+      margin-left: -260px;
+    }
+    .container.menu-inactive {
+      margin-left: 260px; 
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .container.menu-active {
+      margin-left: -210px;
+    }
+    .container.menu-inactive {
+      margin-left: 210px; 
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container.menu-active {
+      margin-left: -160px;
+    }
+    .container.menu-inactive {
+      margin-left: 160px; 
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .container.menu-active {
+      margin-left: -120px;
+    }
+    .container.menu-inactive {
+      margin-left: 120px; 
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container.menu-active {
+      margin-left: -100px;
+    }
+    .container.menu-inactive {
+      margin-left: 100px; 
+    }
+  }
+  
+  
+  
