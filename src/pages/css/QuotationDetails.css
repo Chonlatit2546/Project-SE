@@ -164,7 +164,7 @@
 .quotation-details {
   position: absolute;
   margin-top: 180px;
-  padding: 40px 120px 180px 120px;
+  padding: 90px 80px;
   background-color: #f9f9f9;
   border-radius: 10px;
   margin-left: 100px;
@@ -193,7 +193,7 @@
 
 .part1 .custom-colors {
   color: #636262;
-  font-weight: 500;
+  font-weight: 650;
 }
 
 .part1 .custom-color, .custom-color {
