@@ -8,6 +8,7 @@ import Addvendor from './pages/Addvendor';
 import Navbar from './components/Navbar';
 import Editquotation from './pages/Editquotation';
 import Purchaseorder from './pages/Purchaseorder';
+import PurchaseOrderDetails from './pages/PurchaseOrderDetails';
 import AddProduct from './pages/AddProduct';
 import Editvendor from './pages/Editvendor';
 import Vendorlist from './pages/Vendorlist';
@@ -33,6 +34,7 @@ function App() {
           <Route path='/Addvendor' element = {<Addvendor/>}></Route>
           <Route path='/Editquotation' element = {<Editquotation/>}></Route>
           <Route path='/Purchaseorder' element = {<Purchaseorder/>}></Route>
+          <Route path='/PurchaseOrderDetails/:id' element={<PurchaseOrderDetails/>}></Route>
           <Route path='/AddProduct' element = {<AddProduct/>}></Route>
           <Route path='/Editvendor/:id' element = {<Editvendor/>}></Route>
           <Route path='/Vendorlist' element = {<Vendorlist/>}></Route>
