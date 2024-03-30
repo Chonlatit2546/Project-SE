@@ -151,7 +151,7 @@ function PurchaseOrderDetails() {
                 loading ? 'Loading document...' : 'Download'
               }
             </PDFDownloadLink>
-            <button onClick={handleCancel} className="Cancel-btn">Cancel PO</button>
+            
           </div>
             <div className="purchase-order-details">
               <h2>Purchase Order No. {id}</h2><br />

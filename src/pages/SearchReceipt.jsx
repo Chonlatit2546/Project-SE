@@ -102,10 +102,13 @@ function SearchReceipt() {
                   </div>
                 );
               }
-              else if(status === "Waiting for Response"){
-                <div>
-                    <Link to={`/CreateReceipt/${id}`}>approve</Link>
-                </div>
+              else{
+                return(
+                  <div>
+                    <Link to={`/ApproveReceipt/${id}`}>approve</Link>
+                  </div>
+                );
+                
               }
           }
       }
