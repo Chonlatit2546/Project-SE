@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { doc, getDoc, updateDoc, getDocs, collection, writeBatch} from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  getDocs,
+  collection,
+  writeBatch,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import Navbar from "../components/Navbar";
 import "./css/EditProduct.css";
@@ -19,16 +27,13 @@ function EditProduct() {
     unit: "",
   });
 
-  // const [productOwn, setProductOwn] = useState({
-  //   venID: "",
-  //   savedDate: "",
-  //   unitPrice: "",
-  //   prodID: "",
-  // });
+  const [initialProductData, setInitialProductData] = useState(null);
 
   const [productOwn, setProductOwn] = useState([]);
-  const [productOwnID,setProductOwnID] = useState([]);
+  const [initialProductOwnData, setInitialProductOwnData] = useState(null);
+
   const [AddProductOwn, setAddProductOwn] = useState([]);
+  const [deleteProductOwn_buffer, setDeleteProductOwn] = useState([]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -38,6 +43,7 @@ function EditProduct() {
 
         if (docSnap.exists()) {
           setProduct(docSnap.data());
+          setInitialProductData(docSnap.data());
         } else {
           console.log("No such document!");
         }
@@ -55,23 +61,13 @@ function EditProduct() {
           const data = doc.data();
           const productIdRef = data.prodID;
           const venIDRef = data.venID;
-          
-          // ตรวจสอบว่า productIdRef.id เท่ากับ id ที่ได้รับจาก useParams() หรือไม่
-          if (productIdRef.id === id) {
-            // ถ้าตรงกัน ก็เพิ่มข้อมูล productOwn ลงใน state
 
-            // setProductOwn({
-            //   venID: venIDRef.id,
-            //   savedDate: data.savedDate,
-            //   unitPrice: data.unitPrice,
-            //   prodID: productIdRef.id,
-            // });
+          if (productIdRef.id === id) {
             newProductOwn.push({
-              id:doc.id,
+              id: doc.id,
               venID: venIDRef,
               savedDate: data.savedDate,
               unitPrice: data.unitPrice,
-              
             });
           }
           // console.log('productOwnIdRef',productOwnIdRef);
@@ -79,6 +75,7 @@ function EditProduct() {
         });
 
         setProductOwn(newProductOwn);
+        setInitialProductOwnData(newProductOwn);
       } catch (error) {
         console.error("Error fetching document:", error);
       }
@@ -106,13 +103,63 @@ function EditProduct() {
   };
 
   const addProductOwn = () => {
-    setAddProductOwn([...AddProductOwn, {}]);
+    setAddProductOwn([
+      ...AddProductOwn,
+      {
+        venID: "",
+        savedDate: "",
+        unitPrice: "",
+        prodID: id,
+      },
+    ]);
   };
 
-  const deleteProductOwn = (index) => {
+  const handleAddProductOwnChange = (e, index) => {
+    const { name, value } = e.target;
+    setAddProductOwn((prevAddProductOwn) => {
+      return prevAddProductOwn.map((item, i) => {
+        if (i === index) {
+          return { ...item, [name]: value };
+        }
+        return item;
+      });
+    });
+  };
+
+  const deleteAddProductOwn = (index) => {
     const updatedProductOwns = [...AddProductOwn];
     updatedProductOwns.splice(index, 1);
     setAddProductOwn(updatedProductOwns);
+  };
+
+  const deleteProductOwn = (item, index) => {
+    const productOwnToDelete = item;
+
+    // ลบรายการที่ต้องการลบออกมาจากอาร์เรย์ productOwn
+    const updatedProductOwns = productOwn.filter(
+      (product, idx) => idx !== index
+    );
+
+    // เพิ่มรายการที่ต้องการลบเข้าไปใน buffer
+    setDeleteProductOwn([...deleteProductOwn_buffer, productOwnToDelete]);
+
+    // อัพเดท state ของ productOwn ด้วยรายการที่อัพเดทแล้ว
+    setProductOwn(updatedProductOwns);
+  };
+
+  const cancel = () => {
+    if (initialProductData) {
+      // กลับค่า product ให้เป็นค่าเริ่มต้น
+      setProduct(initialProductData);
+
+    }
+
+    if(initialProductOwnData){
+      setProductOwn(initialProductOwnData);
+    }
+
+    setAddProductOwn([])
+    setDeleteProductOwn([])
   };
 
   const save = async () => {
@@ -126,39 +173,72 @@ function EditProduct() {
       const batch = writeBatch(db);
 
       productOwn.forEach((item, index) => {
-
-
-        console.log("item.id",item.id);
+        console.log("item.id", item.id);
         const productOwnID = item.id;
 
-        const productOwnRef = doc(db, "productOwn",productOwnID);
+        const productOwnRef = doc(db, "productOwn", productOwnID);
         const vendorRef = item.venID;
         // console.log("productOwnRef",productOwnRef)
         // console.log("vendorRefID",vendorRef.id);
         // const productOwn_venID_Ref = doc(db, "vendor", vendorRef);
 
-
-
         // console.log(productOwn_venID_Ref);
-        console.log("vendorRef",vendorRef)
+        console.log("vendorRef", vendorRef);
 
-        
-        productOwn[index]["venID"] = vendorRef;
-        
+        const productOwn_update = {
+          venID: vendorRef,
+          savedDate: item.savedDate,
+          unitPrice: item.unitPrice,
+        };
 
         const productOwnDocRef = doc(productOwnsCollectionRef, productOwnID);
 
-        batch.update(productOwnDocRef, productOwn[index]);
+        batch.update(productOwnDocRef, productOwn_update);
       });
 
-      await batch.commit();
+      // ตรวจสอบว่ามีข้อมูลใน deleteProductOwn_buffer หรือไม่
+      if (deleteProductOwn_buffer.length > 0) {
+        const deleteBatch = writeBatch(db);
+        deleteProductOwn_buffer.forEach(async (item) => {
+          const docRef = doc(db, "productOwn", item.id);
+          deleteBatch.delete(docRef);
+        });
+        await deleteBatch.commit();
+      }
 
-      
+      if (AddProductOwn.length > 0) {
+        // เพิ่มข้อมูลของ Product Own ที่ถูกเพิ่มเข้ามาผ่านอินพุตฟิลด์
+        await Promise.all(
+          AddProductOwn.map(async (productOwn, index) => {
+            const productOwnDoc = await getDocs(collection(db, "productOwn"));
+            const prodOwn_docCount = productOwnDoc.size;
+            const newProductOwnID = `pdv${String(prodOwn_docCount + index + 1).padStart(
+              4,
+              "0"
+            )}`;
+
+            const productOwnCollectionRef = collection(db, "productOwn");
+
+            const productDocRef = doc(db, "product", productOwn.prodID);
+            const vendorDocRef = doc(db, "vendor", productOwn.venID);
+
+            console.log("newProductOwnID", newProductOwnID);
+
+            await setDoc(doc(productOwnCollectionRef, newProductOwnID), {
+              prodID: productDocRef,
+              venID: vendorDocRef,
+              savedDate: productOwn.savedDate || "",
+              unitPrice: productOwn.unitPrice || "",
+            });
+          })
+        );
+      }
+
+      await batch.commit();
 
       alert("Data updated successfully");
       console.log("Data updated successfully");
     } catch (error) {
-
       alert("Error updating data: ", error);
       console.error("Error updating data: ", error);
     }
@@ -166,7 +246,8 @@ function EditProduct() {
 
   console.log("product", product);
   console.log("productOwn", productOwn);
-
+  console.log("delete product buffer", deleteProductOwn_buffer);
+  console.log("AddProductOwn", AddProductOwn);
   return (
     <div
       className={`container ${menuActive ? "menu-inactive" : "menu-active"}`}
@@ -282,6 +363,7 @@ function EditProduct() {
                           <button
                             type="button"
                             className="ProductOwn-Delete-Button"
+                            onClick={() => deleteProductOwn(item, index)}
                           >
                             Delete
                           </button>
@@ -295,13 +377,16 @@ function EditProduct() {
                 <label className="add">Add more Product Own</label>
 
                 <div className="more-vendor">
-                  {AddProductOwn.map((productOwn, index) => (
+                  {AddProductOwn.map((add_productOwn, index) => (
                     <div key={index} className="addVendor">
                       <div className="addVendorID">
                         <label htmlFor="vendorID">VendorID</label>
                         <input
                           type="text"
                           id="vendorID"
+                          name="venID"
+                          onChange={(e) => handleAddProductOwnChange(e, index)}
+                          value={add_productOwn.venID || ""}
                           // onChange={(e) => handleAddProductOwnChange(e, index)}
                           // value={productOwn.vendorID}
                         />
@@ -311,6 +396,9 @@ function EditProduct() {
                         <input
                           type="date"
                           id="saveDate"
+                          name="savedDate"
+                          onChange={(e) => handleAddProductOwnChange(e, index)}
+                          value={add_productOwn.savedDate || ""}
                           // onChange={(e) => handleAddProductOwnChange(e, index)}
                           // value={productOwn.saveDate}
                         />
@@ -320,6 +408,9 @@ function EditProduct() {
                         <input
                           type="text"
                           id="unitPrice"
+                          name="unitPrice"
+                          onChange={(e) => handleAddProductOwnChange(e, index)}
+                          value={add_productOwn.unitPrice || ""}
                           // onChange={(e) => handleAddProductOwnChange(e, index)}
                           // value={productOwn.unitPrice}
                         />
@@ -327,7 +418,7 @@ function EditProduct() {
                       <button
                         className="Delete-addvendor"
                         type="button"
-                        onClick={() => deleteProductOwn(index)}
+                        onClick={() => deleteAddProductOwn(index)}
                       >
                         Delete
                       </button>
@@ -349,10 +440,12 @@ function EditProduct() {
 
           <div className="Submit-Button">
             <div className="Cancle">
-              <button className="Cancel-Button">Cancel</button>
+              <button className="Cancel-Button" onClick={cancel}>Cancel</button>
             </div>
             <div className="Edit-Save-Product-Button">
-              <button type="Save-product" onClick={save}>save</button>
+              <button type="Save-product" onClick={save}>
+                save
+              </button>
             </div>
           </div>
         </div>
