@@ -1,0 +1,222 @@
+.Edit-Head-Topic{
+   margin:10px;
+   color: #1d438a;
+}
+
+.EditProduct-form label{
+   padding-right: 10px;
+}
+
+.EditProduct-form{
+   margin-left: 200px;
+   margin-right: 200px;
+   width: 2000px;
+   
+}
+
+.Edit-Product-part{
+   border: 1px solid #d3d3d3;
+   height: 150px;
+   margin: 10px;
+}
+
+.Edit-Product-info{
+   display: flex;
+   margin: 20px;
+   padding-left: 10px;
+   
+}
+
+.Edit-Product-ID{
+   padding-left: 50px;
+   
+}
+
+.Edit-Product-Name{
+   padding-left: 50px;
+}
+
+.Edit-Description {
+   display: flex;
+   margin: 20px;
+   padding-left: 10px;
+}
+
+.Edit-Material{
+   padding-left: 25px;
+}
+
+.Edit-Color{
+   padding-left: 10px;
+}
+
+.Edit-Size{
+   padding-left: 20px;
+}
+
+.Edit-Unit{
+   padding-left: 20px;
+}
+
+#size,#unit{
+   width: 70px;
+}
+
+.Edit-Product-Own{
+   border:1px solid #d3d3d3;
+   height: auto;
+   margin: 10px;
+   margin-top: -10px;
+   overflow: hidden;
+   
+}
+
+.Edit-Product-Own-Info{
+   display: flex;
+   flex-direction: column; 
+   margin: 20px;
+   
+}
+
+.Edit-ProductOwn-item-manage{
+   margin: 10px 10px 10px 150px;
+   
+   
+}
+
+.Edit-ProductOwn-item{
+   padding-left: 10px;
+   margin-left: 10px;
+   display: flex;
+   margin-bottom: 10px;
+   
+}
+
+.Edit-VendorID{
+   padding-left: 30px ;
+}
+
+.Edit-SavedDate{
+   padding-left: 30px ;
+}
+
+.Edit-UnitPrice{
+   margin-left: 30px;
+}
+
+.ProductOwn-Delete{
+   margin-left: 30px;
+}
+
+.ProductOwn-Delete-Button{
+   border:1px solid;
+   border-radius: 25px;
+   height: 25px;
+   width: 60px;
+   margin-left: 20px;
+}
+
+.ProductOwn-Delete-Button:hover{
+   background-color: rgb(231, 228, 228);
+}
+
+.Delete-addvendor{
+   border:1px solid;
+   border-radius: 25px;
+   height: 25px;
+   width: 60px;
+   margin-left: 20px;
+}
+
+.AddmoreProductOwn{
+   margin-top: 20px;
+   display: flex;
+   
+}
+
+.add{
+   font-size: 10px;
+   padding-left: 10px;
+   padding-top: 2px;
+   
+}
+
+.more-vendor{
+   margin-top: -10px;
+}
+
+.addVendor{
+   display: flex;
+   margin-left: 30px;
+   margin-top: 4px;
+
+}
+
+
+.AddSaveDate{
+   margin-left: 20px;
+}
+
+.AddUnitPrice{
+   margin-left: 20px;
+}
+
+.add-product-Footer{
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   height: 70px;
+   border-top: 1px solid #ccc;
+   background-color: white;
+   justify-content: space-between;
+   
+}
+
+.footer-manage{
+   display: flex;
+   justify-content: space-between;
+   margin:20px;
+   height: 100%;
+}
+
+.Submit-Button {
+   display: flex;
+   gap: 10px; 
+   
+ }
+
+
+.Cancel-Button{
+   border:1px solid;
+   border-radius: 25px;
+   height: 30px;
+   width: 60px;
+   padding: 2px;
+   
+
+   position: fixed;
+   bottom: 20px;
+   left: 1700px; /* ระบุตำแหน่งที่ต้องการแสดงบนแกน X */
+}
+
+.Edit-Save-Product-Button{
+   position: fixed;
+   bottom: 20px;
+   right: 30px; /* ระบุตำแหน่งที่ต้องการแสดงบนแกน X */
+}
+
+.Edit-Save-Product-Button button{
+   height: 30px;
+   width: 100px;
+   border:1px solid; 
+   border-radius: 25px;
+   background-color: rgb(62, 180, 88);
+   color:white;
+   padding: 2px;
+   
+}
+
+
+.Edit-Save-Product-Button button:hover {
+   background-color:  rgb(26, 168, 57);
+}

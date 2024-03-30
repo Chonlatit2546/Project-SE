@@ -19,6 +19,7 @@ import Quotation from './pages/Quotation';
 import VendorDetails from './pages/VendorDetails';
 import Product_list from './pages/Product_list';
 import ViewProduct from './pages/ViewProduct';
+import EditProduct from './pages/EditProduct';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path='/VendorDetails/:id' element={<VendorDetails/>}></Route>
           <Route path='/Product_list' element={<Product_list/>}></Route>
           <Route path='/ViewProduct/:id' element={<ViewProduct/>}></Route>
+          <Route path='/EditProduct/:id' element={<EditProduct/>}></Route>
         </Routes>
     </UserProvider>
     </div>
