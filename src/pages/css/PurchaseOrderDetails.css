@@ -1,0 +1,94 @@
+.main-content {
+  height: calc(100vh); 
+  overflow-y: auto; 
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.header h1 {
+  margin-right: auto;
+  margin-bottom: 560px;
+  color: #1d438a;
+}
+
+.back-btn {
+  margin-bottom: 570px;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 400px; 
+  margin-right: 50px;
+}
+
+.purchase-order-details {
+  position: absolute;
+  margin-top: 180px;
+  padding: 40px 120px 180px 120px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  margin-left: 100px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.data-details h2 {
+  color: #1d438a; 
+}
+
+.data-details p {
+  margin-bottom: 10px; 
+}
+
+.data-details ul {
+  list-style-type: none; 
+  padding: 0; 
+}
+
+.data-details li {
+  margin-bottom: 5px; 
+}
+.approval-container {
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  padding: 0.5px; 
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.CreateReceipt-btn {
+  background-color: #24cd81;
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 20px;
+  margin: 5px 50px; 
+  width: auto;
+}
+.CreateReceipt-btn:hover {
+  background-color: #207846;
+}
+.Cancel-btn {
+  background-color: #e92020; 
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 20px;
+  margin-right: 20px;
+}
+
+.Cancel-btn:hover {
+  background-color: #831919; 
+}

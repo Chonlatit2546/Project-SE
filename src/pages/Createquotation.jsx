@@ -43,6 +43,8 @@ function CreateQuotation() {
       unitPrice: '',
     }],
   });
+
+  
   
   useEffect(() => {
     const fetchProductPOData = async () => {
@@ -66,12 +68,18 @@ function CreateQuotation() {
     const fetchLatestDocumentId = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'quotation'));
-        const documentCount = querySnapshot.size;
-        const nextQuotationNo = `Q${String(documentCount + 1).padStart(8, '0')}`;
-        setQuotation((prevQuotation) => ({
-          ...prevQuotation,
-          quotationNo: nextQuotationNo,
-        }));
+        let maxQuotationNo = 0;
+        querySnapshot.forEach(doc => {
+        const currentQuotationNo = parseInt(doc.id.substr(1)); // Extract the numeric part of the quotation number
+          if (currentQuotationNo > maxQuotationNo) {
+            maxQuotationNo = currentQuotationNo;
+          }
+      });
+      const nextQuotationNo = `Q${String(maxQuotationNo + 1).padStart(8, '0')}`;
+      setQuotation((prevQuotation) => ({
+      ...prevQuotation,
+      quotationNo: nextQuotationNo,
+    }));
       } catch (error) {
         console.error('Error fetching latest document ID: ', error);
       }

@@ -22,7 +22,6 @@ function QuotationDetails() {
   const [menuActive, setMenuActive] = useState(true);
   const [status, setStatus] = useState('');
   const [isApproved, setIsApproved] = useState(false);
-  const [documentIdValue, setDocumentIdValue] = useState('');
   const [poDocumentName, setPoDocumentName] = useState('');
 
   useEffect(() => {
@@ -96,28 +95,15 @@ function QuotationDetails() {
     }
   }, [productData, productPOData]);
 
-  const handleDeleteQuotation = async (quotationId) => {
-    try {
-      await deleteDoc(doc(db, 'productPO', quotationId));
-      setProductData(productData.filter(quotation => quotation.id !== quotationId)); // Fix this line
-    } catch (error) {
-      console.error('Error deleting quotation:', error);
+  const handleCancel = async () => {
+    const confirmCancel = window.confirm("Are you sure you want to cancel this purchase order?");
+    if (confirmCancel) {
+      await deleteDoc(doc(db, 'productPO', id));
+      await deleteDoc(doc(db, 'quotation', quotationData.id));
     }
   };
 
-  const handleConfirmation = (quotationId) => {
-    setConfirmationDialogOpen(true);
-    setQuotationToDelete(quotationId);
-  };
-
-  const confirmDelete = () => {
-    handleDeleteQuotation(quotationToDelete);
-    setConfirmationDialogOpen(false);
-  };
-
-  const cancelDelete = () => {
-    setConfirmationDialogOpen(false);
-  };
+  
   useEffect(() => {
     if (quotationData) {
       setStatus(quotationData.status);
@@ -165,6 +151,7 @@ function QuotationDetails() {
         const poRef = doc(db, 'po', documentId);
         await setDoc(doc(db, 'po', documentId), purchaseOrderData);
         await updateDoc(doc(db, 'quotation', quotationData.id), { poId: poRef });
+        window.location.href = `/PurchaseOrderDetails/${documentId}`;
       } catch (error) {
         console.error('Error updating status and creating purchase order:', error);
       }
@@ -206,7 +193,7 @@ function QuotationDetails() {
               <div className="options-dropdown-content">
                 {(!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation') && (
                   <Link to={`/Editquotation/${quotationData.id}`} className="options-btn edit-btn">Edit Quotation</Link>
-                )}<button onClick={() => handleConfirmation(quotationData.id)} className="options-btn cancel-btn">Cancel Quotation</button>
+                )}<button onClick={handleCancel} className="options-btn cancel-btn">Cancel Quotation</button>
               </div>
             </div>
           </div>
@@ -269,16 +256,15 @@ function QuotationDetails() {
             </div>
             <div className="part3">
             <div className="payment-details">
-              <h3 className="custom-color">Payment</h3>
+              <h3 className="custom-color">Payment</h3><br />
               <p>
-              <strong className="custom-colors">Payment: &nbsp;&nbsp;&nbsp;Paying by cheque</strong> {/* Payment term value */}<br />
-              <strong className="custom-colors">Payment Term: &nbsp;&nbsp;&nbsp;60 DAYS FROM END OF RECEIPT MONTH</strong> {/* Payment details */}
+              <strong className="custom-colors">Payment: &nbsp;&nbsp;&nbsp;Paying by cheque</strong> <br /><br />
+              <strong className="custom-colors">Payment Term: &nbsp;&nbsp;&nbsp;60 DAYS FROM END OF RECEIPT MONTH</strong> 
               </p>
               </div>
               </div>
           </div>
           <div className='approval-container'>
-          <div className="footer">
           {!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation' ? (
             <button className="Approve-btn" onClick={handleApproved}>Approve</button>
           ) : (
@@ -286,7 +272,6 @@ function QuotationDetails() {
             <button className="Accept-btn" onClick={handleAccepted}>Accept</button>
             )
           )}
-          </div>
           </div>
         </>
       ) : (

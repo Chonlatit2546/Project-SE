@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { collection, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase'; 
 import { DataGrid } from "@mui/x-data-grid";
 import Navbar from "../components/Navbar";
@@ -12,63 +12,61 @@ function Quotation() {
   const [error, setError] = useState(null);
   const [menuActive, setMenuActive] = useState(true);
   const [storedUsername, setStoredUsername] = useState('');
+
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       setStoredUsername(storedUsername);
     }
-    console.log("Username in Homew:", storedUsername);
+    console.log("Username in Home:", storedUsername);
   }, []);
 
   useEffect(() => {
     const fetchQuotations = async () => {
       try {
-        const quotationSnapshot = await getDocs(collection(db, 'productPO'));
-
-        const quotationData = [];
-        await Promise.all(quotationSnapshot.docs.map(async doc => {
-          const data = doc.data();
-          const quotationNoRef = data.quotationNo;
-          if (!quotationNoRef) {
-            throw new Error('Quotation reference is null or undefined');
-          }
-          const quotationNoId = quotationNoRef.id;
-          console.log('quotationNoId:', quotationNoId);
-
-          const quotationNoDoc = await getDoc(quotationNoRef);
-          if (!quotationNoDoc.exists()) {
-            throw new Error('Quotation document does not exist');
-          }
-          const quotationNoData = quotationNoDoc.data();
-          console.log('quotationNoData:', quotationNoData);
-
-          let grandTotal = 0;
-          Object.keys(data).forEach(key => {
-            if (key.startsWith('productNo')) {
-              const product = data[key];
-              const subtotalProduct = product.quantity * product.unitPrice;
-              grandTotal += subtotalProduct;
-              console.log('qNoData:', product);
+        const quotationSnapshot = collection(db, 'productPO');
+        const unsubscribe = onSnapshot(quotationSnapshot, async (snapshot) => {
+          const quotationData = await Promise.all(snapshot.docs.map(async (doc) => {
+            const data = doc.data();
+            const quotationNoRef = data.quotationNo;
+            if (!quotationNoRef) {
+              throw new Error('Quotation reference is null or undefined');
             }
-          });
+            const quotationNoId = quotationNoRef.id;
+            console.log('quotationNoId:', quotationNoId);
+            const quotationNoDoc = await getDoc(quotationNoRef);
+            if (!quotationNoDoc.exists()) {
+              throw new Error('Quotation document does not exist');
+            }
+            const quotationNoData = quotationNoDoc.data();
+            console.log('quotationNoData:', quotationNoData);
 
-          const vat = 0.07;
-          grandTotal *= 1 + vat;
+            let grandTotal = 0;
+            Object.keys(data).forEach(key => {
+              if (key.startsWith('productNo')) {
+                const product = data[key];
+                const subtotalProduct = product.quantity * product.unitPrice;
+                grandTotal += subtotalProduct;
+                console.log('qNoData:', product);
+              }
+            });
 
-          const quotation = {
-            id: doc.id,
-            quotationNo: quotationNoId,
-            cusName: quotationNoData.cusName,
-            issuedDate: quotationNoData.issuedDate,
-            expiredDate: quotationNoData.expiredDate, 
-            grandTotal: grandTotal.toFixed(2)
-          };
+            const vat = 0.07;
+            grandTotal *= 1 + vat;
 
-          quotationData.push(quotation);
-        }));
-
-        setQuotations(quotationData);
-        setLoading(false);
+            return {
+              id: doc.id,
+              quotationNo: quotationNoId,
+              cusName: quotationNoData.cusName,
+              issuedDate: quotationNoData.issuedDate,
+              expiredDate: quotationNoData.expiredDate, 
+              grandTotal: grandTotal.toFixed(2)
+            };
+          }));
+          setQuotations(quotationData);
+          setLoading(false);
+        });
+        return unsubscribe;
       } catch (error) {
         console.error('Error fetching quotations:', error);
         setError(error);

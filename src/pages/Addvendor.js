@@ -3,12 +3,13 @@ import { collection, getDocs, doc, deleteDoc, setDoc, addDoc } from "firebase/fi
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
-// import "./css/Vendor.css"
+import "./css/Vendor.css"
 
 function Addvendor() {
-  const [menuActive, setMenuActive] = useState(true);
   const navigate = useNavigate();
+  const [menuActive, setMenuActive] = useState(true);
   const [nextVenId, setNextvenid] = useState('');
+
   const [vendor, setVendor] = useState({
     VenId: '',
     name: '',
@@ -30,20 +31,41 @@ function Addvendor() {
     }));
   };
 
-
   useEffect(() => {
     const fetchLatestDocumentId = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'vendor'));
-        const documentCount = querySnapshot.size;
-        const nextVenId = `ven${String(documentCount + 1).padStart(4, '0')}`;
-        setNextvenid(nextVenId);
+        let maxVendor = 0;
+        querySnapshot.forEach(doc => {
+          const currentVendor = parseInt(doc.id.substr(3)); // Extract the numeric part of the vendor ID
+          if (currentVendor > maxVendor) {
+            maxVendor = currentVendor;
+          }
+        });
+        const nextVenId = `ven${String(maxVendor + 1).padStart(4, '0')}`;
+        setNextvenid(nextVenId); // Set nextVenId directly as a string
       } catch (error) {
         console.error('Error fetching latest document ID: ', error);
       }
     };
     fetchLatestDocumentId();
   }, []);
+  
+
+  
+  // useEffect(() => {
+  //   const fetchLatestDocumentId = async () => {
+  //     try {
+  //       const querySnapshot = await getDocs(collection(db, 'vendor'));
+  //       const documentCount = querySnapshot.size;
+  //       const nextVenId = `ven${String(documentCount + 1).padStart(4, '0')}`;
+  //       setNextvenid(nextVenId);
+  //     } catch (error) {
+  //       console.error('Error fetching latest document ID: ', error);
+  //     }
+  //   };
+  //   fetchLatestDocumentId();
+  // }, []);
 
 
   const addVendor = async (e) => {
@@ -79,6 +101,7 @@ function Addvendor() {
       };
 
       fetchLatestDocumentId();
+      
 
       setVendor({
         VenId: '',
@@ -102,9 +125,8 @@ function Addvendor() {
 
 
 
-  const Cancel = () => {
+  const CancelVendor = () => {
     setVendor({
-      VenId: '',
       name: '',
       phone: '',
       type: '',
@@ -118,19 +140,16 @@ function Addvendor() {
 
 
   return (
-    
-      // <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
-      // <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
-      
-      <>
-      
-      <h1 className='Head'>Add vendor</h1><form>
+    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+      <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+      <form>
+      <h1 className='HeadVendor'>Add vendor</h1>
         <section className='app-section'>
           <div className='app-container'>
             <div className='box'>
               <div className="ven-in">
                 <b>Vendor</b>
-                <div className="VenId">
+                <div className="VenIdAdd">
                   <label htmlFor="VenId">VendorID</label>
                   <input
                     type='text'
@@ -138,20 +157,18 @@ function Addvendor() {
                     value={nextVenId}
                     onChange={handleChange} />
                 </div>
-                <div className="VenType">
+                <div className="VenTypeAdd">
                   <label htmlFor="type">Vendor Type</label>
                   <select
-                    class="form-select"
-                    aria-label="Default select example"
                     name="type"
                     value={vendor.type}
                     onChange={handleChange}>
-                    <option selected>Open this select menu</option>
+                    <option selected>Select Type</option>
                     <option>Company</option>
                     <option>Individuals</option>
                   </select>
                 </div>
-                <div className="VenPhone">
+                <div className="VenPhoneAdd">
                   <label htmlFor="phone">Phone Number</label>
                   <input
                     type='tel'
@@ -203,12 +220,10 @@ function Addvendor() {
                 <div className="BName">
                   <label htmlFor="bankName">Bank Name</label>
                   <select
-                    class="form-select"
-                    aria-label="Default select example"
                     name="bankName"
                     value={vendor.bankName}
                     onChange={handleChange}>
-                    <option selected>Open this select menu</option>
+                    <option selected>Select Bank Name</option>
                     <option>KBank</option>
                     <option>SCB</option>
                     <option>BBL</option>
@@ -232,28 +247,26 @@ function Addvendor() {
                   value={vendor.bankAccNo}
                   onChange={handleChange} />
               </div>
-
             </div>
           </div>
         </section>
-      </form><footer className="Footer">
-        <div className="footer-manage">
-          <div>
-            <label>VendorID: {nextVenId}</label>
-          </div>
 
-            <div className="Cancle">
-              <button className="CancelButton" onClick={Cancel}>Cancle</button>
+      </form>
+      <footer className="FooterVendor">
+          <div className="footer-manageVendor">
+            <div>
+              <label><b>VendorID :</b> {nextVenId}</label>
             </div>
-            <div className="AddButtonVen">
+
+            <div className="CancleVendorfoot">
+              <button className="CancelButtonVendor" onClick={CancelVendor}>Cancle</button>
+            </div>
+            <div className="AddButtonVendor">
               <button type="Submit" onClick={addVendor}>Add vendor</button>
             </div>
           </div>
-      </footer></>
-        
-      
-
-    // </div>
+        </footer>
+    </div >
   );
 };
 

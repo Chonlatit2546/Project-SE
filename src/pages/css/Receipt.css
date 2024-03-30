@@ -1,432 +1,333 @@
-
-
-.main{
-    margin-top: 15px;
-    margin-left: 20px;
-}
-
-.status .PO h2{
-    margin-top: 0px;
-    font-size: 30px;
-}
-
-.status .Receipt h2{
-    margin-top: 0px;
-    font-size: 30px;
-}
-
-.status .Cheque-Only-Cleared h2{
-    margin-top: 0px;
-    font-size: 30px;
-}
-
-.status .PO {
-    border: 1px solid rgb(75, 177, 121);
-    border-radius: 10px;
-    width: 100px;
-    height: 35px;
-    margin: 0;
-    margin-left: 30px;
-    margin-top: 20px;
-    background-color: rgb(208, 241, 216);
-    float: left;
-    text-align: center;
-    
-}
-
-.status .Receipt {
-    border: 1px solid rgb(125, 211, 218);
-    border-radius: 10px;
-    width: 150px;
-    height: 35px;
-    margin: 0;
-    margin-left: 30px;
-    margin-top: 20px;
-    background-color: rgb(218, 240, 240);
-    float: left;
-    text-align: center;
-    
-}
-
-.status .Cheque-Only-Cleared{
-    border: 1px solid rgb(0, 0, 0);
-    border-radius: 10px;
-    width: 300px;
-    height: 35px;
-    margin: 0;
-    margin-left: 30px;
-    margin-top: 20px;
-    background-color: rgb(255, 255, 255);
-    float: left;
-    text-align: center;
-    
-}
-
-.Quotation {
-    border: 1px solid rgb(214, 214, 214);
-    border-radius: 10px;
-    width: auto;
-    height: 170px;
-    margin-top: 79px;
-    margin-right: 20px;
-}
-
-.customer {
-    border: 1px solid rgb(214, 214, 214);
-    border-radius: 10px;
-    width: auto;
-    height: 170px;
-    margin-top: 0px;
-    margin-right: 20px;
-}
-
-.Quotation .p1{
-    margin: 10px;
-    margin-left: 20px;
-    font-size: 20px;
-}
-
-.Quotation .p2{
-    margin: -30px;
-    margin-right: 800px;
-    font-size: 20px;
-    float: right;
-}
-
-.Quotation .PO-ID{
-    margin: -30px;
-    margin-right: 620px;
-    font-size: 20px;
-    float: right;
-    color: rgb(55, 80, 224);
-}
-
-.Quotation .p3{
-    margin: -30px;
-    margin-right: 400px;
-    font-size: 20px;
-    float: right;
-}
-
-.Quotation .Re-No{
-    border: 1px solid black;
-    border-radius: 10px;
-    height: 30px;
-    width: 180px;
-    margin: -30px;
-    margin-right: 210px;
-    font-size: 20px;
-    float: right;
-    text-align: center;
-}
-
-.Quotation .Re-No p{
-    margin: 0;
-    color: rgb(55, 80, 224);
-}
-
-.Quotation .Re-No .p2{
-    margin-top: -28px;
-    margin-right: 5px;
-    color: rgb(248, 0, 0);
-}
-
-.Quotation .p4{
-    margin: -30px;
-    margin-top: 40px;
-    margin-right: 750px;
-    font-size: 20px;
-    float: right;
-}
-
-.Quotation .d{
-    border: 1px solid black;
-    border-radius: 10px;
-    height: 30px;
-    width: 150px;
-    margin: 10px;
-    margin-top: 40px;
-    margin-right: -240px;
-    font-size: 20px;
-    float: right;
-    text-align: center;
-    color: rgb(55, 80, 224);
-}
-
-.cus-data {
-    position: relative;
-    left: 100px;
-}
-
-.customer .p1{
-    margin-top: 20px;
-    margin-left: 20px;
-    font-size: 20px;
-}
-
-.customer .p2{
-    position: relative;
-    top: -45px;
-    margin-left: 580px;
-    font-size: 20px;
-}
-
-.customer .Name{
-    position: relative;
-    right: 0px;
-    top: -89px;
-    border: 1px solid black;
-    border-radius: 10px;
-    height: 30px;
-    width: 150px;
-    margin-right: 970px;
-    font-size: 20px;
-    float: right;
-    text-align: center;
-    color: rgb(55, 80, 224);
-}
-
-.customer .p3{
-    position: relative;
-    top: -136px;
-    margin-top: -24px;
-    margin-left: 1000px;
-    font-size: 20px;
-}    
-    
-.customer .Department{
-    position: relative;
-    top: -179px;
-    border: 1px solid black;
-    border-radius: 10px;
-    height: 30px;
-    width: 180px;
-    margin-left: 1120px;
-    font-size: 20px;
-    float: left;
-    text-align: center;
-    color: rgb(55, 80, 224);
-}
-
-.customer .p4{
-    position: relative;
-    top: -226px;
-    margin-left: 1400px;
-    font-size: 20px;
-    float: left;
-}
-
-.customer .Email{
-    position: relative;
-    top: -269px;
-    border: 1px solid black;
-    border-radius: 10px;
-    height: 30px;
-    width: 230px;
-    margin-left: 1460px;
-    font-size: 20px;
-    float: left;
-    text-align: center;
-    color: rgb(55, 80, 224);
-}
-
-.customer .p5{
-    position: relative;
-    top: -246px;
-    left: -20px;
-    margin-left: 600px;
-    font-size: 20px;
-    float: left;
-}
-
-.customer .address{
-    position: relative;
-    top: -246px;
-    border: 1px solid black;
-    border-radius: 10px;
-    height: 30px;
-    width: 490px;
-    margin-left: 12px;
-    font-size: 20px;
-    float: left;
-    text-align: center;
-    color: rgb(55, 80, 224);
-}
-
-.customer .p6{
-    position: relative;
-    top: -294px;
-    margin-left: 1350px;
-    font-size: 20px;
-    float: left;
-}
-
-.customer .phone{
-    position: relative;
-    top: -336px;
-    border: 1px solid black;
-    border-radius: 10px;
-    height: 30px;
-    width: 200px;
-    margin-left: 1500px;
-    font-size: 20px;
-    float: left;
-    text-align: center;
-    color: rgb(55, 80, 224);
-}
-
-.item {
-    border: 1px solid rgb(214, 214, 214);
-    border-radius: 10px;
-    width: auto;
-    height: auto;
-    margin: 0;
-    border-collapse: collapse;
-    margin-right: 20px;
-    
-}
-
-
-
-.item .p1{
-    position: relative;
-    top: 14px;
-    left: 20px;
-    font-size: 20px;
-    
-}
-.item .p2{
-    position: relative;
-    top: -30px;
-    left: -1000px;
-    font-size: 20px;
-    
-}
-.item .p3{
-    position: relative;
-    top: -70px;
-    left: -500px;
-    font-size: 20px;
-    
-}
-.item .p4{
-    position: relative;
-    top: -115px;
-    left: -450px;
-    font-size: 20px;
-}
-.item .p5{
-    position: relative;
-    top: -160px;
-    left: 200px;
-    font-size: 20px;
-}
-.item .p6{
-    position: relative;
-    top: -205px;
-    left: 200px;
-    font-size: 20px;
-}
-
-
-
-.summary  {
-    border: 1px solid rgb(214, 214, 214);
-    border-radius: 10px;
-    width: auto;
-    height: 110px;
-    margin-top: 0px;
-    margin-right: 20px;
-    
-    
-}
-
-.summary .p1 {
-    margin: 10px;
-    margin-left: 20px;
-    font-size: 20px;
-    float: left;
-}
-
-
-
-.summary .total {
-    margin-left: 730px;
-    margin-top: 10px;
-    font-size: 20px;
-
-}
-
-.summary .vat {
-    margin-left: 730px;
-    margin-top: 20px;
-    font-size: 20px;
-
-}
-
-.tab {
-    display: inline-block;
-    margin-left: 80px;
-}
-
-.tab2 {
-    display: inline-block;
-    margin-left: 75px;
-}
-
-.summary .grand-total {
-    border: 1px solid rgb(0, 0, 0);
-    border-radius: 10px;
-    width: 350px;
-    height: 40px;
-    margin-right: 380px;
-    background-color: rgb(255, 136, 0);
-    margin-top: -50px;
-    font-size: 30px;
-    float: right;
-    text-align: center;
-    color: rgb(252, 252, 252);
-
-}
-
-.item-row {
-    margin-top: 50px;
+.button-container {
     display: flex;
-    justify-content:space-around;
-    padding: 5px 0;
+    align-items: center;
+    margin-left: 500px;
+  }
+  .download-btn,
+  .options-btn {
+    background-color: #42b8d0;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 20px;
+  }
+  
+  .options-btn {
+    margin-left: 20px; 
+  }
+  .download-btn {
+    background-color: #1d438a; 
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 20px; 
+  }
+  .approval-container {
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    padding: 0.5px; 
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .approval-container2{
     
-    font-size: 20px;
-}
+    position: absolute;
+    right: 630px;
+    top: 92px;
+    
+  }
+  .Approve-btn, .create-btn {
+    
+    background-color: #24cd81;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    
+    font-size: 16px;
+    
+    border-radius: 20px;
 
-.item .i1{
-    margin-top: -250px;
-    position: relative;
-    left: -110px;
-}
-.item .i2{
-    margin-top: -250px;
-    position: relative;
-    left: -100px;
-}
 
-.item .i3{
-    margin-top: -250px;
-    position: relative;
-    left: 230px;
-}
-.item .i4{
-    margin-top: -250px;
-    position: relative;
-    left: 200px;
-}
-.item .i5{
-    margin-top: -250px;
-    position: relative;
-    left: -110px;
-    left: 130px;
-}
-.item .i6{
-    margin-top: -250px;
-    position: relative;
-    left: 30px;
-}
+     
+    
+
+  }
+  .Approve-btn:hover,
+  .Accept-btn:hover {
+    background-color: #207846;
+  }
+  .options-btn {
+    margin-right: 10px; 
+  }
+  
+  .download-btn:hover,
+  .options-btn:hover {
+    background-color: #0a384e;
+  }
+  
+  .edit-btn,
+  .cancel-btn {
+    background-color: #f9f9f9;
+    color: black;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 20px; 
+  }
+  .header-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  .back-btn {
+    order: 0;
+    color: #1d438a;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 35px;
+    font-weight: bolder;
+    width: 60px;
+  }
+  
+  .options-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    padding: 12px 16px;
+  }
+  
+  .options-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .options-dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .options-dropdown:hover .options-dropdown-content {
+    display: block;
+  }
+  .container {
+    position: relative; 
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .header h1 {
+    margin-right: auto;
+    margin-bottom: 560px;
+    color: #1d438a;
+  }
+  
+  .back-btn {
+    margin-bottom: 570px;
+  }
+  
+  .button-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 400px; 
+    margin-right: 50px;
+  }
+  
+  .options-dropdown {
+    position: relative; 
+  }
+  
+  .options-btn {
+    margin-left: 20px;
+  }
+  
+  .quotation-details {
+    position: absolute;
+    margin-top: 180px;
+    padding: 40px 120px 180px 120px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin-left: 100px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .data-details h2 {
+    color: #1d438a; 
+  }
+  
+  .data-details p {
+    margin-bottom: 10px; 
+  }
+  
+  .data-details ul {
+    list-style-type: none; 
+    padding: 0; 
+  }
+  
+  .data-details li {
+    margin-bottom: 5px; 
+  }
+  .part1 {
+    margin-bottom: 20px;
+    margin-left: 80px;
+  }
+  
+  .part1 .custom-colors {
+    color: #636262;
+    font-weight: 500;
+  }
+  
+  .part1 .custom-color, .custom-color {
+    color: #535252;
+    font-weight: 650;
+  }
+  
+  .part2 {
+    margin-bottom: 20px;
+    margin-top: -90px;
+    margin-left: 510px;
+  }
+  
+  .part2 .grand-total {
+    display: inline-block;
+    padding: 20px 25px;
+    background-color: #ec8510;
+    color: #fff;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 30px;
+    position: static;
+  }
+  
+  .part3 {
+    margin-bottom: 20px;
+  }
+  
+  .part3 .payment-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .part3 h3, .h3 {
+    color: #1d438a;
+  }
+  h3 {
+    color: #1d438a;
+  }
+  
+  .part3 p {
+    margin-bottom: 10px;
+  }
+  
+  .part3 .custom-c {
+    font-weight: bold;
+    color: #42b8d0;
+  }
+  
+  .part3 .custom-colors, .custom-colors {
+    color: #535252;
+    font-weight: 600;
+  }
+  .custom-c {
+    font-weight: bold;
+    color: #42b8d0;
+  }
+  .footer {
+    margin-top: 20px; 
+  }
+  
+  .container.menu-active {
+    margin-left: -310px;
+    margin-top: 80px;
+  }
+  .container.menu-inactive {
+    margin-left: 310px; 
+    margin-top: 80px;
+  }
+  .main-content {
+    height: calc(100vh); 
+    overflow-y: auto; 
+  }
+  
+  @media (max-width: 1200px) {
+    .container.menu-active {
+      margin-left: -260px;
+    }
+    .container.menu-inactive {
+      margin-left: 260px; 
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .container.menu-active {
+      margin-left: -210px;
+    }
+    .container.menu-inactive {
+      margin-left: 210px; 
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container.menu-active {
+      margin-left: -160px;
+    }
+    .container.menu-inactive {
+      margin-left: 160px; 
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .container.menu-active {
+      margin-left: -120px;
+    }
+    .container.menu-inactive {
+      margin-left: 120px; 
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container.menu-active {
+      margin-left: -100px;
+    }
+    .container.menu-inactive {
+      margin-left: 100px; 
+    }
+  }
+  
+  
+  
+  

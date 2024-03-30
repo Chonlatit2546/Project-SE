@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { collection, onSnapshot, doc, getDoc } from "firebase/firestore";
+import { useParams, Link } from 'react-router-dom';
+import { getDoc, doc, deleteDoc, getDocs, onSnapshot,collection, setDoc, updateDoc, documentId } from 'firebase/firestore';
 import { db } from "../firebase";
 import { DataGrid } from "@mui/x-data-grid";
 import Navbar from '../components/Navbar';
-import { Link } from "react-router-dom";
+
+import './css/Purchaseorders.css'; 
 
 function Purchaseorder() {
   const [purchaseOrders, setPurchaseOrders] = useState([]);
+  const [ProductPOData, setProductPOData] = useState([]);
+  const [menuActive, setMenuActive] = useState(true);
+  
   
   
 
@@ -25,19 +30,37 @@ function Purchaseorder() {
             //reference productPO table
             const productPORef = poData.productPO;
             const productPODoc = await getDoc(productPORef);
-            const productPOData = productPODoc.data();
+            const productPOData = { id: productPORef.id, ...productPODoc.data() };
+            setProductPOData(productPOData);
 
             //reference quotation table
             const quotationRef = productPOData.quotationNo;
             const quotationDoc = await getDoc(quotationRef);
             const quotationData = quotationDoc.data();
 
+            let grandTotal = 0;
+            Object.keys(productPOData).forEach(key => {
+            if (key.startsWith('productNo')) {
+              const product = productPOData[key];
+              const subtotalProduct = product.quantity * product.unitPrice;
+              grandTotal += subtotalProduct;
+              console.log('qNoData:', product);
+            }
+           });
+
+          const vat = 0.07;
+          grandTotal *= 1 + vat;
+
+            
+          
+
             return{
               id:doc.id,
+              ponumber:doc.id,
               customerId: quotationData?.cusName || 'Unknown',
               expiredDate: poData.expiredDate,
               issuedDate: poData.issuedDate,
-              amount: productPOData.amount,
+              amount: grandTotal.toFixed(2),
               status: poData.status,
             };
           });
@@ -59,7 +82,7 @@ function Purchaseorder() {
 
   }, []);
 
-  
+
 
   const actionColumn = {
     field: "action",
@@ -72,14 +95,14 @@ function Purchaseorder() {
           if(status === "Closed"){
             return(
               <div>
-                <Link to={`/PurchaseOrderDetails/${id}`}>Details</Link>
+                <Link to={`/PurchaseOrderDetails/${params.row.id}`}>Details</Link>
               </div>
             );
           }
           else{
             return(
               <div>
-                <Link to={`/CreateReceipt/${id}`}>CreateReceipt</Link>
+                <Link to={`/CreateReceipt/${params.row.id}`}>CreateReceipt</Link>
               </div>
             );
           }
@@ -88,9 +111,28 @@ function Purchaseorder() {
   
 
   const columns = [
-    { field: "id",
+    { field: "ponumber",
      headerName: "PO Number",
-      width: 230 
+      width: 230,
+      renderCell: (params) => {
+        const status = params.row.status;
+        const id = params.row.id;
+
+        if(status === "Closed"){
+          return(
+            <div>
+              <Link to={`/PurchaseOrderDetails/${params.row.id}`}>{params.value}</Link>
+            </div>
+          );
+        }
+        else{
+          return(
+            <div>
+              <Link to={`/CreateReceipt/${params.row.id}`}>{params.value}</Link>
+            </div>
+          );
+        }
+    }
     },
 
     { field: "customerId",
@@ -132,23 +174,22 @@ function Purchaseorder() {
 
   return (
     
-      <div>
-        
+      <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+        <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
         <div className="list">
           <div className="listContainer">
             <div className="datatable">
               <div className="datatableTitle">
                 <h1>Purchase Orders</h1>
               </div>
-              <div style={{ height: 400, width: "100%" }}>
+              <div >
                 {purchaseOrders.length > 0 ? (
-                  <DataGrid 
+                  <DataGrid className="po-table"
                   rows={purchaseOrders} 
                   columns={columns.concat(actionColumn)} 
-                  pageSize={5} 
-                  /*checkboxSelection
-                  disableSelectionOnClick*/
-                  //onCellClick={handleCellClick}
+                  pageSize={10} 
+                  rowsPerPageOptions={[10]}
+                  
                   
                   
                   />

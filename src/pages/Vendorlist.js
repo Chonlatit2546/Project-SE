@@ -9,6 +9,8 @@ import "./css/Vendorlist.css"
 function Vendorlist() {
   const [vendor, setVendor] = useState([]);
   const [menuActive, setMenuActive] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
 
@@ -20,9 +22,12 @@ function Vendorlist() {
           list.push({ id: doc.id, ...doc.data() });
         });
         setVendor(list);
+        setLoading(false);
       },
       (error) => {
-        console.log(error);
+        console.log('Error fetching vendors:',error);
+        setError(error);
+        setLoading(false);
       }
     );
 
@@ -30,13 +35,23 @@ function Vendorlist() {
       addtolist();
     };
   }, []);
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="error">Error: {error.message}</div>;
+  }
 
   const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, "vendor", id));
-      setVendor(vendor.filter((item) => item.id !== id));
-    } catch (err) {
-      console.log(err);
+    const confirmDelete = window.confirm("Are you sure you want to delete this Vendor?");
+    if(confirmDelete){
+      try {
+        await deleteDoc(doc(db, "vendor", id));
+        setVendor(vendor.filter((item) => item.id !== id));
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -44,17 +59,16 @@ function Vendorlist() {
     {
       field: "action",
       headerName: "Action",
-      width: 200,
+      width: 230,
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to={`/VendorDetails/${params.row.id}`}>
-              <div className="viewButton">View</div>
+            <Link to={`/VendorDetails/${params.row.id}`} style={{ textDecoration: "none" }}>
+              <div className="viewButtonVen">View</div>
             </Link>
             <div
-              className="deleteButton"
-              onClick={() => handleDelete(params.row.id)}
-            >
+              className="deleteButtonVen"
+              onClick={() => handleDelete(params.row.id)}>
               Delete
             </div>
           </div>
@@ -64,22 +78,22 @@ function Vendorlist() {
   ];
 
   const vendorColumns = [
-    { field: "id", headerName: "Vendor ID", width: 230 },
+    { field: "id", headerName: "Vendor ID", width: 150 },
     {
       field: "name",
       headerName: "Name",
-      width: 230,
+      width: 180,
     },
     {
       field: "phone",
       headerName: "Phone Number",
-      width: 230,
+      width: 180,
     },
 
     {
       field: "type",
       headerName: "Vendor Type",
-      width: 230,
+      width: 180,
       renderCell: (params) => {
         return (
           <div className={`cellWithType ${params.row.type}`}>
@@ -92,8 +106,8 @@ function Vendorlist() {
 
 
   return (
-    // <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
-    //     <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
+        <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
         <div className="list">
             <div className="listContainer">
                 <div className="datatable">
@@ -103,7 +117,7 @@ function Vendorlist() {
                             Add Vendor
                         </Link>
                     </div>
-                    <div style={{height: 550, width: '100%' }}>
+                    <div style={{ width: '100%' }}>
                         <DataGrid
                             rows={vendor}
                             columns={vendorColumns.concat(actionColumn)}
@@ -112,13 +126,14 @@ function Vendorlist() {
                                     paginationModel: { page: 0, pageSize: 10 },
                                 },
                             }}     
+                            pageSizeOptions={[5, 10]}
                             checkboxSelection
                         />
                     </div>
                 </div>
             </div>
         </div>
-    // </div>
+     </div>
 );
 }
 
