@@ -118,7 +118,7 @@ function Purchaseorder() {
         const status = params.row.status;
         const id = params.row.id;
 
-        if(status === "Closed"){
+        if(status === "Closed" || status === "On Hold"){
           return(
             <div>
               <Link to={`/PurchaseOrderDetails/${params.row.id}`}>{params.value}</Link>
@@ -163,6 +163,9 @@ function Purchaseorder() {
           return <span style={{ color: "green" }}>{status}</span>;
 
         }
+        else if(status === "On Hold"){
+          return <span style={{ color: "mint" }}>{status}</span>;
+        }
         else{
           return <span style={{ color: "blue" }}>{status}</span>;
         }
@@ -186,7 +189,7 @@ function Purchaseorder() {
                 {purchaseOrders.length > 0 ? (
                   <DataGrid className="po-table"
                   rows={purchaseOrders} 
-                  columns={columns.concat(actionColumn)} 
+                  columns={columns} 
                   pageSize={10} 
                   rowsPerPageOptions={[10]}
                   
@@ -194,7 +197,7 @@ function Purchaseorder() {
                   
                   />
                 ) : (
-                  <p>Loading...</p>
+                  <div class="loader"></div>
                 )}
               </div>
             </div>

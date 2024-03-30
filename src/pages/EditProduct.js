@@ -238,6 +238,8 @@ function EditProduct() {
 
       alert("Data updated successfully");
       console.log("Data updated successfully");
+
+      window.location.href = `/EditProduct/${id}`;
     } catch (error) {
       alert("Error updating data: ", error);
       console.error("Error updating data: ", error);
@@ -372,14 +374,14 @@ function EditProduct() {
                     )
                 )}
               </div>
-              <div className="AddmoreProductOwn">
+              <div className="Edit-AddmoreProductOwn">
                 <IoIosAddCircle onClick={addProductOwn} />
-                <label className="add">Add more Product Own</label>
+                <label className="Edit-add">Add more Product Own</label>
 
-                <div className="more-vendor">
+                <div className="Edit-more-vendor">
                   {AddProductOwn.map((add_productOwn, index) => (
-                    <div key={index} className="addVendor">
-                      <div className="addVendorID">
+                    <div key={index} className="Edit-addVendor">
+                      <div className="Edit-addVendorID">
                         <label htmlFor="vendorID">VendorID</label>
                         <input
                           type="text"
@@ -391,7 +393,7 @@ function EditProduct() {
                           // value={productOwn.vendorID}
                         />
                       </div>
-                      <div className="AddSaveDate">
+                      <div className="Edit-AddSaveDate">
                         <label htmlFor="saveDate">Saved Date</label>
                         <input
                           type="date"
@@ -403,7 +405,7 @@ function EditProduct() {
                           // value={productOwn.saveDate}
                         />
                       </div>
-                      <div className="AddUnitPrice">
+                      <div className="Edit-AddUnitPrice">
                         <label htmlFor="unitPrice">Unit Price</label>
                         <input
                           type="text"
@@ -416,7 +418,7 @@ function EditProduct() {
                         />
                       </div>
                       <button
-                        className="Delete-addvendor"
+                        className="Edit-Delete-addvendor"
                         type="button"
                         onClick={() => deleteAddProductOwn(index)}
                       >
@@ -432,15 +434,15 @@ function EditProduct() {
         </form>
       </div>
 
-      <footer className="add-product-Footer">
-        <div className="footer-manage">
+      <footer className="Edit-add-product-Footer">
+        <div className="Edit-footer-manage">
           <div>
             <label>ProductID: {id}</label>
           </div>
 
-          <div className="Submit-Button">
-            <div className="Cancle">
-              <button className="Cancel-Button" onClick={cancel}>Cancel</button>
+          <div className="Edit-Submit-Button">
+            <div className="Edit-Cancle">
+              <button className="Edit-Cancel-Button" onClick={cancel}>Cancel</button>
             </div>
             <div className="Edit-Save-Product-Button">
               <button type="Save-product" onClick={save}>

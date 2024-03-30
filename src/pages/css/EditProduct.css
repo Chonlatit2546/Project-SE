@@ -120,7 +120,39 @@
    background-color: rgb(231, 228, 228);
 }
 
-.Delete-addvendor{
+.Edit-AddmoreProductOwn{
+   margin-top: 20px;
+   display: flex;
+   
+}
+
+.Edit-add{
+   font-size: 10px;
+   padding-left: 10px;
+   padding-top: 2px;
+   
+}
+
+.Edit-more-vendor{
+   margin-top: -10px;
+}
+
+.Edit-addVendor{
+   display: flex;
+   margin-left: 30px;
+   margin-top: 4px;
+
+}
+
+.Edit-AddSaveDate{
+   margin-left: 20px;
+}
+
+.Edit-AddUnitPrice{
+   margin-left: 20px;
+}
+
+.Edit-Delete-addvendor{
    border:1px solid;
    border-radius: 25px;
    height: 25px;
@@ -128,40 +160,11 @@
    margin-left: 20px;
 }
 
-.AddmoreProductOwn{
-   margin-top: 20px;
-   display: flex;
-   
+.Edit-Delete-addvendor:hover{
+   background-color: rgb(231, 228, 228);
 }
 
-.add{
-   font-size: 10px;
-   padding-left: 10px;
-   padding-top: 2px;
-   
-}
-
-.more-vendor{
-   margin-top: -10px;
-}
-
-.addVendor{
-   display: flex;
-   margin-left: 30px;
-   margin-top: 4px;
-
-}
-
-
-.AddSaveDate{
-   margin-left: 20px;
-}
-
-.AddUnitPrice{
-   margin-left: 20px;
-}
-
-.add-product-Footer{
+.Edit-add-product-Footer{
    position: fixed;
    bottom: 0;
    width: 100%;
@@ -172,21 +175,21 @@
    
 }
 
-.footer-manage{
+.Edit-footer-manage{
    display: flex;
    justify-content: space-between;
    margin:20px;
    height: 100%;
 }
 
-.Submit-Button {
+.Edit-Submit-Button {
    display: flex;
    gap: 10px; 
    
  }
 
 
-.Cancel-Button{
+.Edit-Cancel-Button{
    border:1px solid;
    border-radius: 25px;
    height: 30px;
@@ -197,6 +200,10 @@
    position: fixed;
    bottom: 20px;
    left: 1700px; /* ระบุตำแหน่งที่ต้องการแสดงบนแกน X */
+}
+
+.Edit-Cancel-Button:hover{
+   background-color: rgb(231, 228, 228);
 }
 
 .Edit-Save-Product-Button{

@@ -51,6 +51,11 @@
   }
 }
 
+.cellId{
+  color: #193e72;
+  font-weight: bold;
+}
+
 .cellAction {
   display: flex;
   align-items: center;
@@ -101,6 +106,16 @@
 
 .container.menu-inactive {
   margin-left: 310px;
+}
+
+.Searchvendor input{
+  text-align: left;
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+.Searchvendor input[type="text"]{
+  padding-left: 20px;
 }
 
 @media (max-width: 1200px) {

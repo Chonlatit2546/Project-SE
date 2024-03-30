@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getDoc, doc, deleteDoc, getDocs, collection, setDoc, updateDoc, documentId } from 'firebase/firestore';
-import './css/Receipt.css';
+import './css/ApproveReceipt.css';
 import { db } from '../firebase'; 
 import Navbar from "../components/Navbar";
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import FormPDF from './FormPDF';
-import PurchaseOrderPDF from './PurchaseOrderPDF'
 
-function CreateReceipt() {
+
+function ApproveReceipt() {
    const { id } = useParams();
    const [productPOData, setProductPOData] = useState(null);
+   const [receiptData, setreceiptData] = useState(null);
    const [po, setpo] = useState(null);
    const [quotationData, setQuotationData] = useState();
    const [productData, setProductData] = useState([]);
@@ -32,16 +31,29 @@ function CreateReceipt() {
  useEffect(() => {
    const fetchQuotationAndProductPOData = async () => {
      try {
-       const poDocRef = doc(db, 'po', id);
+        //fetch data receipt table from id
+       const reDocRef = doc(db, 'receipt', id);
+       const reSnapshot = await getDoc(reDocRef);
+
+       if (!reSnapshot.exists()) {
+         throw new Error('PO document does not exist');
+       }
+
+       const reData = reSnapshot.data();
+       setreceiptData(reData);
+       
+       //fetch data po table
+       const poDocRef = reData.POref;
        const poSnapshot = await getDoc(poDocRef);
 
        if (!poSnapshot.exists()) {
          throw new Error('PO document does not exist');
        }
 
-       const poData = poSnapshot.data();
+       const poData = { id: poDocRef.id, ...poSnapshot.data() };
        setpo(poData);
 
+       //fetch data productPO table
        const productPODocRef = poData.productPO;
        const productPOSnapshot = await getDoc(productPODocRef);
 
@@ -52,6 +64,7 @@ function CreateReceipt() {
        const productPOData = { id: productPODocRef.id, ...productPOSnapshot.data() };
        setProductPOData(productPOData);
 
+       //fetch data quotation table
        const quotationNoRef = productPOData.quotationNo;
        const quotationNoDoc = await getDoc(quotationNoRef);
 
@@ -62,6 +75,7 @@ function CreateReceipt() {
        const quotationNoData = { id: quotationNoRef.id, ...quotationNoDoc.data() };
        setQuotationData(quotationNoData);
 
+       //each item in productPO table
        const productDataPromises = Object.values(productPOData)
          .filter(product => typeof product === 'object' && product.description)
          .map(async (product) => {
@@ -104,78 +118,76 @@ function CreateReceipt() {
    }
  }, [productData, productPOData]);
 
- /////set first status///////////////////////////////////////
+ 
+ /////set first status/////////////////////////////////////// 
  useEffect(() => {
-   if (po) {
-     setStatus(po.status);
-     setIsApproved(po.status === 'Waiting for receipt creation');
+   if (receiptData) {
+     setStatus(receiptData.status);
+     setIsApproved(po.status === 'On Hold');
    }
  }, [po]);
 
  
-///handle create receipt button/////////////////////////////////
- const handlecreateReceipt = async () => {
-   try {
-     await updateDoc(doc(db,'po', id), { status: 'On Hold' });
-     setStatus('On Hold');
-     setIsApproved(true); 
-     alert('Receipt created successfully.');
-     const currentDate = new Date();
-     const formattedCurrentDate = currentDate.toISOString().split('T')[0];
-     const expiredDate = new Date(currentDate.getTime() + 32 * 24 * 60 * 60 * 1000);
-     const formattedExpiredDate = expiredDate.toISOString().split('T')[0];
-     
-     ///set id receipt//////////////////////////////////////////
-     const querySnapshot = await getDocs(collection(db, 'receipt'));
-     
-     let maxReceiptNo = 0;
-      querySnapshot.forEach(doc => {
-        const currentReceiptNo = parseInt(doc.id.substr(3)); 
-          if (currentReceiptNo > maxReceiptNo) {
-            maxReceiptNo = currentReceiptNo;
-          }
-      });
+ const handleAccept = async () => {
+    try {
+      setStatus('Waiting for Response'); // Optimistically update the status
+      setIsApproved(true);
+      await updateDoc(doc(db, 'receipt', id), {status: 'Closed' });
+      const reid = receiptData.id;
+      const poreff = receiptData.POref.id;
+      await updateDoc(doc(db, 'po', poreff), {status: 'Closed' });
+      setIsApproved(false);
+      alert('Receipt accepted successfully.');
+      window.location.href = '/SearchReceipt';
+    } catch (error) {
+      console.error('Error approving receipt:', error);
+      // Revert the state if the operation fails
+      setStatus(receiptData.status);
+      setIsApproved(receiptData.status === 'Waiting for Response');
+    }
+  };
 
-     const documentId = `rec${String(maxReceiptNo+1).padStart(4, '0')}`;
-     setDocumentIdValue(documentId);
+ const handleDraft = async () => {
+    try {
+      
+      await updateDoc(doc(db, 'receipt', id), {status: 'On Hold' });
+      window.location.href = '/SearchReceipt';
+      
+    
+    } catch (error) {
+      console.error('Error approving receipt:', error);
+      // Revert the state if the operation fails
+      setStatus(receiptData.status);
+      setIsApproved(receiptData.status === 'On Hold');
+    }
+  };
 
-     //sec doc receipt data//////////////////////////////////////////
-     const poref = doc(db, 'po', id);
-     const receiptData = {
-       POref: poref,
-       issuedDate: formattedCurrentDate,
-       status: 'On Hold',
-       
-     };
-     
-     await setDoc(doc(db, 'receipt', documentId), receiptData);
-     window.location.href = '/Purchaseorder';
-     
-   } catch (error) {
-     console.error('Error updating status and creating receipt:', error);
-   }
- };
+  const handleCancel = async () => {
+    const confirmCancel = window.confirm("Are you sure you want to cancel this receipt ?");
 
- ///handle cancel button////////////////////////////////////////////
- const handleCancel = async () => {
-   const confirmCancel = window.confirm("Are you sure you want to cancel this purchase order?");
+    if (confirmCancel) {
+        try {
+            await deleteDoc(doc(db, 'receipt', id));
+            const POReff = receiptData.POref.id;
+            await updateDoc(doc(db, 'po', POReff), { status: 'Waiting for receipt creation' });
+            alert('Receipt canceled successfully.');
+            window.location.href = '/SearchReceipt';
+        } catch (error) {
+            console.error('Error canceling receipt:', error);
+            alert('Failed to cancel receipt. Please try again.');
+        }
+    }
+};
 
-   if (confirmCancel) {
-     await deleteDoc(doc(db, 'po', id));
-     const productPORef = po.productPO.id;
-     await deleteDoc(doc(db, 'productPO', productPORef));
-     const quotationRef = quotationData.id;
-     await deleteDoc(doc(db, 'quotation', quotationRef));
-     window.location.href = '/Purchaseorder';
-   } 
- };
+ 
+  
 
- ///set go back page//////////////////////////////////////////////////
+
+
  const handleGoBack = () => {
-   window.location.href = '/Purchaseorder';
+   window.location.href = '/SearchReceipt';
  };
  
- ///display in web page////////////////////////////////////////////////
  return (
    <div class="main-content">
    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
@@ -184,50 +196,20 @@ function CreateReceipt() {
    <>
      <div className="header">
            <button className="back-btn" onClick={handleGoBack}>&lt;</button>
-           <h1>Purchase Order - {id}</h1>
+           <h1>Receipt - {id}</h1>
          </div>
-         
          <div className="button-container">
-           <PDFDownloadLink
-             className="download-btn"
-             document={<PurchaseOrderPDF
-               purchaseOrderID={id}
-               purchaseOrderData={po}
-               quotationData={quotationData}
-               productData={productData}
-               productPOData={productPOData}
-               total={total}
-               vat={vat}
-               grandTotal={grandTotal}
-             />}
-             fileName={`PurchaseOrder_${id}.pdf`}
-           >
-             {({ blob, url, loading, error }) =>
-               loading ? 'Loading document...' : 'Download'
-             }
-           </PDFDownloadLink>
-           <div className="options-dropdown">
-             <button className="options-btn">Options</button>
-             <div className="options-dropdown-content">
-               {status === 'Waiting for receipt creation' && (
-                  <div >
-
-                     <Link to={`/Editquotation/${quotationData.id}`} className="options-btn edit-btn">Edit Quotation</Link>
-                     <button onClick={() => handleCancel} className="options-btn cancel-btn">Cancel Purchase Order</button>
-                  </div>
-
-                   
-               )}
-             </div>
-           </div>
+           
+                     <button onClick={() => handleCancel} className="cancel-btn1">Cancel Receipt</button>
+           
          </div>
          <div className="quotation-details">
-           <h2>Purchase Order No. {id}</h2>
+           <h2>Receipt No. {id}</h2>
            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
-           <p><span className="custom-c">๐ {po.status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 
-           <span className="custom-colors">Refer To: {quotationData.id} &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Issued Date: {po.issuedDate} &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-            Expired Date: {po.expiredDate}</span>
+           <p><span className="custom-c">๐ {receiptData.status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 
+           <span className="custom-colors">Refer To: {po.id} &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Issued Date: {receiptData.issuedDate} &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            </span>
            </p>
             <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
            <h3>Customer</h3>
@@ -287,12 +269,29 @@ function CreateReceipt() {
              </div>
              </div>
          </div>
-         <div className='approval-container2'>
+         <div className='approval-container3'>
             <div className="footer">
-               {status === 'Waiting for receipt creation' ? (
-                  <button className="create-btn" onClick={handlecreateReceipt}>CreateReceipt</button>
+               {status === 'On Hold' || receiptData.status === 'Draft' ? (
+                 <>
+                    <button className="create-btn" onClick={handleAccept}>Accept Receipt</button>
+                 
+                 </>
                ) : (
-               status !== 'Waiting for receipt creation' && (
+               status !== 'On Hold' && (
+               ' '
+               )
+               )}
+            </div>
+         </div>
+         <div className='approval-container4'>
+            <div className="footer">
+               {status === 'On Hold' || receiptData.status === 'Draft' ? (
+                 <>
+                    <button className="draft-btn" onClick={handleDraft}>Save a Draft</button>
+                 
+                 </>
+               ) : (
+               status !== 'On Hold' && (
                ' '
                )
                )}
@@ -300,12 +299,12 @@ function CreateReceipt() {
          </div>
        </>
      ) : (
-       <div>Loading...</div>
+        <div class="loader"></div>
      )}
    </div>
    </div>
  );
 }
  
- export default CreateReceipt;
+ export default ApproveReceipt;
                   

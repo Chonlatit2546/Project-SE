@@ -100,6 +100,7 @@ function PurchaseOrderDetails() {
   };
   console.log(productPOData)
   console.log(quotationData)
+  
   const handleCancel = async () => {
     const confirmCancel = window.confirm("Are you sure you want to cancel this purchase order?");
 
@@ -148,7 +149,7 @@ function PurchaseOrderDetails() {
                 loading ? 'Loading document...' : 'Download'
               }
             </PDFDownloadLink>
-            <button onClick={handleCancel} className="Cancel-btn">Cancel PO</button>
+            
           </div>
             <div className="purchase-order-details">
               <h2>Purchase Order No. {id}</h2><br />

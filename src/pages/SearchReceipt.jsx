@@ -80,40 +80,33 @@ function SearchReceipt() {
     
       }, []);
     
-      const actionColumn = {
-        field: "action",
-          headerName: "Action",
-          width: 200,
-          renderCell: (params) => {
-              const status = params.row.status;
-              const id = params.row.id;
-    
-              if(status === "Closed"){
-                return(
-                  <div>
-                    <Link to={`/PurchaseOrderDetails/${id}`}>Details</Link>
-                  </div>
-                );
-              }
-              else if(status === "waiting for cheque cleared"){
-                return(
-                  <div>
-                    <Link to={`/CreateReceipt/${id}`}>Cheque cleared</Link>
-                  </div>
-                );
-              }
-              else if(status === "Waiting for Response"){
-                <div>
-                    <Link to={`/CreateReceipt/${id}`}>approve</Link>
-                </div>
-              }
-          }
-      }
+      
 
     const columns = [
         { field: "id",
          headerName: "RE Number",
-          width: 230 
+          width: 230 ,
+          renderCell: (params) => {
+            const status = params.row.status;
+            const id = params.row.id;
+  
+            if(status === "Closed"){
+              return(
+                <div>
+                  <Link to={`/ReceiptDetail/${id}`}>{params.value}</Link>
+                </div>
+              );
+            }
+            
+            else if(status === "On Hold" || status === "Draft"){
+              return(
+                <div>
+                  <Link to={`/ApproveReceipt/${id}`}>{params.value}</Link>
+                </div>
+              );
+              
+            }
+        }
         },
     
         { field: "customerId",
@@ -143,11 +136,15 @@ function SearchReceipt() {
               return <span style={{ color: "green" }}>{status}</span>;
     
             }
-            else if(status === "waiting for cheque cleared"){
+            else if(status === "On Hold"){
               return <span style={{ color: "blue" }}>{status}</span>;
             }
+            
+            else if(status === "Draft"){
+              return <span style={{ color: "gray" }}>{status}</span>;
+            }
             else{
-              return <span style={{ color: "turquoise" }}>{status}</span>;
+              return '' ;
             }
           } 
     
@@ -167,7 +164,7 @@ function SearchReceipt() {
                 {receipt.length > 0 ? (
                   <DataGrid className="re-table"
                   rows={receipt} 
-                  columns={columns.concat(actionColumn)} 
+                  columns={columns} 
                   pageSize={10} 
                   rowsPerPageOptions={[10]}
                   
@@ -175,7 +172,7 @@ function SearchReceipt() {
                   
                   />
                 ) : (
-                  <p>Loading...</p>
+                  <div class="loader"></div>
                 )}
               </div>
             </div>

@@ -153,4 +153,12 @@
   }
 }
 
+.Searchquo input{
+  text-align: left;
+  width: 200px;
+  margin-bottom: 10px;
+}
 
+.Searchquo input[type="text"]{
+  padding-left: 20px;
+}

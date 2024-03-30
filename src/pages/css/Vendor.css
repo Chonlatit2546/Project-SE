@@ -328,3 +328,30 @@
   margin-bottom: 0;
   text-align: center;
 }
+
+.back-btnven {
+  order: 0;
+  color: #1d438a;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 35px;
+  font-weight: bolder;
+  width: 60px;
+}
+
+.back-btnvenadd {
+  order: 0;
+  color: #1d438a;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 35px;
+  font-weight: bolder;
+  width: 60px;
+  margin-bottom: 10px;
+}
