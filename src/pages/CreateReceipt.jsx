@@ -125,8 +125,15 @@ function CreateReceipt() {
      const formattedExpiredDate = expiredDate.toISOString().split('T')[0];
 
      const querySnapshot = await getDocs(collection(db, 'receipt'));
-     const documentCount = querySnapshot.size;
-     const documentId = `rec${String(documentCount+1).padStart(4, '0')}`;
+     const nextReceiptNo = querySnapshot.size
+     let maxReceiptNo = 0;
+      querySnapshot.forEach(doc => {
+        const currentReceiptNo = parseInt(doc.id.substr(3)); // Extract the numeric part of the quotation number
+          if (currentReceiptNo > maxReceiptNo) {
+            maxReceiptNo = currentReceiptNo;
+          }
+      });
+     const documentId = `rec${String(maxReceiptNo+1).padStart(4, '0')}`;
      setDocumentIdValue(documentId);
      const poref = doc(db, 'po', id);
      const receiptData = {
