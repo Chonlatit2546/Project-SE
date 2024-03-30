@@ -133,6 +133,9 @@ function ApproveReceipt() {
       setStatus('Waiting for Response'); // Optimistically update the status
       setIsApproved(true);
       await updateDoc(doc(db, 'receipt', id), {status: 'Closed' });
+      const reid = receiptData.id;
+      const poreff = receiptData.POref.id;
+      await updateDoc(doc(db, 'po', poreff), {status: 'Closed' });
       setIsApproved(false);
       alert('Receipt accepted successfully.');
       window.location.href = '/SearchReceipt';

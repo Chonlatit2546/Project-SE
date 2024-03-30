@@ -118,7 +118,7 @@ function Purchaseorder() {
         const status = params.row.status;
         const id = params.row.id;
 
-        if(status === "Closed"){
+        if(status === "Closed" || status === "On Hold"){
           return(
             <div>
               <Link to={`/PurchaseOrderDetails/${params.row.id}`}>{params.value}</Link>
@@ -162,6 +162,9 @@ function Purchaseorder() {
         if(status === "Closed"){
           return <span style={{ color: "green" }}>{status}</span>;
 
+        }
+        else if(status === "On Hold"){
+          return <span style={{ color: "mint" }}>{status}</span>;
         }
         else{
           return <span style={{ color: "blue" }}>{status}</span>;

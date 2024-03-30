@@ -116,8 +116,8 @@ function CreateReceipt() {
 ///handle create receipt button/////////////////////////////////
  const handlecreateReceipt = async () => {
    try {
-     await updateDoc(doc(db,'po', id), { status: 'Closed' });
-     setStatus('Closed');
+     await updateDoc(doc(db,'po', id), { status: 'On Hold' });
+     setStatus('On Hold');
      setIsApproved(true); 
      alert('Receipt created successfully.');
      const currentDate = new Date();
