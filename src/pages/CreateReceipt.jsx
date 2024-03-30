@@ -28,7 +28,7 @@ function CreateReceipt() {
    const [poDocumentName, setPoDocumentName] = useState('');
 
 
-
+///fetch data from data base/////////////////////////
  useEffect(() => {
    const fetchQuotationAndProductPOData = async () => {
      try {
@@ -87,6 +87,7 @@ function CreateReceipt() {
    fetchQuotationAndProductPOData();
  }, [id]);
 
+ ///calculate amount for each item////////////////////////
  useEffect(() => {
    if (productData.length > 0) {
      const calculatedTotal = productData.reduce((acc, product, index) => {
@@ -103,7 +104,7 @@ function CreateReceipt() {
    }
  }, [productData, productPOData]);
 
- 
+ /////set first status///////////////////////////////////////
  useEffect(() => {
    if (po) {
      setStatus(po.status);
@@ -112,7 +113,7 @@ function CreateReceipt() {
  }, [po]);
 
  
-
+///handle create receipt button/////////////////////////////////
  const handlecreateReceipt = async () => {
    try {
      await updateDoc(doc(db,'po', id), { status: 'Closed' });
@@ -123,18 +124,22 @@ function CreateReceipt() {
      const formattedCurrentDate = currentDate.toISOString().split('T')[0];
      const expiredDate = new Date(currentDate.getTime() + 32 * 24 * 60 * 60 * 1000);
      const formattedExpiredDate = expiredDate.toISOString().split('T')[0];
-
+     
+     ///set id receipt//////////////////////////////////////////
      const querySnapshot = await getDocs(collection(db, 'receipt'));
-     const nextReceiptNo = querySnapshot.size
+     
      let maxReceiptNo = 0;
       querySnapshot.forEach(doc => {
-        const currentReceiptNo = parseInt(doc.id.substr(3)); // Extract the numeric part of the quotation number
+        const currentReceiptNo = parseInt(doc.id.substr(3)); 
           if (currentReceiptNo > maxReceiptNo) {
             maxReceiptNo = currentReceiptNo;
           }
       });
+
      const documentId = `rec${String(maxReceiptNo+1).padStart(4, '0')}`;
      setDocumentIdValue(documentId);
+
+     //sec doc receipt data//////////////////////////////////////////
      const poref = doc(db, 'po', id);
      const receiptData = {
        POref: poref,
@@ -151,6 +156,7 @@ function CreateReceipt() {
    }
  };
 
+ ///handle cancel button////////////////////////////////////////////
  const handleCancel = async () => {
    const confirmCancel = window.confirm("Are you sure you want to cancel this purchase order?");
 
@@ -164,11 +170,12 @@ function CreateReceipt() {
    } 
  };
 
-
+ ///set go back page//////////////////////////////////////////////////
  const handleGoBack = () => {
    window.location.href = '/Purchaseorder';
  };
  
+ ///display in web page////////////////////////////////////////////////
  return (
    <div class="main-content">
    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
@@ -179,6 +186,7 @@ function CreateReceipt() {
            <button className="back-btn" onClick={handleGoBack}>&lt;</button>
            <h1>Purchase Order - {id}</h1>
          </div>
+         
          <div className="button-container">
            <PDFDownloadLink
              className="download-btn"
