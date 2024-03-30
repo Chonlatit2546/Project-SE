@@ -11,7 +11,9 @@ function Vendorlist() {
   const [menuActive, setMenuActive] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
+//ดึงข้อมูล vendor เพื่อมาใส่ในลิส
   useEffect(() => {
 
     const addtolist = onSnapshot(
@@ -25,16 +27,16 @@ function Vendorlist() {
         setLoading(false);
       },
       (error) => {
-        console.log('Error fetching vendors:',error);
+        console.log('Error fetching vendors:', error);
         setError(error);
         setLoading(false);
       }
     );
-
     return () => {
       addtolist();
     };
   }, []);
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -43,9 +45,10 @@ function Vendorlist() {
     return <div className="error">Error: {error.message}</div>;
   }
 
+//Delete
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this Vendor?");
-    if(confirmDelete){
+    if (confirmDelete) {
       try {
         await deleteDoc(doc(db, "vendor", id));
         setVendor(vendor.filter((item) => item.id !== id));
@@ -78,7 +81,16 @@ function Vendorlist() {
   ];
 
   const vendorColumns = [
-    { field: "id", headerName: "Vendor ID", width: 150 },
+    {
+      field: "id",
+      headerName: "Vendor ID",
+      width: 150,
+      renderCell: (params) => (
+        <div className={`cellId`}>
+          {params.row.id}
+        </div>
+      ),
+    },
     {
       field: "name",
       headerName: "Name",
@@ -89,7 +101,6 @@ function Vendorlist() {
       headerName: "Phone Number",
       width: 180,
     },
-
     {
       field: "type",
       headerName: "Vendor Type",
@@ -104,37 +115,54 @@ function Vendorlist() {
     },
   ];
 
+//Search
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
   return (
     <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
-        <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
-        <div className="list">
-            <div className="listContainer">
-                <div className="datatable">
-                    <div className="datatableTitle">
-                        <h1>Vendor list</h1>
-                        <Link to="/Addvendor" className="link">
-                            Add Vendor
-                        </Link>
-                    </div>
-                    <div style={{ width: '100%' }}>
-                        <DataGrid
-                            rows={vendor}
-                            columns={vendorColumns.concat(actionColumn)}
-                            initialState={{
-                                pagination: {
-                                    paginationModel: { page: 0, pageSize: 10 },
-                                },
-                            }}     
-                            pageSizeOptions={[5, 10]}
-                            checkboxSelection
-                        />
-                    </div>
-                </div>
+      <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+      <div className="list">
+        <div className="listContainer">
+          <div className="datatable">
+            <div className="datatableTitle">
+              <h1>Vendor list</h1>
+              <Link to="/Addvendor" className="link">
+                Add Vendor
+              </Link>
             </div>
+            <div className='Searchvendor'>
+              <input
+                type="text"
+                placeholder="Search "
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </div>
+            <div style={{ height: 550, idth: '100%' }}>
+              <DataGrid className='ventable'
+                rows={vendor.filter((row) =>
+                  row.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  row.type.toLowerCase().includes(searchTerm.toLowerCase())
+                )}
+                columns={vendorColumns.concat(actionColumn)}
+                onSearchChange={handleSearch}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 10 },
+                  },
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+              />
+            </div>
+          </div>
         </div>
-     </div>
-);
+      </div>
+    </div>
+  );
 }
 
 export default Vendorlist;

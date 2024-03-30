@@ -12,6 +12,7 @@ function Quotation() {
   const [error, setError] = useState(null);
   const [menuActive, setMenuActive] = useState(true);
   const [storedUsername, setStoredUsername] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -85,6 +86,10 @@ function Quotation() {
     return <div className="error">Error: {error.message}</div>;
   }
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
       <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
@@ -97,9 +102,21 @@ function Quotation() {
                   Create Quotation
               </Link>
               </div>
+              <div className='Searchquo'>
+              <input
+                type="text"
+                placeholder="Search "
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </div>
+              <div style={{ height: 550, idth: '100%' }}>
               <DataGrid
               className="quotation-table"
-              rows={quotations}
+              rows={quotations.filter((row) =>
+                row.quotationNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                row.cusName.toLowerCase().includes(searchTerm.toLowerCase())
+              )}
               columns={[
                 { field: 'quotationNo', headerName: 'QuotationNo', width: 230, renderCell: (params) => (
                   <Link to={`/QuotationDetails/${params.row.id}`}>{params.value}</Link>
@@ -110,13 +127,19 @@ function Quotation() {
                 { field: 'expiredDate', headerName: 'Expired Date', width: 230 },
                 { field: 'grandTotal', headerName: 'Amount', width: 230 },
               ]}
-              pageSize={10}
-              rowsPerPageOptions={[10]}
-              checkboxSelection
+              onSearchChange={handleSearch}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 10 },
+                  },
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
             />
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
