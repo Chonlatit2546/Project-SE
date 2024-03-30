@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { getDocs, collection, addDoc, setDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase'; 
@@ -129,28 +130,28 @@ function CreateQuotation() {
     }
   };
 
-const handleItemChange = async(event, index) => {
-  const { name, value } = event.target;
-   if (name === 'description') {
-    const selectedProduct = products.find(product => product.id === value);
-    const unit = selectedProduct && selectedProduct.unit ? selectedProduct.unit : '';
-    setQuotation((prevQuotation) => ({
-      ...prevQuotation,
-      items: prevQuotation.items.map((item, i) =>
-        i === index ? { ...item, [name]: value, unit: unit } : item
-      ),
-    }));
-  } else {
-    setQuotation((prevQuotation) => ({
-      ...prevQuotation,
-      items: prevQuotation.items.map((item, i) =>
-        i === index ? { ...item, [name]: value } : item
-      ),
-    }));
-  }
-};
-
-
+  const handleItemChange = async (event, index) => {
+    const { name, value } = event.target;
+  
+    if (name === 'description') {
+      const selectedProduct = products.find(product => product.id === value);
+      const unit = selectedProduct && selectedProduct.unit ? selectedProduct.unit : '';
+  
+      setQuotation(prevQuotation => ({
+        ...prevQuotation,
+        items: prevQuotation.items.map((item, i) =>
+          i === index ? { ...item, [name]: value, unit: unit } : item
+        ),
+      }));
+    } else {
+      setQuotation(prevQuotation => ({
+        ...prevQuotation,
+        items: prevQuotation.items.map((item, i) =>
+          i === index ? { ...item, [name]: value } : item
+        ),
+      }));
+    }
+  };
   const handleAddItem = () => {
     const newItem = {
       description: '',
@@ -311,26 +312,22 @@ const handleItemChange = async(event, index) => {
       });
     }
   };
-
   const handleGoBack = () => {
     const confirmGoBack = window.confirm("Are you sure you want to quit from creating the quotation?");
     if (confirmGoBack) {
       window.location.href = '/quotation';
     }
   };
-
   return (
     <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
-    <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
-    <div className="main-container">
+      <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+      <main style={{ padding: '20px', marginLeft: '30px' }}>
       <div className="header-wrapper">
-        <button className="back-btn" onClick={handleGoBack}>&lt;</button>
-        <h1 className='cq'>Create Quotation</h1>
+        <button className="Back-btn" onClick={handleGoBack}>&lt;</button>
+        <h2 style={{ marginLeft: '-20px', fontSize: '35px', color: '#1d438a', marginBottom: '58px' }}>Create Quotation</h2>
       </div>
-      <div className='data-contain'>
-        {/* Quotation Info */}
-        <section className="quotation-info">
-        <div>
+        <section style={{border: '1px solid #ccc', padding: '10px', display: 'flex', flexDirection: 'column', marginTop: '50px' }} className="quotation-info">
+          <div style={{ textAlign: 'left' }}>
             <label>Quotation No.</label>
             <input
               type="text"
@@ -340,143 +337,184 @@ const handleItemChange = async(event, index) => {
               readOnly
             />
           </div>
-          <div>
-            <label>Issued Date</label>
-            <input
-              type="date"
-              name="issuedDate"
-              value={quotation.issuedDate}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Expired Date</label>
-            <input
-              type="date"
-              name="expiredDate"
-              value={quotation.expiredDate}
-              onChange={handleChange}
-            />
-          </div>
-        </section>
-
-        {/* Customer Section */}
-        <section className="customer-info">
-          <div>
-            <label>Customer Name</label>
-            <input
-              type="text"
-              name="cusName"
-              value={quotation.cusName}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Department</label>
-            <input
-              type="text"
-              name="cusDepartment"
-              value={quotation.cusDepartment}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Email</label>
-            <input
-              type="email"
-              name="cusEmail"
-              value={quotation.cusEmail}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Address</label>
-            <input
-              type="text"
-              name="cusAddress"
-              value={quotation.cusAddress}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Phone Number</label>
-            <input
-              type="text"
-              name="cusPhoneNo"
-              value={quotation.cusPhoneNo}
-              onChange={handleChange}
-            />
-          </div>
-        </section>
-
-        {/* Item List */}
-        <section className="item-list">
-          {quotation.items.map((item, index) => (
-            <div key={index}>
-              <label>{index + 1}</label> 
-            <select
-                name="description"
-                value={item.description}
-                onChange={(e) => handleItemChange(e, index)}
-              >
-                <option value="">Select Product</option>
-                {products.map((product, idx) => (
-                  <option key={idx} value={product.id}>{`${product.id}${product.productName}${product.material ? ' - ' + product.material : ''}${product.color ? ', ' + product.color : ''}${product.size ? ', ' + product.size : ''}`}
-                  </option>
-                ))}
-              </select>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <div style={{ textAlign: 'right', marginRight: '10px' }}>
+              <label>Issued Date</label>
               <input
-                type="number"
-                name="quantity"
-                placeholder="Quantity"
-                value={item.quantity}
-                onChange={(e) => handleItemChange(e, index)}
+                type="date"
+                name="issuedDate"
+                value={quotation.issuedDate}
+                onChange={handleChange}
               />
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <label>Expired Date</label>
+              <input
+                type="date"
+                name="expiredDate"
+                value={quotation.expiredDate}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        </section>
+  
+        <section style={{ border: '1px solid #ccc', padding: '10px', display: 'flex', flexDirection: 'column' }} className="customer-info">
+          <div style={{ textAlign: 'left' }}>
+            <label>Customer</label>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <div style={{ textAlign: 'right', marginRight: '10px' }}>
+              <label>Customer Name</label>
               <input
                 type="text"
-                name="unit"
-                placeholder="Unit"
-                value={item.unit}
-                onChange={(e) => handleItemChange(e, index)}
+                name="cusName"
+                value={quotation.cusName}
+                onChange={handleChange}
               />
-    <input
-      type="number"
-      name="unitPrice"
-      placeholder="Unit Price"
-      value={item.unitPrice}
-      onChange={(e) => handleItemChange(e, index)}
-    />
-    <button onClick={() => handleDeleteItem(index)}>Delete</button>
-  </div>
-))}
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <label>Department</label>
+              <input
+                type="text"
+                name="cusDepartment"
+                value={quotation.cusDepartment}
+                onChange={handleChange}
+              />
+            </div>
+            <div style={{ textAlign: 'right', marginRight: '10px' }}>
+              <label>Email</label>
+              <input
+                type="text"
+                name="cusEmail"
+                value={quotation.cusEmail}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <div style={{ textAlign: 'right', marginRight: '60px' }}>
+              <label>Address</label>
+              <input
+                type="text"
+                name="cusAddress"
+                value={quotation.cusAddress}
+                onChange={handleChange}
+              />
+            </div>
+            <div style={{ textAlign: 'right', marginTop: '12px', marginRight: '10px' }}>
+              <label>Phone Number</label>
+              <input
+                type="text"
+                name="cusPhoneNo"
+                value={quotation.cusPhoneNo}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        </section>
+  
+        <section style={{ border: '1px solid #ccc', padding: '10px' }} className="item-list">
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                <th>Unit Price</th>
+                <th>Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {quotation.items.map((item, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <select
+                      name="description"
+                      value={item.description}
+                      onChange={(e) => handleItemChange(e, index)}
+                    >
+                      <option value="">Select Product</option>
+                      {products.map((product, idx) => (
+                        <option key={idx} value={product.id}>{`${product.id}${product.productName}${product.material ? ' - ' + product.material : ''}${product.color ? ', ' + product.color : ''}${product.size ? ', ' + product.size : ''}`}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      name="quantity"
+                      value={item.quantity}
+                      onChange={(e) => handleItemChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="unit"
+                      value={item.unit}
+                      onChange={(e) => handleItemChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      name="unitPrice"
+                      value={item.unitPrice}
+                      onChange={(e) => handleItemChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      name="amount"
+                      value={item.unitPrice * item.quantity}
+                      readOnly
+                    />
+                  </td>
+                  <td>
+                    <button onClick={() => handleDeleteItem(index)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <button className="item-btn" onClick={handleAddItem}>Add Item</button>
         </section>
-        {/* Summary */}
-        <section className="summary">
-        <div>
-            <label>Total:</label>
-            <span>{calculateTotal()} THB</span>
-        </div>
-        <div>
-            <label>VAT (7%):</label>
-            <span>{calculateVAT()} THB</span>
+  
+        <section style={{ border: '1px solid #ccc', padding: '10px' }} className="summary">
+          <div style={{ textAlign: 'left' }}>
+            <label>Summary</label>
           </div>
-          <div>
-            <label>Grand Total:</label>
-            <span>{calculateGrandTotal()} THB</span>
-          </div>
-
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <tbody>
+              <tr>
+                <td>Total:</td>
+                <td>{calculateTotal()} THB</td>
+              </tr>
+              <tr>
+                <td>VAT (7%):</td>
+                <td>{calculateVAT()} THB</td>
+              </tr>
+              <tr>
+                <td>Grand Total:</td>
+                <td>{calculateGrandTotal()} THB</td>
+              </tr>
+            </tbody>
+          </table>
         </section>
-        {/* Actions */}
-        <section className="actions">
-        <button className="cancel-btn"onClick={handleCancel}>Cancel</button>
-        {isEditable && (<button className="save-draft-btn"onClick={handleSaveDraft}>Save Draft</button>)}
-        {!approved && <button className="approve-btn" onClick={handleApproveQuotation}>Approve Quotation</button>}
+  
+        <section style={{ marginTop: '10px' }} className="actions">
+          <button className="cancel-btn" onClick={handleCancel}>Cancel</button>
+          {isEditable && (<button className="save-draft-btn" onClick={handleSaveDraft}>Save Draft</button>)}
+          {!approved && <button className="approve-btn" onClick={handleApproveQuotation}>Approve Quotation</button>}
         </section>
-      </div>
-    </div>
+      </main>
     </div>
   );
-}
-
+}  
 export default CreateQuotation;
