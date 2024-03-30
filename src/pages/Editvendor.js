@@ -15,6 +15,7 @@ function Editvendor() {
   const [vendor, setVendor] = useState(null);
   const [formData, setFormData] = useState(null);
 
+//ดึงข้อมูล Vendor
   useEffect(() => {
     const fetchVendor = async () => {
       try {
@@ -35,11 +36,13 @@ function Editvendor() {
     fetchVendor();
   }, [id]);
 
+//การอัปเดตข้อมูลเมื่อมีการเปลี่ยนแปลง
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+//ส่งข้อมูลเข้าไปในดาต้าเบส
   const handleSubmit = async () => {
     try {
       const docRef = doc(db, "vendor", id);
@@ -54,29 +57,25 @@ function Editvendor() {
   };
 
   if (!vendor) {
-    return <div>Loading...</div>;
+    return  <div className="loading">Loading...</div>;
   }
 
   const CancelVendor = () => {
-    setVendor({
-      VenId: '',
-      name: '',
-      phone: '',
-      type: '',
-      email: '',
-      address: '',
-      bankName: '',
-      bankAccName: '',
-      bankAccNo: '',
-    });
+    navigate(`/VendorDetails/${id}`);
   };
-
+  const handleGoBack = () => {
+    navigate(`/VendorDetails/${id}`);
+  };
 
   return (
     <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
       <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
       <form>
+        
+      <div className='headerven'>
+          <button className="back-btnvenadd" onClick={handleGoBack}>&lt;</button>
         <h1 className='HeadVendor'>Edit vendor - {id}</h1>
+        </div>
         <section className='app-section'>
           <div className='app-container'>
             <div className='box'>

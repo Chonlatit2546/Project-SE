@@ -10,6 +10,8 @@ function VendorDetails() {
     const [menuActive, setMenuActive] = useState(true);
     const [vendor, setVendor] = useState(null);
     const { id } = useParams();
+
+//ดึงข้อมูล Vendor
     useEffect(() => {
         const fetchVendor = async () => {
             try {
@@ -25,15 +27,14 @@ function VendorDetails() {
                 console.error("Error fetching document:", error);
             }
         };
-
         fetchVendor();
     }, [id]);
-    console.log("Vendor Data:", vendor);
 
     if (!vendor) {
         return <div>Loading...</div>;
     }
 
+//Delect
     const handleDelete = async (id) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this Vendor?");
         if (confirmDelete) {
@@ -46,22 +47,29 @@ function VendorDetails() {
         }
     };
 
+//Back
+    const handleGoBack = () => {
+        window.location.href = '/Vendorlist';
+    };
+
     return (
 
         <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
             <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
             <div>
-                <h1 className='HeadVendorDe'>Vendor list - {id}</h1>
-
+                <div className='headerven'>
+                <button className="back-btnven" onClick={handleGoBack}>&lt;</button>
+                    <h1 className='HeadVendorDe'>Vendor list - {id}</h1>
+                </div>
                 <section className='app-sectionDe'>
-                <div className="button-container-vendor">
-                    <div className="options-dropdown-vendor">
-                        <button className="options-btn-vendor">Options</button>
-                        <div className="options-dropdown-content-vendor">
-                            <Link to={`/Editvendor/${id}`} className="options-btn-vendor edit-btn-vendor">Edit Vendor</Link>
-                            <button onClick={() => handleDelete(id)} className="options-btn-vendor delete-btn-vendor">Delete Vendor</button>
+                    <div className="button-container-vendor">
+                        <div className="options-dropdown-vendor">
+                            <button className="options-btn-vendor">Options</button>
+                            <div className="options-dropdown-content-vendor">
+                                <Link to={`/Editvendor/${id}`} className="options-btn-vendor edit-btn-vendor">Edit Vendor</Link>
+                                <button onClick={() => handleDelete(id)} className="options-btn-vendor delete-btn-vendor">Delete Vendor</button>
+                            </div>
                         </div>
-                    </div>
                     </div>
                     <div className="ID-Vendor">
                         VendorID {id}</div>
@@ -135,5 +143,3 @@ function VendorDetails() {
     );
 };
 export default VendorDetails;
-
-
