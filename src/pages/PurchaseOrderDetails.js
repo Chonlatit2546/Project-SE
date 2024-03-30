@@ -100,6 +100,7 @@ function PurchaseOrderDetails() {
   };
   console.log(productPOData)
   console.log(quotationData)
+  
   const handleCancel = async () => {
     const confirmCancel = window.confirm("Are you sure you want to cancel this purchase order?");
 

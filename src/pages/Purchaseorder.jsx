@@ -186,7 +186,7 @@ function Purchaseorder() {
                 {purchaseOrders.length > 0 ? (
                   <DataGrid className="po-table"
                   rows={purchaseOrders} 
-                  columns={columns.concat(actionColumn)} 
+                  columns={columns} 
                   pageSize={10} 
                   rowsPerPageOptions={[10]}
                   
@@ -194,7 +194,7 @@ function Purchaseorder() {
                   
                   />
                 ) : (
-                  <p>Loading...</p>
+                  <div class="loader"></div>
                 )}
               </div>
             </div>
