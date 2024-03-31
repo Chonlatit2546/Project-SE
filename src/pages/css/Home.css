@@ -1,17 +1,27 @@
-.container {
-    display: flex;
-    transition: margin-left 0.3s; 
-}
- 
-.container.menu-active {
-    margin-left: -310px; 
-}
+/* Add this CSS to your Home.css file */
 
-.content {
-    margin-left: 50px;
-    color: #1d438a;
-}
-
-.container.menu-active .content {
-    margin-left: 0; 
-}
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  thead th {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  tbody td {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tbody tr:hover {
+    background-color: #ddd;
+  }
+  
