@@ -175,7 +175,7 @@ function CreateReceipt() {
    window.location.href = '/Purchaseorder';
  };
  
- ///display in web page////////////////////////////////////////////////
+ //------------------------------HTML-------------------------------------
  return (
    <div class="main-content">
    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>

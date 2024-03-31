@@ -150,7 +150,7 @@ function ApproveReceipt() {
   };
 
   
-
+  //-----------------------------คำสั่งปุ่ม Draft-----------------------------
  const handleDraft = async () => {
     try {
       
@@ -166,6 +166,7 @@ function ApproveReceipt() {
     }
   };
 
+  //------------------------------คำสั่งปุ่มยกเลิกใบเสร็จ------------------------------
   const handleCancel = () => {
     setShowConfirmModal(true);
   };
@@ -199,11 +200,12 @@ function ApproveReceipt() {
   
 
 
-
+//--------------------------ปุ่มย้อนกลับ----------------------------------------------------------
  const handleGoBack = () => {
    window.location.href = '/SearchReceipt';
  };
  
+ //--------------------------HTML--------------------------------------------------------------------
  return (
    <div class="main-content">
    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>

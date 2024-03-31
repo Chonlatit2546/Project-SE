@@ -120,34 +120,7 @@ function ReceiptDetail() {
    }
  }, [productData, productPOData]);
 
- 
- 
-
- const handleCancel = async () => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel this receipt ?");
-
-    
-        try {
-            await deleteDoc(doc(db, 'receipt', id));
-            const POReff = receiptData.POref.id;
-            await updateDoc(doc(db, 'po', POReff), { status: 'Waiting for receipt creation' });
-            alert('Receipt canceled successfully.');
-            window.location.href = '/SearchReceipt';
-        } catch (error) {
-            console.error('Error canceling receipt:', error);
-            alert('Failed to cancel receipt. Please try again.');
-        }
-    
-};
-
- 
- 
- 
- 
-  
-
-
-
+ //-------------------------------ปุ่มย้อนกลับ--------------------------------
  const handleGoBack = () => {
    window.location.href = '/SearchReceipt';
  };
@@ -269,3 +242,14 @@ function ReceiptDetail() {
 
                    
                
+ 
+
+ 
+
+ 
+ 
+ 
+ 
+  
+
+

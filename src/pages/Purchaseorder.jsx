@@ -14,7 +14,7 @@ function Purchaseorder() {
   
   
   
-
+  //fetch data from database
   useEffect(() => {
     const fetchPurchaseOrders = async () => {
       try {
@@ -84,32 +84,9 @@ function Purchaseorder() {
 
 
 
-  const actionColumn = {
-    field: "action",
-      headerName: "Action",
-      width: 200,
-      renderCell: (params) => {
-          const status = params.row.status;
-          const id = params.row.id;
-
-          if(status === "Closed"){
-            return(
-              <div>
-                <Link to={`/PurchaseOrderDetails/${params.row.id}`}>Details</Link>
-              </div>
-            );
-          }
-          else{
-            return(
-              <div>
-                <Link to={`/CreateReceipt/${params.row.id}`}>CreateReceipt</Link>
-              </div>
-            );
-          }
-      }
-  }
   
-
+  
+  //-------------------หัวข้อของ Column ------------------------------
   const columns = [
     { field: "ponumber",
      headerName: "PO Number",
@@ -175,6 +152,7 @@ function Purchaseorder() {
 
   ];
 
+  //----------------------HTML---------------------------------------------
   return (
     
       <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
