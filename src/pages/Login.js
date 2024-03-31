@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from './UserContext';
 import { db } from '../firebase';
-import Navbar from "../components/Navbar";
 import { getDoc, doc } from 'firebase/firestore';
 import './css/Login.css';
 
@@ -58,7 +57,6 @@ function Login() {
 
   return (
     <div className="Form-Login">
-      <Navbar />
       <form onSubmit={handleSubmit} className="login-box">
         <div className="input-box">
           <p>username</p>
