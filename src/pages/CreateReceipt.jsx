@@ -19,13 +19,12 @@ function CreateReceipt() {
    const [total, setTotal] = useState(0);
    const [vat, setVat] = useState(0);
    const [grandTotal, setGrandTotal] = useState(0);
-   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-   const [receiptToDelete, setreceiptToDelete] = useState(null);
    const [menuActive, setMenuActive] = useState(true);
    const [status, setStatus] = useState('');
    const [isApproved, setIsApproved] = useState(false);
    const [documentIdValue, setDocumentIdValue] = useState('');
-   const [poDocumentName, setPoDocumentName] = useState('');
+  
+   
 
 
 ///fetch data from data base/////////////////////////
@@ -175,7 +174,7 @@ function CreateReceipt() {
    window.location.href = '/Purchaseorder';
  };
  
- ///display in web page////////////////////////////////////////////////
+ //------------------------------HTML-------------------------------------
  return (
    <div class="main-content">
    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
@@ -189,7 +188,7 @@ function CreateReceipt() {
          
          <div className="button-container">
            <PDFDownloadLink
-             className="download-btn"
+             className="download-btn2"
              document={<PurchaseOrderPDF
                purchaseOrderID={id}
                purchaseOrderData={po}
@@ -207,7 +206,7 @@ function CreateReceipt() {
              }
            </PDFDownloadLink>
            <div className="options-dropdown">
-             <button className="options-btn">Options</button>
+             <button className="options-btn2">Options</button>
              <div className="options-dropdown-content">
                {status === 'Waiting for receipt creation' && (
                   <div >
@@ -221,7 +220,7 @@ function CreateReceipt() {
              </div>
            </div>
          </div>
-         <div className="quotation-details">
+         <div className="quotation-details2">
            <h2>Purchase Order No. {id}</h2>
            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
            <p><span className="custom-c">๐ {po.status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 

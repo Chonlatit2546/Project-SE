@@ -21,6 +21,7 @@ import Product_list from './pages/Product_list';
 import ViewProduct from './pages/ViewProduct';
 import EditProduct from './pages/EditProduct';
 import ReceiptDetail from './pages/ReceiptDetail';
+import ApproveReceipt from './pages/ApproveReceipt';
 
 function App() {
   return (
@@ -49,6 +50,8 @@ function App() {
           <Route path='/ViewProduct/:id' element={<ViewProduct/>}></Route>
           <Route path='/EditProduct/:id' element={<EditProduct/>}></Route>
           <Route path='/ReceiptDetail/:id' element={<ReceiptDetail/>}></Route>
+          <Route path='/ApproveReceipt/:id' element={<ApproveReceipt/>}></Route>
+          <Route path='/ApproveReceipt' element={<ApproveReceipt/>}></Route>
         </Routes>
     </UserProvider>
     </div>

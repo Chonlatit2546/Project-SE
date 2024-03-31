@@ -4,6 +4,7 @@ import { getDoc, doc, deleteDoc, getDocs, collection, setDoc, updateDoc, documen
 import './css/ApproveReceipt.css';
 import { db } from '../firebase'; 
 import Navbar from "../components/Navbar";
+import { Button } from 'bootstrap';
 
 
 function ApproveReceipt() {
@@ -18,13 +19,12 @@ function ApproveReceipt() {
    const [total, setTotal] = useState(0);
    const [vat, setVat] = useState(0);
    const [grandTotal, setGrandTotal] = useState(0);
-   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-   const [receiptToDelete, setreceiptToDelete] = useState(null);
    const [menuActive, setMenuActive] = useState(true);
    const [status, setStatus] = useState('');
    const [isApproved, setIsApproved] = useState(false);
-   const [documentIdValue, setDocumentIdValue] = useState('');
-   const [poDocumentName, setPoDocumentName] = useState('');
+   const [ShowConfirmModal, setShowConfirmModal] = useState(false);
+   
+   
 
 
 ///fetch data from data base/////////////////////////
@@ -127,7 +127,7 @@ function ApproveReceipt() {
    }
  }, [po]);
 
- 
+ ///handle accept receipt button 
  const handleAccept = async () => {
     try {
       setStatus('Waiting for Response'); // Optimistically update the status
@@ -138,7 +138,7 @@ function ApproveReceipt() {
       await updateDoc(doc(db, 'po', poreff), {status: 'Closed' });
       setIsApproved(false);
       alert('Receipt accepted successfully.');
-      window.location.href = '/SearchReceipt';
+      window.location.href = `/ReceiptDetail/${id}`;
     } catch (error) {
       console.error('Error approving receipt:', error);
       // Revert the state if the operation fails
@@ -147,6 +147,8 @@ function ApproveReceipt() {
     }
   };
 
+  
+  //-----------------------------คำสั่งปุ่ม Draft-----------------------------
  const handleDraft = async () => {
     try {
       
@@ -162,32 +164,46 @@ function ApproveReceipt() {
     }
   };
 
-  const handleCancel = async () => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel this receipt ?");
+  //------------------------------คำสั่งปุ่มยกเลิกใบเสร็จ------------------------------
+  const handleCancel = () => {
+    setShowConfirmModal(true);
+  };
+  const handleCancelDelete = () => {
+    setShowConfirmModal(false);
+  };
 
-    if (confirmCancel) {
-        try {
-            await deleteDoc(doc(db, 'receipt', id));
-            const POReff = receiptData.POref.id;
-            await updateDoc(doc(db, 'po', POReff), { status: 'Waiting for receipt creation' });
-            alert('Receipt canceled successfully.');
-            window.location.href = '/SearchReceipt';
-        } catch (error) {
-            console.error('Error canceling receipt:', error);
-            alert('Failed to cancel receipt. Please try again.');
-        }
+  const handleConfirmDelete = async () => {
+    // Delete the receipt data in Firebase
+    try{
+
+      await deleteDoc(doc(db, 'receipt', id));
+        
+      const poreff = receiptData.POref.id;
+      await updateDoc(doc(db, 'po', poreff), {status: 'Waiting for receipt creation' });
+      console.log('Receipt deleted successfully!');
+      window.location.href = `/SearchReceipt`;
+    }catch(error){
+
     }
-};
+        
+      
+    
+    setShowConfirmModal(false);
+  };
+
+  
+  
 
  
   
 
 
-
+//--------------------------ปุ่มย้อนกลับ----------------------------------------------------------
  const handleGoBack = () => {
    window.location.href = '/SearchReceipt';
  };
  
+ //--------------------------HTML--------------------------------------------------------------------
  return (
    <div class="main-content">
    <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
@@ -200,10 +216,28 @@ function ApproveReceipt() {
          </div>
          <div className="button-container">
            
-                     <button onClick={() => handleCancel} className="cancel-btn1">Cancel Receipt</button>
+         <button className="cancel-btn1" onClick={handleCancel}>
+          Cancel Receipt
+        </button>
+
+        
+            <div className='approval-container3'>
+              <div className="footer">
+               {status === 'On Hold'  ? (
+                 <>
+                    <button className="create-btn" onClick={handleAccept}>Accept Receipt</button>
+                 
+                 </>
+               ) : (
+               status !== 'On Hold' && (
+               ' '
+               )
+               )}
+            </div>
+         </div>
            
          </div>
-         <div className="quotation-details">
+         <div className="quotation-details6">
            <h2>Receipt No. {id}</h2>
            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
            <p><span className="custom-c">๐ {receiptData.status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 
@@ -260,32 +294,26 @@ function ApproveReceipt() {
            <div className="grand-total">Grand Total: {grandTotal} ฿</div>
            </div>
            <div className="part3">
-           <div className="payment-details">
-             <h3 className="custom-color">Payment</h3>
-             <p>
-             <strong className="custom-colors">Payment: &nbsp;&nbsp;&nbsp;Paying by cheque</strong> {/* Payment term value */}<br />
-             <strong className="custom-colors">Payment Term: &nbsp;&nbsp;&nbsp;60 DAYS FROM END OF RECEIPT MONTH</strong> {/* Payment details */}
-             </p>
-             </div>
-             </div>
-         </div>
-         <div className='approval-container3'>
-            <div className="footer">
-               {status === 'On Hold' || receiptData.status === 'Draft' ? (
-                 <>
-                    <button className="create-btn" onClick={handleAccept}>Accept Receipt</button>
-                 
-                 </>
-               ) : (
-               status !== 'On Hold' && (
-               ' '
-               )
-               )}
+              <div className="payment-details">
+                <h3 className="custom-color">Payment</h3>
+                  <p>
+                    <strong className="custom-colors">Payment: &nbsp;&nbsp;&nbsp;Paying by cheque</strong> {/* Payment term value */}<br />
+                    <strong className="custom-colors">Payment Term: &nbsp;&nbsp;&nbsp;60 DAYS FROM END OF RECEIPT MONTH</strong> {/* Payment details */}
+                  </p>
+              </div>
             </div>
+            {ShowConfirmModal && (
+          <div className="confirm-modal">
+            <p className='confirm-text'>Are you sure you want to delete this receipt?</p>
+            <button className='confirmDe-btn' onClick={handleConfirmDelete}>Confirm</button>
+            <button className='notconfirmDe-btn' onClick={handleCancelDelete}>Cancel</button>
+          </div>
+        )}
          </div>
+         
          <div className='approval-container4'>
             <div className="footer">
-               {status === 'On Hold' || receiptData.status === 'Draft' ? (
+               {status === 'On Hold'  ? (
                  <>
                     <button className="draft-btn" onClick={handleDraft}>Save a Draft</button>
                  

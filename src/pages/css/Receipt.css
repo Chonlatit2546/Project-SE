@@ -3,8 +3,10 @@
     align-items: center;
     margin-left: 500px;
   }
-  .download-btn,
-  .options-btn {
+  
+  .options-btn2 {
+    position: absolute;
+    right: -490px;
     background-color: #42b8d0;
     border: none;
     color: white;
@@ -16,6 +18,7 @@
     transition-duration: 0.4s;
     cursor: pointer;
     border-radius: 20px;
+    
   }
 
   /* HTML: <div class="loader"></div> */
@@ -53,10 +56,8 @@
   80%,100%{transform: perspective(80px) rotate3d(-1,1,0,-360deg)}
 }
   
-  .options-btn {
-    margin-left: 20px; 
-  }
-  .download-btn {
+  
+  .download-btn2 {
     background-color: #1d438a; 
     border: none;
     color: white;
@@ -69,6 +70,9 @@
     transition-duration: 0.4s;
     cursor: pointer;
     border-radius: 20px; 
+    position: absolute;
+    left: 1000px;
+    top: 142px;
   }
   .approval-container {
     position: fixed;
@@ -87,8 +91,8 @@
   .approval-container2{
     
     position: absolute;
-    right: 630px;
-    top: 92px;
+    right: 720px;
+    top: 126px;
     
   }
   .Approve-btn, .create-btn {
@@ -111,9 +115,7 @@
   .Accept-btn:hover {
     background-color: #207846;
   }
-  .options-btn {
-    margin-right: 10px; 
-  }
+  
   
   .download-btn:hover,
   .options-btn:hover {
@@ -205,33 +207,31 @@
     position: relative; 
   }
   
-  .options-btn {
-    margin-left: 20px;
-  }
   
-  .quotation-details {
+  
+  .quotation-details2 {
     position: absolute;
-    margin-top: 180px;
+    top: 200px;
     padding: 40px 120px 180px 120px;
     background-color: #f9f9f9;
     border-radius: 10px;
     margin-left: 100px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
-  .data-details h2 {
+  .data-details2 h2 {
     color: #1d438a; 
   }
   
-  .data-details p {
+  .data-details2 p {
     margin-bottom: 10px; 
   }
   
-  .data-details ul {
+  .data-details2 ul {
     list-style-type: none; 
     padding: 0; 
   }
   
-  .data-details li {
+  .data-details2 li {
     margin-bottom: 5px; 
   }
   .part1 {

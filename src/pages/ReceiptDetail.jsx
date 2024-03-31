@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getDoc, doc, deleteDoc, getDocs, collection, setDoc, updateDoc, documentId } from 'firebase/firestore';
-import './css/ApproveReceipt.css';
+import './css/ReceiptDetail.css';
 import { db } from '../firebase'; 
 import Navbar from "../components/Navbar";
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -20,13 +20,9 @@ function ReceiptDetail() {
    const [total, setTotal] = useState(0);
    const [vat, setVat] = useState(0);
    const [grandTotal, setGrandTotal] = useState(0);
-   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-   const [receiptToDelete, setreceiptToDelete] = useState(null);
+   
    const [menuActive, setMenuActive] = useState(true);
-   const [status, setStatus] = useState('');
-   const [isApproved, setIsApproved] = useState(false);
-   const [documentIdValue, setDocumentIdValue] = useState('');
-   const [poDocumentName, setPoDocumentName] = useState('');
+   
 
 
 ///fetch data from data base/////////////////////////
@@ -120,34 +116,7 @@ function ReceiptDetail() {
    }
  }, [productData, productPOData]);
 
- 
- 
-
- const handleCancel = async () => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel this receipt ?");
-
-    
-        try {
-            await deleteDoc(doc(db, 'receipt', id));
-            const POReff = receiptData.POref.id;
-            await updateDoc(doc(db, 'po', POReff), { status: 'Waiting for receipt creation' });
-            alert('Receipt canceled successfully.');
-            window.location.href = '/SearchReceipt';
-        } catch (error) {
-            console.error('Error canceling receipt:', error);
-            alert('Failed to cancel receipt. Please try again.');
-        }
-    
-};
-
- 
- 
- 
- 
-  
-
-
-
+ //-------------------------------ปุ่มย้อนกลับ--------------------------------
  const handleGoBack = () => {
    window.location.href = '/SearchReceipt';
  };
@@ -183,17 +152,9 @@ function ReceiptDetail() {
                loading ? 'Loading document...' : 'Download'
              }
            </PDFDownloadLink>
-           <div className="options-dropdown">
-             <button className="options-btn">Options</button>
-             <div className="options-dropdown-content">
-               
-                  <div >
-                     <button onClick={() => handleCancel} className="options-btn cancel-btn">Cancel Receipt</button>
-                  </div>
-             </div>
-           </div>
+           
          </div>
-         <div className="quotation-details">
+         <div className="quotation-details3">
            <h2>Receipt No. {id}</h2>
            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
            <p><span className="custom-c">๐ {receiptData.status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 
@@ -277,3 +238,14 @@ function ReceiptDetail() {
 
                    
                
+ 
+
+ 
+
+ 
+ 
+ 
+ 
+  
+
+

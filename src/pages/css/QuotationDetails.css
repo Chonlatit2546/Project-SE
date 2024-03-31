@@ -4,8 +4,8 @@
   margin-left: 900px;
   margin-top: -520px
 }
-.download-btn,
-.options-btn {
+
+.options-btn5 {
   background-color: #42b8d0;
   border: none;
   color: white;
@@ -17,12 +17,15 @@
   transition-duration: 0.4s;
   cursor: pointer;
   border-radius: 20px;
+  position: absolute;
+  top: -42px;
+  left: 370px;
 }
 
-.options-btn {
+.options-btn5 {
   margin-left: 20px; 
 }
-.download-btn {
+.download-btn5 {
   background-color: #1d438a; 
   border: none;
   color: white;
@@ -35,6 +38,9 @@
   transition-duration: 0.4s;
   cursor: pointer;
   border-radius: 20px; 
+  position: absolute;
+  top: 100px;
+  left: 1000px;
 }
 .approval-container {
   position: fixed;
@@ -68,8 +74,8 @@
   margin-right: 10px; 
 }
 
-.download-btn:hover,
-.options-btn:hover {
+.download-btn5:hover,
+.options-btn5:hover {
   background-color: #0a384e;
 }
 
@@ -162,9 +168,9 @@
   margin-left: 20px;
 }
 
-.quotation-details {
+.quotation-details5 {
   position: absolute;
-  margin-top: -400px;
+  top: 150px;
   padding: 90px 80px;
   background-color: #f9f9f9;
   border-radius: 10px;

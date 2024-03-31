@@ -92,3 +92,9 @@
 .Cancel-btn:hover {
   background-color: #831919; 
 }
+
+.download-btn{
+  position: absolute;
+  left: 1000px;
+  top: 100px;
+}

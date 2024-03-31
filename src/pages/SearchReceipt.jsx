@@ -13,6 +13,7 @@ function SearchReceipt() {
     const [receipt, setreceipt] = useState([]);
     const [menuActive, setMenuActive] = useState(true);
     
+    //------------------------ดึงข้อมูลจากฐานข้อมูลเข้ามาใช้-----------------------------------
     useEffect(() => {
         const fetchreceipt = async () => {
           try {
@@ -81,7 +82,7 @@ function SearchReceipt() {
       }, []);
     
       
-
+    //----------------------------------หัวข้อ Columns------------------------------------
     const columns = [
         { field: "id",
          headerName: "RE Number",
@@ -151,6 +152,8 @@ function SearchReceipt() {
         },
 
     ];
+
+    //--------------------------------HTML----------------------------------------
     return (
         <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
         <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
