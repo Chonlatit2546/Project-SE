@@ -189,7 +189,7 @@ function QuotationDetails() {
             <button className="back-btn" onClick={handleGoBack}>&lt;</button>
             <h1>Quotations - {quotationData.id}</h1>
           </div>
-          <div className="button-container">
+          <div className="Bbutton-container">
             <PDFDownloadLink
               className="download-btn5"
               document={<FormPDF
@@ -215,7 +215,7 @@ function QuotationDetails() {
               </div>
             </div>
             </div>
-          <div className="quotation-details5">
+          <div className="Qquotation-details5">
             <h2>Quotation No. {quotationData.id}</h2><br />
             <p>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
             <p><span className="custom-c">๐ {status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 
