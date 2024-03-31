@@ -11,10 +11,11 @@ import { IoChevronBack } from "react-icons/io5";
 function AddProduct() {
   const navigate = useNavigate(); //navigate  ใช้สำหรับการเปลี่ยนหน้า
 
-  const [menuActive, setMenuActive] = useState(true); //state สำหรับ NavBar
+   //state สำหรับ NavBar
+  const [menuActive, setMenuActive] = useState(true);
 
+  //state สำหรับ product
   const [product, setProduct] = useState({
-    //state สำหรับ product
     productID: "",
     productName: "",
     material: "",
@@ -26,10 +27,14 @@ function AddProduct() {
     unitPrice: "",
   });
 
-  const [newProductID, setNewProductID] = useState(""); //state สำหรับคำนวณ productID
-  const [newProductOwnID, setNewProductOwnID] = useState(""); //state สำหรับคำนวณ productOwnID
+  //state สำหรับคำนวณ productID
+  const [newProductID, setNewProductID] = useState(""); 
 
-  const [AddProductOwn, setAddProductOwn] = useState([]); //state สำหรับเพิ่ม ProductOwn
+  //state สำหรับคำนวณ productOwnID
+  const [newProductOwnID, setNewProductOwnID] = useState(""); 
+
+  //state สำหรับเพิ่ม ProductOwn
+  const [AddProductOwn, setAddProductOwn] = useState([]);
 
   // ----------------------------------สำหรับกลับไปหน้า Product List--------------------------------------------------------------------
   const GoBack = () => {
@@ -40,53 +45,49 @@ function AddProduct() {
   useEffect(() => {
 
 
-    // ---------------------------------คำนวณ procutID โดยการ นับจำนวณ document---------------------------------------------------------
+    // ---------------------------------คำนวณ procutID โดยการหา procutID ที่มากที่สุด ---------------------------------------------------------
     const checkAmountofProductDoc = async () => {
       try {
-        const productDoc = await getDocs(collection(db, "product"));
 
-        // const prod_docCount = productDoc.size;
-        // const newProductID = `pd${String(prod_docCount + 1).padStart(4, "0")}`;
+        const productDoc = await getDocs(collection(db, "product")); //ดึงข้อมูล product จาก Database 
 
-        let maxProductID = 0;
-        productDoc.forEach(doc => {
+        let maxProductID = 0; // Initial ค่า max ให้เป็น 0
+        productDoc.forEach(doc => {  // วนลูปเพื่อหาตัวที่มีค่ามากที่สุด
           console.log(doc.id);
-          const currentProductID = parseInt(doc.id.match(/\d+/)[0]);// Extract the numeric part of the quotation number
-          if (currentProductID  > maxProductID) {
+          const currentProductID = parseInt(doc.id.match(/\d+/)[0]); //ดึงส่วนของตัวเลขมาเก็บในcurrentProductID เช่น pd0005 -> 5
+          if (currentProductID  > maxProductID) { //เปรียบเทียบค่าล่าสุด กับ ค่า max ถ้าค่าล่าสุดมากกว่าค่า max ก็จะให้ max = ค่าล่าสุด
             maxProductID = currentProductID;
           }
       });
+
       console.log("maxProductID",maxProductID);
 
-      const newProductID = `pd${String(maxProductID + 1).padStart(4, "0")}`;
+      const newProductID = `pd${String(maxProductID + 1).padStart(4, "0")}`; //คำนวณ ProductID ตัวถัดไปโดยการนำค่า max มาบวก 1 
       console.log("newProductID",newProductID);
 
-        setNewProductID(newProductID);
+        setNewProductID(newProductID); // set newProductID State 
       } catch (e) {
         console.log("Error", e);
       }
     };
 
-    // --------------------------------คำนวณ procutOwnID โดยการ นับจำนวณ document-------------------------------------------------------
+    // --------------------------------คำนวณ procutOwnID โดยการหา procutOwnID ที่มากที่สุด-------------------------------------------------------
     const checkAmountofProductOwnDoc = async () => {
       try {
-        const productOwnDoc = await getDocs(collection(db, "productOwn"));
+        const productOwnDoc = await getDocs(collection(db, "productOwn")); //ดึงข้อมูล productOwn จาก Database 
 
-        // const prodOwn_docCount = productOwnDoc.size;
-        // const newProductOwnID = `pdv${String(prodOwn_docCount + 1).padStart(4,"0")}`;
-
-        let maxProductOwnID = 0;
-        productOwnDoc.forEach(doc => {
+        let maxProductOwnID = 0; // Initial ค่า max ให้เป็น 0
+        productOwnDoc.forEach(doc => { // วนลูปเพื่อหาตัวที่มีค่ามากที่สุด
           console.log(doc.id);
-          const currentProductOwnID = parseInt(doc.id.match(/\d+/)[0]);// Extract the numeric part of the quotation number
-          if (currentProductOwnID  > maxProductOwnID) {
+          const currentProductOwnID = parseInt(doc.id.match(/\d+/)[0]);// ดึงส่วนของตัวเลขมาเก็บในcurrentProductOwnID เช่น pdv0009 -> 9
+          if (currentProductOwnID  > maxProductOwnID) { //เปรียบเทียบค่าล่าสุด กับ ค่า max ถ้าค่าล่าสุดมากกว่าค่า max ก็จะให้ max = ค่าล่าสุด
             maxProductOwnID = currentProductOwnID;
           }
       });
 
-      const newProductOwnID = `pdv${String(maxProductOwnID + 1).padStart(4,"0")}`;
+      const newProductOwnID = `pdv${String(maxProductOwnID + 1).padStart(4,"0")}`; //คำนวณ ProductOwnID ตัวถัดไปโดยการนำค่า max มาบวก 1 
 
-        setNewProductOwnID(newProductOwnID);
+        setNewProductOwnID(newProductOwnID); // set newProductOwnID State 
         console.log("amount of productOwn", newProductOwnID);
       } catch (e) {
         console.log("Error", e);
@@ -126,7 +127,7 @@ function AddProduct() {
         await Promise.all(
           //นำเอา AddProductOwn มา loop เพื่อเพิ่มข้อมูลลง Database
           AddProductOwn.map(async (productOwn, index) => {
-            //เป็นการคำนวณ ProductOwnID
+            //เป็นการคำนวณ ProductOwnID โดยนำค่าจาก state ProductOwnID มาแล้วนำมาบวกด้วย ค่า index + 1
             const nextNewProductOwnID = `pdv${String(
               Number(newProductOwnID.slice(3)) + index + 1
             ).padStart(4, "0")}`;
@@ -186,22 +187,22 @@ function AddProduct() {
       // เป็นการคำนวณหา ProductID
       const checkAmountofProductDoc = async () => {
         try {
-          const productDoc = await getDocs(collection(db, "product"));
+          const productDoc = await getDocs(collection(db, "product")); //ดึงข้อมูล product จาก Database 
   
-          let maxProductID = 0;
-          productDoc.forEach(doc => {
+          let maxProductID = 0; // Initial ค่า max ให้เป็น 0
+          productDoc.forEach(doc => { // วนลูปเพื่อหาตัวที่มีค่ามากที่สุด
             console.log(doc.id);
-            const currentProductID = parseInt(doc.id.match(/\d+/)[0]);// Extract the numeric part of the quotation number
-            if (currentProductID  > maxProductID) {
+            const currentProductID = parseInt(doc.id.match(/\d+/)[0]);// ดึงส่วนของตัวเลขมาเก็บในcurrentProductID เช่น pd0005 -> 5
+            if (currentProductID  > maxProductID) {  //เปรียบเทียบค่าล่าสุด กับ ค่า max ถ้าค่าล่าสุดมากกว่าค่า max ก็จะให้ max = ค่าล่าสุด
               maxProductID = currentProductID;
             }
         });
         console.log("maxProductID",maxProductID);
   
-        const newProductID = `pd${String(maxProductID + 1).padStart(4, "0")}`;
+        const newProductID = `pd${String(maxProductID + 1).padStart(4, "0")}`; //คำนวณ ProductID ตัวถัดไปโดยการนำค่า max มาบวก 1 
         console.log("newProductID",newProductID);
   
-          setNewProductID(newProductID);
+          setNewProductID(newProductID); // set newProductID State 
         } catch (e) {
           console.log("Error", e);
         }
@@ -212,20 +213,20 @@ function AddProduct() {
       // เป็นการคำนวณหา ProductOwnID
       const checkAmountofProductOwnDoc = async () => {
         try {
-          const productOwnDoc = await getDocs(collection(db, "productOwn"));
+          const productOwnDoc = await getDocs(collection(db, "productOwn")); //ดึงข้อมูล productOwn จาก Database 
           
-          let maxProductOwnID = 0;
-          productOwnDoc.forEach(doc => {
+          let maxProductOwnID = 0; // Initial ค่า max ให้เป็น 0
+          productOwnDoc.forEach(doc => { // วนลูปเพื่อหาตัวที่มีค่ามากที่สุด
             console.log(doc.id);
-            const currentProductOwnID = parseInt(doc.id.match(/\d+/)[0]);// Extract the numeric part of the quotation number
-            if (currentProductOwnID  > maxProductOwnID) {
+            const currentProductOwnID = parseInt(doc.id.match(/\d+/)[0]);// ดึงส่วนของตัวเลขมาเก็บในcurrentProductOwnID เช่น pdv0009 -> 9
+            if (currentProductOwnID  > maxProductOwnID) {  //เปรียบเทียบค่าล่าสุด กับ ค่า max ถ้าค่าล่าสุดมากกว่าค่า max ก็จะให้ max = ค่าล่าสุด
               maxProductOwnID = currentProductOwnID;
             }
         });
   
-        const newProductOwnID = `pdv${String(maxProductOwnID + 1).padStart(4,"0")}`;
+        const newProductOwnID = `pdv${String(maxProductOwnID + 1).padStart(4,"0")}`; //คำนวณ ProductOwnID ตัวถัดไปโดยการนำค่า max มาบวก 1 
   
-          setNewProductOwnID(newProductOwnID);
+          setNewProductOwnID(newProductOwnID);  // set newProductOwnID State 
           console.log("amount of productOwn", newProductOwnID);
         } catch (e) {
           console.log("Error", e);
