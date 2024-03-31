@@ -1,9 +1,8 @@
-.button-container {
+.Bbutton-container {
   display: flex;
   align-items: center;
   margin-left: 900px;
   margin-top: -520px
-}
 
 .options-btn5 {
   background-color: #42b8d0;
@@ -168,9 +167,9 @@
   margin-left: 20px;
 }
 
-.quotation-details5 {
+.Qquotation-details {
   position: absolute;
-  top: 150px;
+  margin-top: 10px;
   padding: 90px 80px;
   background-color: #f9f9f9;
   border-radius: 10px;
