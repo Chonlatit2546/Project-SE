@@ -209,9 +209,9 @@ function QuotationDetails() {
             <div className="options-dropdown">
               <button className="options-btn">Options</button>
               <div className="options-dropdown-content">
-              {(!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation') && (
-                  <Link to={`/Editquotation/${id}`} onClick={handleEdit} className="options-btn edit-btn">Edit Quotation</Link>
-                )}<button onClick={handleCancel} className="options-btn cancel-btn">Cancel Quotation</button>
+              {(!isApproved && status === 'Pending Approval') && (
+                <Link to={`/Editquotation/${id}`} className="options-btn edit-btn">Edit Quotation</Link>
+              )}<button onClick={handleCancel} className="options-btn cancel-btn">Cancel Quotation</button>
               </div>
             </div>
             </div>
