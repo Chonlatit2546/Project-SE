@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getDoc, doc, deleteDoc, getDocs, collection, setDoc, updateDoc, documentId } from 'firebase/firestore';
-import './css/ApproveReceipt.css';
+import './css/ReceiptDetail.css';
 import { db } from '../firebase'; 
 import Navbar from "../components/Navbar";
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -158,7 +158,7 @@ function ReceiptDetail() {
            </PDFDownloadLink>
            
          </div>
-         <div className="quotation-details">
+         <div className="quotation-details3">
            <h2>Receipt No. {id}</h2>
            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
            <p><span className="custom-c">๐ {receiptData.status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 

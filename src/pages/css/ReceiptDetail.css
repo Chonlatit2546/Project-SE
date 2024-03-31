@@ -258,19 +258,15 @@
     margin-left: 20px;
   }
   
-  .quotation-details6 {
+  
+  .quotation-details3 {
     position: absolute;
-    margin-top: -380px;
+    top: 150px;
     padding: 40px 120px 180px 120px;
     background-color: #f9f9f9;
     border-radius: 10px;
     margin-left: 100px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  .cancel-btn1{
-    position: absolute;
-    top: 112px;
-    left: 850px;
   }
   .data-details h2 {
     color: #1d438a; 

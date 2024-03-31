@@ -239,7 +239,7 @@ function ApproveReceipt() {
          </div>
            
          </div>
-         <div className="quotation-details">
+         <div className="quotation-details6">
            <h2>Receipt No. {id}</h2>
            <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
            <p><span className="custom-c">๐ {receiptData.status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 

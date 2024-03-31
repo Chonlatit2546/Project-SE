@@ -191,7 +191,7 @@ function QuotationDetails() {
           </div>
           <div className="button-container">
             <PDFDownloadLink
-              className="download-btn"
+              className="download-btn5"
               document={<FormPDF
                 quotationData={quotationData}
                 productData={productData}
@@ -207,7 +207,7 @@ function QuotationDetails() {
               }
             </PDFDownloadLink>
             <div className="options-dropdown">
-              <button className="options-btn">Options</button>
+              <button className="options-btn5">Options</button>
               <div className="options-dropdown-content">
               {(!isApproved && status === 'Pending Approval') && (
                 <Link to={`/Editquotation/${id}`} className="options-btn edit-btn">Edit Quotation</Link>
@@ -215,7 +215,7 @@ function QuotationDetails() {
               </div>
             </div>
             </div>
-          <div className="quotation-details">
+          <div className="quotation-details5">
             <h2>Quotation No. {quotationData.id}</h2><br />
             <p>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
             <p><span className="custom-c">๐ {status}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; 
