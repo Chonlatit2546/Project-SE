@@ -17,33 +17,48 @@ import { IoIosAddCircle } from "react-icons/io";
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
+
+
 function EditProduct() {
-  const navigate = useNavigate();
 
-  const [menuActive, setMenuActive] = useState(true);
-  const { id } = useParams();
+  const navigate = useNavigate(); //navigate  ใช้สำหรับการเปลี่ยนหน้า
 
-  const [product, setProduct] = useState({
+  const { id } = useParams(); // รับ id ที่ส่งมา
+
+  const [menuActive, setMenuActive] = useState(true); //state สำหรับ NavBar
+  
+  //state สำหรับ product
+  const [product, setProduct] = useState({ 
     productName: "",
     material: "",
     color: "",
     size: "",
     unit: "",
   });
-
+  
+  //state สำหรับเก็บค่าเริ่มต้นของ Product เพื่อนำไว้ใช้ตอน user กด cancel
   const [initialProductData, setInitialProductData] = useState(null);
 
+  //state สำหรับ productOwn
   const [productOwn, setProductOwn] = useState([]);
+
+  //state สำหรับเก็บค่าเริ่มต้นของ ProductOwn เพื่อนำไว้ใช้ตอน user กด cancel
   const [initialProductOwnData, setInitialProductOwnData] = useState(null);
 
+  //state สำหรับเมื่อมีการเพิ่ม ProductOwn
   const [AddProductOwn, setAddProductOwn] = useState([]);
+
+  //state สำหรับเมื่อมีการลบ ProductOwn
   const [deleteProductOwn_buffer, setDeleteProductOwn] = useState([]);
 
+  //------------------------------------------- Action สำหรับ ปุ่มกดกลับไปหน้า ViewProduct -----------------------------------------------
   const GoBack = () => {
     navigate(`/ViewProduct/${id}`);
   };
 
   useEffect(() => {
+
+    //--------------------------------------------- ดึงข้อมูล Product ---------------------------------------------------------------------
     const fetchProduct = async () => {
       try {
         const docRef = doc(db, "product", id);
@@ -59,7 +74,7 @@ function EditProduct() {
         console.error("Error fetching document:", error);
       }
     };
-
+    //-------------------------------------------------ดึงข้อมูล ProductOwn -------------------------------------------------------------
     const fetchProductOwn = async () => {
       try {
         const productOwnsCollectionRef = collection(db, "productOwn");
@@ -78,8 +93,7 @@ function EditProduct() {
               unitPrice: data.unitPrice,
             });
           }
-          // console.log('productOwnIdRef',productOwnIdRef);
-          // console.log('productIdRef',productIdRef.id);
+          
         });
 
         setProductOwn(newProductOwn);
@@ -92,11 +106,15 @@ function EditProduct() {
     fetchProduct();
   }, [id]);
 
+
+  //--------------------------------------------จัดการกับการเปลี่ยนแปลงค่าใน input field ของ product------------------------------------------
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
   };
+  
 
+  //---------------------------------------------- จัดการกับการเปลี่ยนแปลงค่าใน input field ของ productOwn ----------------------------------
   const handleProductOwnChange = (e, index) => {
     const updatedProductOwns = [...productOwn];
     const { name, value } = e.target;
@@ -105,11 +123,11 @@ function EditProduct() {
       ...updatedProductOwns[index],
       [name]: value,
     };
-
     console.log("updatedProductOwns", updatedProductOwns);
     setProductOwn(updatedProductOwns);
   };
 
+  //------------------------------------------------ Action สำหรับเมื่อมีการกดเพิ่ม ProductOwn ---------------------------------------------
   const addProductOwn = () => {
     setAddProductOwn([
       ...AddProductOwn,
@@ -122,6 +140,7 @@ function EditProduct() {
     ]);
   };
 
+  //-------------------------------------------- จัดการกับการเปลี่ยนแปลงค่าใน input field ของ AddProductOwn--------------------------------
   const handleAddProductOwnChange = (e, index) => {
     const { name, value } = e.target;
     setAddProductOwn((prevAddProductOwn) => {
@@ -134,12 +153,15 @@ function EditProduct() {
     });
   };
 
+  //------------------------------------------------ Action สำหรับเมื่อกดปุ่ม Delete AddProductOwn -----------------------------------------
   const deleteAddProductOwn = (index) => {
     const updatedProductOwns = [...AddProductOwn];
     updatedProductOwns.splice(index, 1);
     setAddProductOwn(updatedProductOwns);
   };
 
+
+  // -------------------------------------------------- Action สำหรับเมื่อกดปุ่ม Delete ProductOwn ----------------------------------------
   const deleteProductOwn = (item, index) => {
     const productOwnToDelete = item;
 
@@ -155,6 +177,7 @@ function EditProduct() {
     setProductOwn(updatedProductOwns);
   };
 
+  // ----------------------------------------------------Action สำหรับเมื่อกดปุ่ม Cancel -------------------------------------------------
   const cancel = () => {
     if (initialProductData) {
       // กลับค่า product ให้เป็นค่าเริ่มต้น
@@ -169,6 +192,7 @@ function EditProduct() {
     setDeleteProductOwn([]);
   };
 
+  // ------------------------------------------------------ Action สำหรับเมื่อกดปุ่ม Save--------------------------------------------------
   const save = async () => {
     
       // กำหนดข้อความที่จะแสดงในกล่องข้อความยืนยัน
@@ -193,11 +217,7 @@ function EditProduct() {
 
         const productOwnRef = doc(db, "productOwn", productOwnID);
         const vendorRef = item.venID;
-        // console.log("productOwnRef",productOwnRef)
-        // console.log("vendorRefID",vendorRef.id);
-        // const productOwn_venID_Ref = doc(db, "vendor", vendorRef);
-
-        // console.log(productOwn_venID_Ref);
+        
         console.log("vendorRef", vendorRef);
 
         const productOwn_update = {
@@ -227,13 +247,10 @@ function EditProduct() {
           AddProductOwn.map(async (productOwn, index) => {
             const productOwnDoc = await getDocs(collection(db, "productOwn"));
 
-            // const prodOwn_docCount = productOwnDoc.size;
-            //const newProductOwnID = `pdv${String(prodOwn_docCount + index + 1).padStart(4,"0")}`;
-
             let maxProductOwnID = 0;
             productOwnDoc.forEach((doc) => {
               console.log(doc.id);
-              const currentProductOwnID = parseInt(doc.id.match(/\d+/)[0]); // Extract the numeric part of the quotation number
+              const currentProductOwnID = parseInt(doc.id.match(/\d+/)[0]); 
               if (currentProductOwnID > maxProductOwnID) {
                 maxProductOwnID = currentProductOwnID;
               }
@@ -276,10 +293,14 @@ function EditProduct() {
 
   };
 
+  //สำหรับ Debugging
   console.log("product", product);
   console.log("productOwn", productOwn);
   console.log("delete product buffer", deleteProductOwn_buffer);
   console.log("AddProductOwn", AddProductOwn);
+
+
+  //------------------------------------------------------------ H T M L -------------------------------------------------------------
   return (
     <div
       className={`container ${menuActive ? "menu-inactive" : "menu-active"}`}

@@ -9,15 +9,21 @@ import Navbar from "../components/Navbar";
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
-function ViewProduct() {
-  const { id } = useParams();
-  const [menuActive, setMenuActive] = useState(true);
-  const [product, setProduct] = useState(null);
-  const [productOwns, setProductOwns] = useState(null);
 
-  const navigate = useNavigate();
+function ViewProduct() {
+
+  const navigate = useNavigate(); //ใช้สำหรับเปลี่ยนหน้า
+
+  const { id } = useParams(); // สำหรับรับ id ที่ส่งมา
+
+  const [menuActive, setMenuActive] = useState(true); // State สำหรับ Navbar
+
+  const [product, setProduct] = useState(null);// State สำหรับ product
+
+  const [productOwns, setProductOwns] = useState(null); //State สำหรับ ProductOwn
 
   useEffect(() => {
+    //------------------------------------------------ดึงข้อมูล Product--------------------------------------------------------------------
     const fetchProduct = async () => {
       try {
         const docRef = doc(db, "product", id);
@@ -33,15 +39,14 @@ function ViewProduct() {
       }
     };
 
+    //--------------------------------------------------- ดึงข้อมูลของ ProductOwn----------------------------------------------------------
     const fetchProductOwns = async () => {
       try {
         console.log(id);
         const productOwnsCollectionRef = collection(db, "productOwn");
         const productOwnsSnapshot = await getDocs(productOwnsCollectionRef);
 
-        //const querySnapshot = await getDocs(query(productOwnsCollectionRef, where("prodID", "==", "prodID", "==", id)));
         let list = [];
-        //const productDocRef = doc(db, "product", id);
         productOwnsSnapshot.docs.forEach(async (doc) => {
           // Get the data of the document
           const data = doc.data();
@@ -63,11 +68,7 @@ function ViewProduct() {
               phone: venIDData.phone,
             });
           }
-
-          //  console.log("vendorID = " ,venderID);
-
-          //list.push({ id: doc.id, ...doc.data()});
-
+        
           setProductOwns(list);
         });
       } catch (error) {
@@ -84,10 +85,11 @@ function ViewProduct() {
     return <div>Loading...</div>;
   }
 
+  //-------------------------------------------------- Action สำหรับ ปุ่มกดกลับไปหน้า Product list-----------------------------------------
   const GoBack = () => {
     navigate('/Product_list');
 };
-
+  //--------------------------------------------------- Action สำหรับ ปุ่ม Delete Product -----------------------------------------------
 const deleteProduct = async () => {
   try {
     // ตรวจสอบก่อนว่าผู้ใช้ต้องการลบจริงหรือไม่
@@ -117,7 +119,7 @@ const deleteProduct = async () => {
   }
 };
 
-
+  //--------------------------------------------------------H T M L--------------------------------------------------------------------
   return (
     <div
       className={`container ${menuActive ? "menu-inactive" : "menu-active"}`}
@@ -134,7 +136,7 @@ const deleteProduct = async () => {
             <button className="product-option-button">option</button>
             <div className="product-options-dropdown-content">
               <Link to={`/EditProduct/${id}`} className="product-edit-btn">
-                Edit Vendor
+                Edit Product
               </Link>
               <button className="product-delete-btn" onClick={deleteProduct}>Delete Product</button>
             </div>
