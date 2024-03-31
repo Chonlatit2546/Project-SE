@@ -282,10 +282,10 @@ function QuotationDetails() {
               </div>
           </div>
           <div className='approval-container'>
-          {!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation' ? (
+          {!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation'&& status !== 'On Hold'&& status !== 'Closed' ? (
             <button className="Approve-btn" onClick={handleApproved}>Approve</button>
           ) : (
-            status !== 'Waiting for receipt creation' && (
+            status !== 'Waiting for receipt creation' && status !== 'On Hold'&& status !== 'Closed' && (
             <button className="Accept-btn" onClick={handleAccepted}>Accept</button>
             )
           )}
