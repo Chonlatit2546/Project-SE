@@ -35,6 +35,8 @@
     cursor: pointer;
     border-radius: 20px; 
   }
+
+  
   .approval-container {
     position: fixed;
     bottom: 0px;
@@ -73,7 +75,8 @@
     font-size: 16px;
     cursor: pointer;
     border-radius: 20px;
-
+    display: inline-block;
+    
 
      
     
@@ -109,6 +112,7 @@
     font-size: 16px;
     cursor: pointer;
     border-radius: 20px;
+    display: inline-block;
 
 
      
@@ -157,6 +161,43 @@
     font-size: 35px;
     font-weight: bolder;
     width: 60px;
+  }
+
+  .confirm-modal{
+    position: absolute;
+    top: 200px;
+    left: 300px;
+    width: 400px;
+    height: 100px;
+    font-size: 20px;
+    text-align: center;
+    
+    border-style: solid;
+    background-color: papayawhip;
+    border-radius: 10px;
+  }
+
+  .confirm-text{
+    margin-top: 15px;
+  }
+
+  .confirmDe-btn{
+    width: 100px;
+    margin-top: 15px;
+    font-size: 20px;
+    background-color: #24cd81;
+    border-radius: 8px;
+    position: absolute;
+    left: 80px;
+  }
+  .notconfirmDe-btn{
+    width: 100px;
+    margin-top: 15px;
+    font-size: 20px;
+    background-color: #ee0303;
+    border-radius: 8px;
+    position: absolute;
+    left: 210px;
   }
   
   .options-dropdown-content {
@@ -324,6 +365,13 @@
   .main-content {
     height: calc(100vh); 
     overflow-y: auto; 
+  }
+
+  .box-confirm{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+
   }
   
   @media (max-width: 1200px) {

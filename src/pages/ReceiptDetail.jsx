@@ -183,15 +183,7 @@ function ReceiptDetail() {
                loading ? 'Loading document...' : 'Download'
              }
            </PDFDownloadLink>
-           <div className="options-dropdown">
-             <button className="options-btn">Options</button>
-             <div className="options-dropdown-content">
-               
-                  <div >
-                     <button onClick={() => handleCancel} className="options-btn cancel-btn">Cancel Receipt</button>
-                  </div>
-             </div>
-           </div>
+           
          </div>
          <div className="quotation-details">
            <h2>Receipt No. {id}</h2>
