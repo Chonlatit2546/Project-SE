@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs,deleteDoc,query,where,writeBatch} from "firebase/firestore";
 import { db } from "../firebase";
 import { DataGrid } from "@mui/x-data-grid";
 import "./css/ViewProduct.css";
@@ -88,6 +88,36 @@ function ViewProduct() {
     navigate('/Product_list');
 };
 
+const deleteProduct = async () => {
+  try {
+    // ตรวจสอบก่อนว่าผู้ใช้ต้องการลบจริงหรือไม่
+    const confirmed = window.confirm("Are you sure you want to delete this product?");
+    
+    if (confirmed) {
+      // ลบข้อมูลผลิตภัณฑ์จากฐานข้อมูล
+      const productDocRef = doc(db, "product", id);
+      await deleteDoc(productDocRef);
+
+      // ลบข้อมูลผลิตภัณฑ์ที่เกี่ยวข้องออกจากฐานข้อมูล
+      const productOwnsCollectionRef = collection(db, "productOwn");
+      const querySnapshot = await getDocs(query(productOwnsCollectionRef, where("prodID", "==", productDocRef)));
+      const batch = writeBatch(db);
+      querySnapshot.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+
+      // หลังจากลบข้อมูลเสร็จสิ้น ให้ทำการ redirect ไปยังหน้า Product_list หรือหน้าอื่นตามที่คุณต้องการ
+      navigate('/Product_list');
+      
+      console.log("Product deleted successfully");
+    }
+  } catch (error) {
+    console.error("Error deleting product:", error);
+  }
+};
+
+
   return (
     <div
       className={`container ${menuActive ? "menu-inactive" : "menu-active"}`}
@@ -106,7 +136,7 @@ function ViewProduct() {
               <Link to={`/EditProduct/${id}`} className="product-edit-btn">
                 Edit Vendor
               </Link>
-              <button className="product-delete-btn">Delete Product</button>
+              <button className="product-delete-btn" onClick={deleteProduct}>Delete Product</button>
             </div>
           </div>
         </div>

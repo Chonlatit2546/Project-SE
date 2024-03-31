@@ -3,6 +3,7 @@ import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
 import  * as Mdicons from "react-icons/md";
+import { FiBox } from "react-icons/fi";
 
 export const SidebarData = [
   {
@@ -41,4 +42,10 @@ export const SidebarData = [
     icon: <IoIcons.IoMdPeople  />,
     cName: "nav-text",
   },
+  {
+    title: "Product List",
+    path: "/Product_list",
+    icon: <FiBox />,
+    cName: "nav-text",
+  }
 ];

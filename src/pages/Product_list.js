@@ -5,10 +5,22 @@ import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { DataGrid } from "@mui/x-data-grid";
 import "./css/Product_list.css";
+import { useNavigate } from "react-router-dom";
 
 function Product_list() {
+
+  const navigate = useNavigate(); //navigate  ใช้สำหรับการเปลี่ยนหน้า
+
+  const [search, setSearch] = useState("");
+
   const [product, setProduct] = useState([]);
   const [menuActive, setMenuActive] = useState(true);
+
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
   useEffect(() => {
     const addtolist = onSnapshot(
       collection(db, "product"),
@@ -64,44 +76,66 @@ function Product_list() {
   ];
 
   const ProductColumns = [
-    { field: "id", headerName: "Product ID", width: 230 },
+    { field: "id", 
+    headerName: "Product ID",
+    width: 300,
+    renderCell:(params) => {
+      return(
+        <div>
+          <Link className="Product-list-link" to= {`/ViewProduct/${params.row.id}`}>{params.value}</Link>
+        </div>
+      );
+    }
+   },
     {
       field: "productName",
       headerName: "Name",
-      width: 300,
+      width: 400,
     },
     {
       field: "size",
       headerName: "Size",
-      width: 230,
+      width: 300,
     },
 
     {
       field: "unit",
       headerName: "Unit",
-      width: 230,
+      width: 300,
     },
   ];
 
   return (
     <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
       <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
-      <div className="list">
-        <div className="listContainer">
-          <div className="datatable">
-            <div className="datatableTitle">
+      <div className="product-list">
+        <div className="product-listContainer">
+          <div className="product-datatable">
+            <div className="product-datatableTitle">
               <h1>Product list</h1>
-              <Link to="/Addproduct" className="link">
+              <Link to="/Addproduct" className="add-product-link">
                 add product
               </Link>
             </div>
+            <div className='product-Search'>
+              <input
+                type="text"
+                placeholder="Search"
+                value={search}
+                onChange={handleSearch}
+              />
+            </div>
             <DataGrid
-              className="datagrid"
-              rows={product}
-              columns={ProductColumns.concat(actionColumn)}
+              className="product-datagrid"
+              rows={product.filter((row) =>
+                row.id.toLowerCase().includes(search.toLowerCase()) ||
+                row.productName.toLowerCase().includes(search.toLowerCase())
+              )}
+              //columns={ProductColumns.concat(actionColumn)}
+              columns={ProductColumns}
               pageSize={10}
               rowsPerPageOptions={[10]}
-              checkboxSelection
+              
             />
           </div>
         </div>

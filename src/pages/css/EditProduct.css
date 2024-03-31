@@ -1,3 +1,8 @@
+.EditProduct-Head-manage{
+   display: flex;
+   margin:10px;
+}
+
 .Edit-Head-Topic{
    margin:10px;
    color: #1d438a;
@@ -226,4 +231,13 @@
 
 .Edit-Save-Product-Button button:hover {
    background-color:  rgb(26, 168, 57);
+}
+
+.EditProduct-form input[type = "text"]{
+   padding-left: 10px;
+   color: #42b8d0;
+}
+
+.Edit-AddmoreProductOwn-btn,.ProductOwn-Delete-Button,.Edit-Delete-addvendor,.Edit-Cancel-Button,.Edit-Save-Product-Button button{
+   cursor: pointer;
 }

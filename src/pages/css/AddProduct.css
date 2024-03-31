@@ -1,3 +1,8 @@
+.addProduct-Head-manage{
+   display: flex;
+   margin:10px;
+}
+
 .Head-Topic{
    margin:10px;
    color: #1d438a;
@@ -96,6 +101,7 @@
    height: 25px;
    width: 60px;
    margin-left: 20px;
+   
 }
 
 .AddmoreProductOwn{
@@ -183,8 +189,26 @@
    background-color: rgb(62, 180, 88);
    color:white;
    padding: 2px;
-   
 
-   
 }
 
+.addProduct-form input[type="text"]{
+
+   padding-left: 10px;
+}
+
+#productID,#vendorID{
+   color:#42b8d0;
+}
+
+.AddmoreProductOwn-btn,.Delete-addvendor,.Cancel-Button,.Add-Product-Button button{
+   cursor: pointer;
+}
+
+.Delete-addvendor:hover,.Cancel-Button:hover{
+   background-color: rgb(231, 228, 228);
+}
+
+.Add-Product-Button button:hover{
+   background-color:  rgb(26, 168, 57);
+}

@@ -6,9 +6,9 @@ import { useState, useEffect } from "react";
 import { collection, doc, setDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { IoChevronBack } from "react-icons/io5";
 
 function AddProduct() {
-
   const navigate = useNavigate(); //navigate  ใช้สำหรับการเปลี่ยนหน้า
 
   const [menuActive, setMenuActive] = useState(true); //state สำหรับ NavBar
@@ -31,13 +31,36 @@ function AddProduct() {
 
   const [AddProductOwn, setAddProductOwn] = useState([]); //state สำหรับเพิ่ม ProductOwn
 
+  // ----------------------------------สำหรับกลับไปหน้า Product List--------------------------------------------------------------------
+  const GoBack = () => {
+    navigate("/Product_list");
+  };
+
+
   useEffect(() => {
+
+
     // ---------------------------------คำนวณ procutID โดยการ นับจำนวณ document---------------------------------------------------------
     const checkAmountofProductDoc = async () => {
       try {
         const productDoc = await getDocs(collection(db, "product"));
-        const prod_docCount = productDoc.size;
-        const newProductID = `pd${String(prod_docCount + 1).padStart(4, "0")}`;
+
+        // const prod_docCount = productDoc.size;
+        // const newProductID = `pd${String(prod_docCount + 1).padStart(4, "0")}`;
+
+        let maxProductID = 0;
+        productDoc.forEach(doc => {
+          console.log(doc.id);
+          const currentProductID = parseInt(doc.id.match(/\d+/)[0]);// Extract the numeric part of the quotation number
+          if (currentProductID  > maxProductID) {
+            maxProductID = currentProductID;
+          }
+      });
+      console.log("maxProductID",maxProductID);
+
+      const newProductID = `pd${String(maxProductID + 1).padStart(4, "0")}`;
+      console.log("newProductID",newProductID);
+
         setNewProductID(newProductID);
       } catch (e) {
         console.log("Error", e);
@@ -48,11 +71,21 @@ function AddProduct() {
     const checkAmountofProductOwnDoc = async () => {
       try {
         const productOwnDoc = await getDocs(collection(db, "productOwn"));
-        const prodOwn_docCount = productOwnDoc.size;
-        const newProductOwnID = `pdv${String(prodOwn_docCount + 1).padStart(
-          4,
-          "0"
-        )}`;
+
+        // const prodOwn_docCount = productOwnDoc.size;
+        // const newProductOwnID = `pdv${String(prodOwn_docCount + 1).padStart(4,"0")}`;
+
+        let maxProductOwnID = 0;
+        productOwnDoc.forEach(doc => {
+          console.log(doc.id);
+          const currentProductOwnID = parseInt(doc.id.match(/\d+/)[0]);// Extract the numeric part of the quotation number
+          if (currentProductOwnID  > maxProductOwnID) {
+            maxProductOwnID = currentProductOwnID;
+          }
+      });
+
+      const newProductOwnID = `pdv${String(maxProductOwnID + 1).padStart(4,"0")}`;
+
         setNewProductOwnID(newProductOwnID);
         console.log("amount of productOwn", newProductOwnID);
       } catch (e) {
@@ -69,9 +102,8 @@ function AddProduct() {
     e.preventDefault();
 
     try {
-
       // เช็คว่า ถ้ามีการใส่ saveDate กับ unitPrice มา โดยไม่มี vendorID จะทำให้ error
-      if ((product.saveDate || product.unitPrice) && !product.vendorID) { 
+      if ((product.saveDate || product.unitPrice) && !product.vendorID) {
         throw new Error("Please fill in vendorID");
       }
 
@@ -80,29 +112,24 @@ function AddProduct() {
         (productOwn) =>
           !productOwn.vendorID && (productOwn.saveDate || productOwn.unitPrice)
       );
-      
 
-      // เช็คว่าถ้า hasEmptyVendorID เป็น true จะโยน error 
+      // เช็คว่าถ้า hasEmptyVendorID เป็น true จะโยน error
       if (hasEmptyVendorID) {
         throw new Error("Please fill in vendorID for each Product Own");
       }
 
       // เช็คว่า มี vendorID และ ใน AddProductOwn มีค่าอยู่ (หมายถึงมีการเพิ่ม ProductOwn)
       if (product.vendorID && AddProductOwn) {
-
         const productOwnCollectionRef = collection(db, "productOwn");
 
         // เพิ่มข้อมูลของ Product Own ที่ถูกเพิ่มเข้ามาผ่านอินพุตฟิลด์
         await Promise.all(
-
           //นำเอา AddProductOwn มา loop เพื่อเพิ่มข้อมูลลง Database
           AddProductOwn.map(async (productOwn, index) => {
-
             //เป็นการคำนวณ ProductOwnID
             const nextNewProductOwnID = `pdv${String(
               Number(newProductOwnID.slice(3)) + index + 1
             ).padStart(4, "0")}`;
-
 
             // สำหรับ Debugging
             console.log("addmore", nextNewProductOwnID);
@@ -110,12 +137,10 @@ function AddProduct() {
             console.log(productOwn.vendorID);
             console.log(productOwn.saveDate);
             console.log(productOwn.unitPrice);
-            
 
             //เป็นการสร้าง Reference เพื่อเชื่อมกับ product และ vendor และนำไปเก็บใน productOwn collection
             const productDocRef = doc(db, "product", newProductID);
             const vendorDocRef = doc(db, "vendor", productOwn.vendorID);
-
 
             //เพิ่มค่า productOwn ลงใน Database (collection:productOwn)
             await setDoc(doc(productOwnCollectionRef, nextNewProductOwnID), {
@@ -128,9 +153,9 @@ function AddProduct() {
         );
       }
 
-      // สร้าง Ref ไว้สำหรับ เพิ่มข้อมูลไปที่ product collection 
+      // สร้าง Ref ไว้สำหรับ เพิ่มข้อมูลไปที่ product collection
       const productCollectionRef = collection(db, "product");
-      
+
       //เพิ่มข้อมูลลง product collection
       await setDoc(doc(productCollectionRef, newProductID), {
         productName: product.productName,
@@ -138,16 +163,12 @@ function AddProduct() {
         color: product.color,
         size: product.size,
         unit: product.unit,
-
       });
-
 
       //เช็คว่า มี vendorID ถึงจะเพิ่มข้อมูลได้
       if (product.vendorID) {
-
         //เป็นการสร้าง Ref อ้างอิง productOwn เพื่อจะนำไปใช้ตอน add ข้อมูลลง databases
         const productOwnCollectionRef = collection(db, "productOwn");
-
 
         //เป็นการสร้าง Reference เพื่อเชื่อมกับ product และ vendor และนำไปเก็บใน productOwn collection
         const productDocRef = doc(db, "product", newProductID);
@@ -166,11 +187,20 @@ function AddProduct() {
       const checkAmountofProductDoc = async () => {
         try {
           const productDoc = await getDocs(collection(db, "product"));
-          const prod_docCount = productDoc.size;
-          const newProductID = `pd${String(prod_docCount + 1).padStart(
-            4,
-            "0"
-          )}`;
+  
+          let maxProductID = 0;
+          productDoc.forEach(doc => {
+            console.log(doc.id);
+            const currentProductID = parseInt(doc.id.match(/\d+/)[0]);// Extract the numeric part of the quotation number
+            if (currentProductID  > maxProductID) {
+              maxProductID = currentProductID;
+            }
+        });
+        console.log("maxProductID",maxProductID);
+  
+        const newProductID = `pd${String(maxProductID + 1).padStart(4, "0")}`;
+        console.log("newProductID",newProductID);
+  
           setNewProductID(newProductID);
         } catch (e) {
           console.log("Error", e);
@@ -183,11 +213,18 @@ function AddProduct() {
       const checkAmountofProductOwnDoc = async () => {
         try {
           const productOwnDoc = await getDocs(collection(db, "productOwn"));
-          const prodOwn_docCount = productOwnDoc.size;
-          const newProductOwnID = `pdv${String(prodOwn_docCount + 1).padStart(
-            4,
-            "0"
-          )}`;
+          
+          let maxProductOwnID = 0;
+          productOwnDoc.forEach(doc => {
+            console.log(doc.id);
+            const currentProductOwnID = parseInt(doc.id.match(/\d+/)[0]);// Extract the numeric part of the quotation number
+            if (currentProductOwnID  > maxProductOwnID) {
+              maxProductOwnID = currentProductOwnID;
+            }
+        });
+  
+        const newProductOwnID = `pdv${String(maxProductOwnID + 1).padStart(4,"0")}`;
+  
           setNewProductOwnID(newProductOwnID);
           console.log("amount of productOwn", newProductOwnID);
         } catch (e) {
@@ -196,7 +233,6 @@ function AddProduct() {
       };
 
       checkAmountofProductOwnDoc();
-
 
       //หลังจากเพิ่มเสร็จก็ set State ให้เป็นค่าว่าง
       setProduct({
@@ -210,7 +246,7 @@ function AddProduct() {
         saveDate: "",
         unitPrice: "",
       });
-      
+
       //หลังจากเพิ่มเสร็จก็ set State ให้เป็นค่าว่าง
       setAddProductOwn([]);
 
@@ -219,7 +255,6 @@ function AddProduct() {
       // alert บอกว่า เพิ่มข้อมูลสำเร็จ
       alert("add successful");
     } catch (e) {
-
       // alert บอกว่า เพิ่มข้อมูล Fail
       alert("add fail");
       console.log("error", e);
@@ -284,10 +319,13 @@ function AddProduct() {
       <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
 
       <div className="addProduct-form">
-        <h1 className="Head-Topic"> Add product</h1>
+        <div className="addProduct-Head-manage">
+          <IoChevronBack className="backButton" onClick={GoBack} />
+          <h1 className="Head-Topic"> Add product</h1>
+        </div>
         <form>
           <div className="Product">
-            <div className="Product-info"> 
+            <div className="Product-info">
               Product
               <div className="Product-ID">
                 <label htmlFor="productID">ProductID</label>
@@ -379,7 +417,7 @@ function AddProduct() {
                 ></input>
               </div>
               <div className="AddmoreProductOwn">
-                <IoIosAddCircle onClick={addProductOwn} />
+                <IoIosAddCircle onClick={addProductOwn} className="AddmoreProductOwn-btn"/>
                 <label className="add">Add more Product Own</label>
 
                 <div className="more-vendor">

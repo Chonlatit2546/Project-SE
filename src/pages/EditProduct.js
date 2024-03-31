@@ -14,8 +14,12 @@ import { db } from "../firebase";
 import Navbar from "../components/Navbar";
 import "./css/EditProduct.css";
 import { IoIosAddCircle } from "react-icons/io";
+import { IoChevronBack } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 function EditProduct() {
+  const navigate = useNavigate();
+
   const [menuActive, setMenuActive] = useState(true);
   const { id } = useParams();
 
@@ -34,6 +38,10 @@ function EditProduct() {
 
   const [AddProductOwn, setAddProductOwn] = useState([]);
   const [deleteProductOwn_buffer, setDeleteProductOwn] = useState([]);
+
+  const GoBack = () => {
+    navigate(`/ViewProduct/${id}`);
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -151,20 +159,27 @@ function EditProduct() {
     if (initialProductData) {
       // กลับค่า product ให้เป็นค่าเริ่มต้น
       setProduct(initialProductData);
-
     }
 
-    if(initialProductOwnData){
+    if (initialProductOwnData) {
       setProductOwn(initialProductOwnData);
     }
 
-    setAddProductOwn([])
-    setDeleteProductOwn([])
+    setAddProductOwn([]);
+    setDeleteProductOwn([]);
   };
 
   const save = async () => {
-    try {
-      // อัพเดทข้อมูลของ product
+    
+      // กำหนดข้อความที่จะแสดงในกล่องข้อความยืนยัน
+      const confirmMessage = "ยืนยันการบันทึกข้อมูล?";
+
+      // ใช้ window.confirm() เพื่อแสดงกล่องข้อความยืนยัน
+      const confirmed = window.confirm(confirmMessage);
+
+      if (confirmed) {
+        try{
+          // อัพเดทข้อมูลของ product
       const productDocRef = doc(db, "product", id);
       await updateDoc(productDocRef, product);
 
@@ -211,11 +226,22 @@ function EditProduct() {
         await Promise.all(
           AddProductOwn.map(async (productOwn, index) => {
             const productOwnDoc = await getDocs(collection(db, "productOwn"));
-            const prodOwn_docCount = productOwnDoc.size;
-            const newProductOwnID = `pdv${String(prodOwn_docCount + index + 1).padStart(
-              4,
-              "0"
-            )}`;
+
+            // const prodOwn_docCount = productOwnDoc.size;
+            //const newProductOwnID = `pdv${String(prodOwn_docCount + index + 1).padStart(4,"0")}`;
+
+            let maxProductOwnID = 0;
+            productOwnDoc.forEach((doc) => {
+              console.log(doc.id);
+              const currentProductOwnID = parseInt(doc.id.match(/\d+/)[0]); // Extract the numeric part of the quotation number
+              if (currentProductOwnID > maxProductOwnID) {
+                maxProductOwnID = currentProductOwnID;
+              }
+            });
+
+            const newProductOwnID = `pdv${String(
+              maxProductOwnID + index + 1
+            ).padStart(4, "0")}`;
 
             const productOwnCollectionRef = collection(db, "productOwn");
 
@@ -240,10 +266,14 @@ function EditProduct() {
       console.log("Data updated successfully");
 
       window.location.href = `/EditProduct/${id}`;
-    } catch (error) {
-      alert("Error updating data: ", error);
+        }catch(error){
+          alert("Error updating data: ", error);
       console.error("Error updating data: ", error);
-    }
+        }
+
+
+      }
+
   };
 
   console.log("product", product);
@@ -257,7 +287,10 @@ function EditProduct() {
       <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
 
       <div className="EditProduct-form">
-        <h1 className="Edit-Head-Topic">Edit product-{id}</h1>
+        <div className="EditProduct-Head-manage">
+          <IoChevronBack className="backButton" onClick={GoBack} />
+          <h1 className="Edit-Head-Topic">Edit product-{id}</h1>
+        </div>
         <form>
           <div className="Edit-Product-part">
             <div className="Edit-Product-info">
@@ -375,7 +408,10 @@ function EditProduct() {
                 )}
               </div>
               <div className="Edit-AddmoreProductOwn">
-                <IoIosAddCircle onClick={addProductOwn} />
+                <IoIosAddCircle
+                  onClick={addProductOwn}
+                  className="Edit-AddmoreProductOwn-btn"
+                />
                 <label className="Edit-add">Add more Product Own</label>
 
                 <div className="Edit-more-vendor">
@@ -442,7 +478,9 @@ function EditProduct() {
 
           <div className="Edit-Submit-Button">
             <div className="Edit-Cancle">
-              <button className="Edit-Cancel-Button" onClick={cancel}>Cancel</button>
+              <button className="Edit-Cancel-Button" onClick={cancel}>
+                Cancel
+              </button>
             </div>
             <div className="Edit-Save-Product-Button">
               <button type="Save-product" onClick={save}>
