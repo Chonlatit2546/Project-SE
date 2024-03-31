@@ -58,53 +58,53 @@ function Vendorlist() {
     }
   };
 
-  const actionColumn = [
-    {
-      field: "action",
-      headerName: "Action",
-      width: 230,
-      renderCell: (params) => {
-        return (
-          <div className="cellAction">
-            <Link to={`/VendorDetails/${params.row.id}`} style={{ textDecoration: "none" }}>
-              <div className="viewButtonVen">View</div>
-            </Link>
-            <div
-              className="deleteButtonVen"
-              onClick={() => handleDelete(params.row.id)}>
-              Delete
-            </div>
-          </div>
-        );
-      },
-    },
-  ];
+  // const actionColumn = [
+  //   {
+  //     field: "action",
+  //     headerName: "Action",
+  //     width: 230,
+  //     renderCell: (params) => {
+  //       return (
+  //         <div className="cellAction">
+  //           <Link to={`/VendorDetails/${params.row.id}`} style={{ textDecoration: "none" }}>
+  //             <div className="viewButtonVen">View</div>
+  //           </Link>
+  //           <div
+  //             className="deleteButtonVen"
+  //             onClick={() => handleDelete(params.row.id)}>
+  //             Delete
+  //           </div>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  // ];
 
   const vendorColumns = [
     {
       field: "id",
       headerName: "Vendor ID",
-      width: 150,
+      width: 210,
       renderCell: (params) => (
-        <div className={`cellId`}>
-          {params.row.id}
-        </div>
+        <div>
+        <Link className="vendorlink" to= {`/VendorDetails/${params.row.id}`}>{params.value}</Link>
+      </div>
       ),
     },
     {
       field: "name",
       headerName: "Name",
-      width: 180,
+      width: 220,
     },
     {
       field: "phone",
       headerName: "Phone Number",
-      width: 180,
+      width: 220,
     },
     {
       field: "type",
       headerName: "Vendor Type",
-      width: 180,
+      width: 220,
       renderCell: (params) => {
         return (
           <div className={`cellWithType ${params.row.type}`}>
@@ -147,7 +147,7 @@ function Vendorlist() {
                   row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                   row.type.toLowerCase().includes(searchTerm.toLowerCase())
                 )}
-                columns={vendorColumns.concat(actionColumn)}
+                columns={vendorColumns}
                 onSearchChange={handleSearch}
                 initialState={{
                   pagination: {
