@@ -136,7 +136,7 @@ const deleteProduct = async () => {
             <button className="product-option-button">option</button>
             <div className="product-options-dropdown-content">
               <Link to={`/EditProduct/${id}`} className="product-edit-btn">
-                Edit Vendor
+                Edit Product
               </Link>
               <button className="product-delete-btn" onClick={deleteProduct}>Delete Product</button>
             </div>
