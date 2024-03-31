@@ -5,6 +5,7 @@ import { db } from '../firebase';
 import Navbar from "../components/Navbar";
 import { useUser } from './UserContext';
 import "./css/Createquotation.css"
+import "./css/Vendor.css";
 
 function CreateQuotation() {
   const { user, setUser } = useState(); 
@@ -71,7 +72,7 @@ function CreateQuotation() {
         const querySnapshot = await getDocs(collection(db, 'quotation'));
         let maxQuotationNo = 0;
         querySnapshot.forEach(doc => {
-        const currentQuotationNo = parseInt(doc.id.substr(1)); // Extract the numeric part of the quotation number
+        const currentQuotationNo = parseInt(doc.id.substr(1)); 
           if (currentQuotationNo > maxQuotationNo) {
             maxQuotationNo = currentQuotationNo;
           }
@@ -507,12 +508,22 @@ function CreateQuotation() {
             </tbody>
           </table>
         </section>
-  
-        <section style={{ marginTop: '10px' }} className="actions">
-          <button className="cancel-btn" onClick={handleCancel}>Cancel</button>
-          {isEditable && (<button className="save-draft-btn" onClick={handleSaveDraft}>Save Draft</button>)}
-          {!approved && <button className="approve-btn" onClick={handleApproveQuotation}>Approve Quotation</button>}
-        </section>
+        <footer className="FooterVendor">
+        <div className="footer-manageVendor">
+          <div>
+            <label><b>Quotation :</b> {quotation.quotationNo}</label>
+          </div>
+          <div className="CancleVendorfoot">
+            <button className="CancelButtonVendor" onClick={handleCancel}>Cancle</button>
+          </div>
+          <div className="SaveButtonVendor">
+          {isEditable && (<button  onClick={handleSaveDraft}>Save Draft</button>)}
+          </div>
+          <div className="AddButtonVendor">
+          {!approved && <button onClick={handleApproveQuotation}>Approve</button>}
+          </div>
+        </div>
+      </footer>
       </main>
     </div>
   );
