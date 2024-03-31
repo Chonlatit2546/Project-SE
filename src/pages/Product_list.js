@@ -9,8 +9,6 @@ import { useNavigate } from "react-router-dom";
 
 function Product_list() {
 
-  const navigate = useNavigate(); //navigate  ใช้สำหรับการเปลี่ยนหน้า
-
   const [menuActive, setMenuActive] = useState(true); // state สำหรับ Navbar
 
   const [search, setSearch] = useState(""); // state สำหรับการ Search
