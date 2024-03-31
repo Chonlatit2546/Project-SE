@@ -4,7 +4,7 @@ import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
 import { DataGrid } from "@mui/x-data-grid";
 import { collection, getDocs, getDoc, doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase'; // Import your Firebase configuration
+import { db } from '../firebase'; 
 
 import './css/Home.css';
 import './css/Quotation.css';
@@ -17,12 +17,12 @@ function Home() {
   const [vendor, setVendor] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [id, setId] = useState(''); // Assuming you use 'id' somewhere in your component
+  const [id, setId] = useState(''); 
   const [quotations, setQuotations] = useState([]);
   const [product, setProduct] = useState([]);
   const [purchaseOrders, setPurchaseOrders] = useState([]);
   const [receipt, setReceipt] = useState([]);
-  const [sortOrder, setSortOrder] = useState('asc'); // Track sort order
+  const [sortOrder, setSortOrder] = useState('asc');
   const [sortColumn, setSortColumn] = useState('issuedDate');
   const [selectedTopic, setSelectedTopic] = useState('All');
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,17 +52,17 @@ function Home() {
       try {
         const pocollection = collection(db, 'po');
   
-        // Real-time collection data
+        
         const adddataPO = onSnapshot(pocollection, async (snapshot) => {
           const purchaseOrdersData = await Promise.all(snapshot.docs.map(async (doc) => {
             const poData = doc.data();
   
-            // Reference productPO table
+            
             const productPORef = poData.productPO;
             const productPODoc = await getDoc(productPORef);
             const productPOData = { id: productPORef.id, ...productPODoc.data() };
   
-            // Reference quotation table
+          
             const quotationRef = productPOData.quotationNo;
             const quotationDoc = await getDoc(quotationRef);
             const quotationData = quotationDoc.data();
@@ -108,22 +108,20 @@ function Home() {
         try {
             const receiptCollection = collection(db, 'receipt');
 
-            // Real-time collection data
+            
             const unsubscribe = onSnapshot(receiptCollection, async (snapshot) => {
                 const receiptData = snapshot.docs.map(async (doc) => {
                     const reData = doc.data();
 
-                    // Reference PO table
                     const PORef = reData.POref;
                     const PODoc = await getDoc(PORef);
                     const POData = PODoc.data();
 
-                    // Reference productPO table
+              
                     const productPORef = POData.productPO;
                     const productPODoc = await getDoc(productPORef);
                     const productPOData = productPODoc.data();
 
-                    // Reference quotation table
                     const quotationRef = productPOData.quotationNo;
                     const quotationDoc = await getDoc(quotationRef);
                     const quotationData = quotationDoc.data();
@@ -262,12 +260,12 @@ function Home() {
       const purchaseOrdersData = await Promise.all(poSnapshot.docs.map(async (doc) => {
         const data = doc.data();
   
-        // Reference productPO table
+  
         const productPORef = data.productPO;
         const productPODoc = await getDoc(productPORef);
         const productPOData = productPODoc.data();
   
-        // Reference quotation table
+
         const quotationRef = productPOData.quotationNo;
         const quotationDoc = await getDoc(quotationRef);
         const quotationData = quotationDoc.data();
@@ -348,11 +346,9 @@ function Home() {
   };
   
   const handleSort = (column) => {
-    // Toggle sort order if same column is clicked
     if (column === sortColumn) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
-      // Otherwise, set new column and default to ascending order
       setSortColumn(column);
       setSortOrder('asc');
     }
@@ -364,10 +360,8 @@ function Home() {
 
   const sortedData = combinedData.all ? [...combinedData.all] : [];
 
-  // Filter data based on selected topic
   const filteredData = selectedTopic === 'All' ? sortedData : sortedData.filter(item => item.type === selectedTopic);
 
-  // Sort the filtered data based on the selected column and order
   filteredData.sort((a, b) => {
     const valA = a[sortColumn];
     const valB = b[sortColumn];
@@ -399,7 +393,7 @@ console.log(id)
   return (
     <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
       <Navbar setMenuActive={setMenuActive} />
-      <div className="content" style={{ marginTop: '130px', marginLeft: '40px' }}> {/* Add margin top here */}
+      <div className="content" style={{ marginTop: '130px', marginLeft: '40px' }}> 
         <h1>Home</h1><br />
         <div>
           <label htmlFor="topic">Select Topic: </label>
