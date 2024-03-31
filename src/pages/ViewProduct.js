@@ -1,23 +1,21 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  doc,
-  getDoc,
-  collection,
-  getDocs,
-  onSnapshot,
-  where,
-  query,
-} from "firebase/firestore";
-import { getStorage, ref } from "firebase/storage";
+import { doc, getDoc, collection, getDocs,deleteDoc,query,where,writeBatch} from "firebase/firestore";
 import { db } from "../firebase";
 import { DataGrid } from "@mui/x-data-grid";
 import "./css/ViewProduct.css";
+import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import { IoChevronBack } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 function ViewProduct() {
   const { id } = useParams();
+  const [menuActive, setMenuActive] = useState(true);
   const [product, setProduct] = useState(null);
   const [productOwns, setProductOwns] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -44,7 +42,7 @@ function ViewProduct() {
         //const querySnapshot = await getDocs(query(productOwnsCollectionRef, where("prodID", "==", "prodID", "==", id)));
         let list = [];
         //const productDocRef = doc(db, "product", id);
-         productOwnsSnapshot.docs.forEach(async (doc) => {
+        productOwnsSnapshot.docs.forEach(async (doc) => {
           // Get the data of the document
           const data = doc.data();
           // Get the venID reference from the document data
@@ -54,19 +52,19 @@ function ViewProduct() {
           const venIDDoc = await getDoc(venIDRef);
           // Get the data from the venID document
           const venIDData = venIDDoc.data();
-            
 
           const productIdRef = data.prodID;
-          
-            if(productIdRef.id === id){
-               list.push({ id: venderID, ...data ,name:venIDData.name,phone:venIDData.phone});
-            }
 
-         //  console.log("vendorID = " ,venderID);
-          
-          
-            
-          
+          if (productIdRef.id === id) {
+            list.push({
+              id: venderID,
+              ...data,
+              name: venIDData.name,
+              phone: venIDData.phone,
+            });
+          }
+
+          //  console.log("vendorID = " ,venderID);
 
           //list.push({ id: doc.id, ...doc.data()});
 
@@ -86,61 +84,113 @@ function ViewProduct() {
     return <div>Loading...</div>;
   }
 
-  return (
-    <div>
-      <h1 className="Head-Name"> Product List - {id} </h1>
+  const GoBack = () => {
+    navigate('/Product_list');
+};
 
-      <div className="ID-Head">ProductID {id}</div>
-      <div className="view-product">
-        <div className="View-product-info">
-          <div className="view-product-info">
-            Product
-            <div className="view-Product-ID">
-              <label htmlFor="view-productID">ProductID</label>
-              <label className="view-productID-r">{id}</label>
-            </div>
-            <div className="view-Product-Name">
-              <label htmlFor="view-productName">Name</label>
-              <label className="view-productName-r">
-                {product.productName}
-              </label>
-            </div>
-          </div>
-          <div className="view-Description-info">
-            Description
-            <div className="view-Material">
-              <label htmlFor="material">Material</label>
-              <label>{product.material}</label>
-            </div>
-            <div className="view-Color">
-              <label htmlFor="color">Color</label>
-              <label>{product.color}</label>
-            </div>
-            <div className="view-Size">
-              <label htmlFor="size">Size</label>
-              <label>{product.size}</label>
-            </div>
-            <div className="view-Unit">
-              <label htmlFor="unit">Unit</label>
-              <label>{product.unit}</label>
+const deleteProduct = async () => {
+  try {
+    // ตรวจสอบก่อนว่าผู้ใช้ต้องการลบจริงหรือไม่
+    const confirmed = window.confirm("Are you sure you want to delete this product?");
+    
+    if (confirmed) {
+      // ลบข้อมูลผลิตภัณฑ์จากฐานข้อมูล
+      const productDocRef = doc(db, "product", id);
+      await deleteDoc(productDocRef);
+
+      // ลบข้อมูลผลิตภัณฑ์ที่เกี่ยวข้องออกจากฐานข้อมูล
+      const productOwnsCollectionRef = collection(db, "productOwn");
+      const querySnapshot = await getDocs(query(productOwnsCollectionRef, where("prodID", "==", productDocRef)));
+      const batch = writeBatch(db);
+      querySnapshot.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+
+      // หลังจากลบข้อมูลเสร็จสิ้น ให้ทำการ redirect ไปยังหน้า Product_list หรือหน้าอื่นตามที่คุณต้องการ
+      navigate('/Product_list');
+      
+      console.log("Product deleted successfully");
+    }
+  } catch (error) {
+    console.error("Error deleting product:", error);
+  }
+};
+
+
+  return (
+    <div
+      className={`container ${menuActive ? "menu-inactive" : "menu-active"}`}
+    >
+      <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
+      <div className="product-page-manage">
+        <div className="Head-ViewProduct-Page">
+        <IoChevronBack className = "backButton" onClick={GoBack}/>
+        <h1 className="Head-Name"> Product List - {id} </h1>
+        </div>
+        <div className="Top-head">
+          <div className="ID-Head">ProductID {id}</div>
+          <div className="product-options-dropdown">
+            <button className="product-option-button">option</button>
+            <div className="product-options-dropdown-content">
+              <Link to={`/EditProduct/${id}`} className="product-edit-btn">
+                Edit Vendor
+              </Link>
+              <button className="product-delete-btn" onClick={deleteProduct}>Delete Product</button>
             </div>
           </div>
         </div>
-        <div className="view-Product-Own">
-          <div className="view-Product-Own-Info">Product Own</div>
+        <div className="view-product">
+          <div className="View-product-info">
+            <div className="view-product-info">
+              Product
+              <div className="view-Product-ID">
+                <label htmlFor="view-productID">ProductID</label>
+                <label className="view-productID-r">{id}</label>
+              </div>
+              <div className="view-Product-Name">
+                <label htmlFor="view-productName">Name</label>
+                <label className="view-productName-r">
+                  {product.productName}
+                </label>
+              </div>
+            </div>
+            <div className="view-Description-info">
+              Description
+              <div className="view-Material">
+                <label htmlFor="material">Material</label>
+                <label>{product.material}</label>
+              </div>
+              <div className="view-Color">
+                <label htmlFor="color">Color</label>
+                <label>{product.color}</label>
+              </div>
+              <div className="view-Size">
+                <label htmlFor="size">Size</label>
+                <label>{product.size}</label>
+              </div>
+              <div className="view-Unit">
+                <label htmlFor="unit">Unit</label>
+                <label>{product.unit}</label>
+              </div>
+            </div>
+          </div>
+          <div className="view-Product-Own">
+            <div className="view-Product-Own-Info">Product Own</div>
 
-          <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={productOwns || {}}
-              columns={[
-                { field: "id", headerName: "Vendor ID", width: 200 },
-                { field: "name", headerName: "Name", width: 400 },
-                { field: "phone", headerName: "Phone Number", width: 300 },
-                { field: "unitPrice", headerName: "Unit price", width: 100 },
-                { field: "savedDate", headerName: "Saved Date", width: 200 },
-              ]}
-              pageSize={5}
-            />
+            <div style={{ height: 400, width: "100%" }}>
+              <DataGrid
+                rows={productOwns || {}}
+                columns={[
+                  { field: "id", headerName: "Vendor ID", width: 200 },
+                  { field: "name", headerName: "Name", width: 400 },
+                  { field: "phone", headerName: "Phone Number", width: 300 },
+                  { field: "unitPrice", headerName: "Unit price", width: 100 },
+                  { field: "savedDate", headerName: "Saved Date", width: 200 },
+                ]}
+                pageSize={5}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
+import { IoChevronBack } from "react-icons/io5";
 import "./css/Vendor.css";
 
 
@@ -73,7 +74,7 @@ function Editvendor() {
       <form>
         
       <div className='headerven'>
-          <button className="back-btnvenadd" onClick={handleGoBack}>&lt;</button>
+      <IoChevronBack className="back-btnvenadd" onClick={handleGoBack} />
         <h1 className='HeadVendor'>Edit vendor - {id}</h1>
         </div>
         <section className='app-section'>

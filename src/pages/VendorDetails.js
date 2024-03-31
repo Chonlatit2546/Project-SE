@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { IoChevronBack } from "react-icons/io5";
 import "./css/VendorDetails.css"
 
 function VendorDetails() {
@@ -58,7 +59,7 @@ function VendorDetails() {
             <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
             <div>
                 <div className='headerven'>
-                <button className="back-btnven" onClick={handleGoBack}>&lt;</button>
+                <IoChevronBack className="back-btnven" onClick={handleGoBack} />
                     <h1 className='HeadVendorDe'>Vendor list - {id}</h1>
                 </div>
                 <section className='app-sectionDe'>

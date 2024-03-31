@@ -1,65 +1,65 @@
-.addProduct-Head-manage{
+.EditProduct-Head-manage{
    display: flex;
    margin:10px;
 }
 
-.Head-Topic{
+.Edit-Head-Topic{
    margin:10px;
    color: #1d438a;
 }
 
-.addProduct-form label{
+.EditProduct-form label{
    padding-right: 10px;
 }
 
-.addProduct-form{
+.EditProduct-form{
    margin-left: 200px;
    margin-right: 200px;
    width: 2000px;
    
 }
 
-.Product{
+.Edit-Product-part{
    border: 1px solid #d3d3d3;
    height: 150px;
    margin: 10px;
 }
 
-.Product-info {
+.Edit-Product-info{
    display: flex;
    margin: 20px;
    padding-left: 10px;
    
 }
 
-.Product-ID{
+.Edit-Product-ID{
    padding-left: 50px;
    
 }
 
-.Product-Name{
+.Edit-Product-Name{
    padding-left: 50px;
 }
 
-.Description {
+.Edit-Description {
    display: flex;
    margin: 20px;
    padding-left: 10px;
 }
 
-.Material{
+.Edit-Material{
    padding-left: 25px;
 }
 
-.Color{
+.Edit-Color{
    padding-left: 10px;
 }
 
-.Size{
+.Edit-Size{
    padding-left: 20px;
 }
 
-.Unit{
+.Edit-Unit{
    padding-left: 20px;
 }
 
@@ -67,77 +67,109 @@
    width: 70px;
 }
 
-.Product-Own{
+.Edit-Product-Own{
    border:1px solid #d3d3d3;
    height: auto;
    margin: 10px;
    margin-top: -10px;
    overflow: hidden;
+   
 }
 
-.Product-Own-Info{
+.Edit-Product-Own-Info{
    display: flex;
-   flex-wrap: wrap;
+   flex-direction: column; 
    margin: 20px;
+   
 }
 
-.VendorID{
+.Edit-ProductOwn-item-manage{
+   margin: 10px 10px 10px 150px;
+   
+   
+}
+
+.Edit-ProductOwn-item{
+   padding-left: 10px;
+   margin-left: 10px;
+   display: flex;
+   margin-bottom: 10px;
+   
+}
+
+.Edit-VendorID{
    padding-left: 30px ;
 }
 
-.SavedDate{
+.Edit-SavedDate{
    padding-left: 30px ;
 }
 
-.UnitPrice{
-   flex-basis: 100%;
-   margin-left: 125px;
-   margin-top: 20px;
+.Edit-UnitPrice{
+   margin-left: 30px;
 }
 
-.Delete-addvendor{
+.ProductOwn-Delete{
+   margin-left: 30px;
+}
+
+.ProductOwn-Delete-Button{
    border:1px solid;
    border-radius: 25px;
    height: 25px;
    width: 60px;
    margin-left: 20px;
-   
 }
 
-.AddmoreProductOwn{
+.ProductOwn-Delete-Button:hover{
+   background-color: rgb(231, 228, 228);
+}
+
+.Edit-AddmoreProductOwn{
    margin-top: 20px;
    display: flex;
    
 }
 
-.add{
+.Edit-add{
    font-size: 10px;
    padding-left: 10px;
    padding-top: 2px;
    
 }
 
-.more-vendor{
+.Edit-more-vendor{
    margin-top: -10px;
 }
 
-.addVendor{
+.Edit-addVendor{
    display: flex;
    margin-left: 30px;
    margin-top: 4px;
 
 }
 
-
-.AddSaveDate{
+.Edit-AddSaveDate{
    margin-left: 20px;
 }
 
-.AddUnitPrice{
+.Edit-AddUnitPrice{
    margin-left: 20px;
 }
 
-.add-product-Footer{
+.Edit-Delete-addvendor{
+   border:1px solid;
+   border-radius: 25px;
+   height: 25px;
+   width: 60px;
+   margin-left: 20px;
+}
+
+.Edit-Delete-addvendor:hover{
+   background-color: rgb(231, 228, 228);
+}
+
+.Edit-add-product-Footer{
    position: fixed;
    bottom: 0;
    width: 100%;
@@ -148,21 +180,21 @@
    
 }
 
-.footer-manage{
+.Edit-footer-manage{
    display: flex;
    justify-content: space-between;
    margin:20px;
    height: 100%;
 }
 
-.Submit-Button {
+.Edit-Submit-Button {
    display: flex;
    gap: 10px; 
    
  }
 
 
-.Cancel-Button{
+.Edit-Cancel-Button{
    border:1px solid;
    border-radius: 25px;
    height: 30px;
@@ -175,13 +207,17 @@
    left: 1700px; /* ระบุตำแหน่งที่ต้องการแสดงบนแกน X */
 }
 
-.Add-Product-Button{
+.Edit-Cancel-Button:hover{
+   background-color: rgb(231, 228, 228);
+}
+
+.Edit-Save-Product-Button{
    position: fixed;
    bottom: 20px;
    right: 30px; /* ระบุตำแหน่งที่ต้องการแสดงบนแกน X */
 }
 
-.Add-Product-Button button{
+.Edit-Save-Product-Button button{
    height: 30px;
    width: 100px;
    border:1px solid; 
@@ -189,26 +225,19 @@
    background-color: rgb(62, 180, 88);
    color:white;
    padding: 2px;
-
+   
 }
 
-.addProduct-form input[type="text"]{
 
-   padding-left: 10px;
-}
-
-#productID,#vendorID{
-   color:#42b8d0;
-}
-
-.AddmoreProductOwn-btn,.Delete-addvendor,.Cancel-Button,.Add-Product-Button button{
-   cursor: pointer;
-}
-
-.Delete-addvendor:hover,.Cancel-Button:hover{
-   background-color: rgb(231, 228, 228);
-}
-
-.Add-Product-Button button:hover{
+.Edit-Save-Product-Button button:hover {
    background-color:  rgb(26, 168, 57);
+}
+
+.EditProduct-form input[type = "text"]{
+   padding-left: 10px;
+   color: #42b8d0;
+}
+
+.Edit-AddmoreProductOwn-btn,.ProductOwn-Delete-Button,.Edit-Delete-addvendor,.Edit-Cancel-Button,.Edit-Save-Product-Button button{
+   cursor: pointer;
 }

@@ -19,9 +19,8 @@ import Quotation from './pages/Quotation';
 import VendorDetails from './pages/VendorDetails';
 import Product_list from './pages/Product_list';
 import ViewProduct from './pages/ViewProduct';
-import ApproveReceipt from './pages/ApproveReceipt';
+import EditProduct from './pages/EditProduct';
 import ReceiptDetail from './pages/ReceiptDetail';
-import EditReceipt from './pages/EditReceipt';
 
 function App() {
   return (
@@ -48,12 +47,8 @@ function App() {
           <Route path='/VendorDetails/:id' element={<VendorDetails/>}></Route>
           <Route path='/Product_list' element={<Product_list/>}></Route>
           <Route path='/ViewProduct/:id' element={<ViewProduct/>}></Route>
-          <Route path='/ApproveReceipt' element={<ApproveReceipt/>}></Route>
-          <Route path='/ApproveReceipt/:id' element={<ApproveReceipt/>}></Route>
-          <Route path='/ReceiptDetail' element={<ReceiptDetail/>}></Route>
+          <Route path='/EditProduct/:id' element={<EditProduct/>}></Route>
           <Route path='/ReceiptDetail/:id' element={<ReceiptDetail/>}></Route>
-          <Route path='/EditReceipt' element={<EditReceipt/>}></Route>
-          <Route path='/EditReceipt/:id' element={<EditReceipt/>}></Route>
         </Routes>
     </UserProvider>
     </div>

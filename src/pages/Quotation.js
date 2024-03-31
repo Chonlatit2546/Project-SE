@@ -61,7 +61,8 @@ function Quotation() {
               cusName: quotationNoData.cusName,
               issuedDate: quotationNoData.issuedDate,
               expiredDate: quotationNoData.expiredDate, 
-              grandTotal: grandTotal.toFixed(2)
+              grandTotal: grandTotal.toFixed(2),
+              status: quotationNoData.status
             };
           }));
           setQuotations(quotationData);
@@ -126,6 +127,26 @@ function Quotation() {
                 { field: 'issuedDate', headerName: 'Issued Date', width: 230 },
                 { field: 'expiredDate', headerName: 'Expired Date', width: 230 },
                 { field: 'grandTotal', headerName: 'Amount', width: 230 },
+                  { field: 'status', headerName: 'Status', width: 230, renderCell: (params) => {
+                  const status = params.row.status;
+          
+                  if(status === "Pending Approval"){
+                    return <span style={{ color: "purple" }}>{status}</span>;
+          
+                  }
+                  else if(status === "Waiting for Response"){
+                    return <span style={{ color: "orange" }}>{status}</span>;
+                  }else if(status === "Closed"){
+                    return <span style={{ color: "green" }}>{status}</span>;
+          
+                  }
+                  else if(status === "On Hold"){
+                    return <span style={{ color: "mint" }}>{status}</span>;
+                  }
+                  else{
+                    return <span style={{ color: "blue" }}>{status}</span>;
+                  }
+                }  },
               ]}
               onSearchChange={handleSearch}
                 initialState={{

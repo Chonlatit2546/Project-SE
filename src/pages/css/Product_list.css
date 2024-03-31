@@ -1,22 +1,35 @@
-.list {
+.product-Search input{
+   text-align: left;
+   width: 200px;
+   margin-bottom: 10px;
+ }
+
+.product-Search input[type="text"]{
+   padding-left: 20px;
+   border: 1px solid #d3d3d3;
+ }
+ 
+
+
+.product-list {
    display: flex;
    width: 95%;
    padding-left: 55px;
    
 }
 
-.listContainer {
+.product-listContainer {
    flex: 6;
    
 }
 
-.datatable {
+.product-datatable {
    width: 95%; /*reduce space in box na*/
    /* padding: 15px; */
 
 }
 
-.datatableTitle{
+.product-datatableTitle{
  width: 100%;
  color: #1d438a;
  padding: 10px;
@@ -26,7 +39,7 @@
  
 }  
 
-.link{
+.add-product-link{
        text-decoration: none;
        text-align: center;
        color: rgb(255, 255, 255);
@@ -37,6 +50,16 @@
        cursor: pointer;
        width: 120px;
 }
+
+.product-datagrid a {
+   text-decoration: none;
+   color: #193e72;
+   font-weight: bold;
+ }
+ 
+ .product-datagrid a:hover {
+   text-decoration: underline;
+ }
  
 .cellWithType {
  text-align: center;

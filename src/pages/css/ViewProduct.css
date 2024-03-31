@@ -1,17 +1,106 @@
+.product-page-manage{
+   /* border:1px solid black; */
+   margin-left: 200px;
+   margin-right: 200px;
+   width: calc(100% - 400px);
+}
+
+.Head-ViewProduct-Page{
+   
+   display: flex;
+   margin:10px
+}
+
+.backButton{
+   width: 40px;
+   height: 30px;
+   margin-top:15px;
+   cursor: pointer;
+}
+
 .Head-Name{
    margin:10px;
    color: #1d438a;
 }
 
+.Top-head{
+   display: flex;
+   justify-content: space-between;
+   /* border:solid; */
+   margin: 10px 10px -6px 10px;
+   height: 30px;
+}
+
 .ID-Head{
-   margin-left:10px;
-   margin-bottom: -10px;
    background-color: #d3d3d3;
    width:200px;
-   height: 30px;
+   height: 100%;
    padding: 5px 0 0 20px;
+}
+
+.product-options-dropdown{
+   /* border: solid; */
+   margin-right: 100px;
    
+}
+
+.product-option-button{
    
+   background-color: #42b8d0;
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  margin: -10px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.product-option-button:hover {
+   background-color: #0a384e;
+ }
+
+ .product-options-dropdown-content {
+   display: none;
+   position: absolute;
+   background-color: #f9f9f9;
+   width: 160px; /* ปรับความกว้างของ dropdown content */
+   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+   z-index: 1;
+   padding: 12px 16px;
+   max-height: 300px; /* เพิ่มส่วนนี้เพื่อกำหนดความสูงสูงสุดของ dropdown content */
+   overflow-y: auto; /* เพิ่มส่วนนี้เพื่อให้มีการเลื่อนแนวตั้งในกรณีที่เนื้อหามากเกินไป */
+ }
+ 
+ .product-options-dropdown:hover .product-options-dropdown-content {
+   display: block;
+ }
+
+ .product-edit-btn,
+.product-delete-btn {
+  background-color: #f9f9f9;
+  color: black;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 20px; 
+  border: 0px
+}
+
+.product-edit-btn:hover{
+   background-color: #0a384e;
+}
+
+.product-delete-btn:hover{
+   background-color: #0a384e;
 }
 
 .view-product label{
@@ -33,6 +122,7 @@
 
 .view-productID-r,.view-productName-r{
    color: rgb(33, 182, 202);
+   font-weight: bold;
 }
 
 .view-Description-info {

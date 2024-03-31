@@ -9,17 +9,28 @@
 }
 
 .VenIdAdd {
-  padding-left: 40px;
+  padding-left: 35px;
 }
 
 .VenTypeAdd {
-  padding-left: 40px;
+  padding-left: 35px;
 }
 
 .VenPhoneAdd {
-  padding-left: 40px;
+  padding-left: 35px;
 }
 
+.VenNameAdd {
+  padding-left: 86px;
+}
+
+.VenEmailAdd {
+  padding-left: 45px;
+}
+
+.VenaddAdd {
+  margin-left: 107px;
+}
 
 .VenId {
   padding-left: 50px;
@@ -78,19 +89,29 @@
 .box {
   border: 1px solid rgb(220, 220, 220);
   padding: 16px;
+  width: 97%;
 }
 
 .VenAdd textarea {
   margin-left: 5px;
   border-radius: 25px;
   border: 1px solid #d3d3d3;
-  text-align: center;
+  padding-left: 10px;
+  color: #42b8d0;
+  align-content: center;
+}
+
+.VenaddAdd textarea {
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+  padding-left: 10px;
   color: #42b8d0;
   align-content: center;
 }
 
 .VenId input {
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
   margin-left: 3px;
   border-radius: 25px;
@@ -99,7 +120,7 @@
 
 .VenIdAdd
  input {
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
   margin-left: 3px;
   border-radius: 25px;
@@ -112,7 +133,7 @@
   border: 1px solid #d3d3d3;
   height: 25px;
   width: 150px;
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
 }
 
@@ -122,19 +143,19 @@
   border: 1px solid #d3d3d3;
   height: 25px;
   width: 150px;
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
 }
 
 .VenPhone input {
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
   margin-left: 5px;
   border-radius: 25px;
   border: 1px solid #d3d3d3;
 }
 .VenPhoneAdd input {
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
   margin-left: 5px;
   border-radius: 25px;
@@ -142,7 +163,7 @@
 }
 
 .VenName input {
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
   margin-left: 5px;
   border-radius: 25px;
@@ -150,7 +171,23 @@
 }
 
 .VenEmail input {
-  text-align: center;
+  padding-left: 10px;
+  color: #42b8d0;
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+
+.VenNameAdd input {
+  padding-left: 10px;
+  color: #42b8d0;
+  margin-left: 5px;
+  border-radius: 25px;
+  border: 1px solid #d3d3d3;
+}
+
+.VenEmailAdd input {
+  padding-left: 10px;
   color: #42b8d0;
   margin-left: 5px;
   border-radius: 25px;
@@ -163,12 +200,12 @@
   border: 1px solid #d3d3d3;
   height: 25px;
   width: 180px;
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
 }
 
 .BAccName input {
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
   margin-left: 5px;
   border-radius: 25px;
@@ -176,7 +213,7 @@
 }
 
 .BAccNo input {
-  text-align: center;
+  padding-left: 10px;
   color: #42b8d0;
   margin-left: 5px;
   border-radius: 25px;

@@ -188,8 +188,7 @@ function PurchaseOrderDetails() {
                 {productData.map((product, index) => (
                   <tr key={index}>
                     <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{index + 1}</td>
-                    <td className="custom-colors">{product.productName}&nbsp; ({product.color})<br />
-                      Material: {product.material}
+                    <td value={product.id}className="custom-colors">{`${product.productName}, (${product.color}), Material: ${product.material ? product.material + ', ' : ''} Size: ${product.size ? product.size : ''}`}
                     </td>
                     <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{productPOData[`productNo${index + 1}`].quantity}</td>
                     <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{product.unit}</td>

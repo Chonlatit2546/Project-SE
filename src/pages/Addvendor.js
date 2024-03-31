@@ -3,6 +3,7 @@ import { collection, getDocs, doc, setDoc,} from "firebase/firestore";
 import { db } from '../firebase';
 import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
+import { IoChevronBack } from "react-icons/io5";
 import "./css/Vendor.css"
 
 function Addvendor() {
@@ -115,7 +116,8 @@ function Addvendor() {
       <Navbar setMenuActive={setMenuActive} menuActive={menuActive} />
       <form>
         <div className='headerven'>
-          <button className="back-btnvenadd" onClick={handleGoBack}>&lt;</button>
+        <IoChevronBack className="back-btnvenadd" onClick={handleGoBack} />
+          {/* <button className="back-btnvenadd" onClick={handleGoBack}>&lt;</button> */}
           <h1 className='HeadVendor'>Add vendor</h1>
         </div>
         <section className='app-section'>
@@ -154,7 +156,7 @@ function Addvendor() {
 
 
               <div className="ven-in2">
-                <div className="VenName">
+                <div className="VenNameAdd">
                   <label htmlFor="name">Name</label>
                   <input
                     type='text'
@@ -162,7 +164,7 @@ function Addvendor() {
                     value={vendor.name}
                     onChange={handleChange} />
                 </div>
-                <div className='VenEmail'>
+                <div className='VenEmailAdd'>
                   <label htmlFor="email">Email</label>
                   <input
                     type='email'
@@ -171,7 +173,7 @@ function Addvendor() {
                     onChange={handleChange} />
                 </div>
               </div>
-              <div className='VenAdd'>
+              <div className='VenaddAdd'>
                 <label htmlFor='address'>Address</label>
                 <textarea
                   rows='4'

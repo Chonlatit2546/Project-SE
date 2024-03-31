@@ -6,6 +6,7 @@ import { db } from '../firebase';
 import Navbar from "../components/Navbar";
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FormPDF from './FormPDF';
+import Editquotation from './Editquotation'; 
 
 function QuotationDetails() {
   const { id } = useParams();
@@ -99,7 +100,8 @@ function QuotationDetails() {
     const confirmCancel = window.confirm("Are you sure you want to cancel this purchase order?");
     if (confirmCancel) {
       await deleteDoc(doc(db, 'productPO', id));
-      await deleteDoc(doc(db, 'quotation', quotationData.id));
+      const quotationRef = quotationData.id;
+      await deleteDoc(doc(db, 'quotation', quotationRef));
     }
   };
 
@@ -113,14 +115,13 @@ function QuotationDetails() {
 
   const handleApproved = async () => {
     try {
-      setStatus('Waiting for Response'); // Optimistically update the status
+      setStatus('Waiting for Response'); 
       setIsApproved(true);
       await updateDoc(doc(db, 'quotation', quotationData.id), {status: 'Waiting for Response' });
       setIsApproved(false);
       alert('Quotation approved successfully.');
     } catch (error) {
       console.error('Error approving quotation:', error);
-      // Revert the state if the operation fails
       setStatus(quotationData.status);
       setIsApproved(quotationData.status === 'Waiting for Response');
     }
@@ -138,8 +139,14 @@ function QuotationDetails() {
         const formattedExpiredDate = expiredDate.toISOString().split('T')[0];
     
         const querySnapshot = await getDocs(collection(db, 'po'));
-        const documentCount = querySnapshot.size;
-        const documentId = `pud${String(documentCount+1).padStart(4, '0')}`;
+        let maxPONo = 0;
+        querySnapshot.forEach(doc => {
+        const currentPONo = parseInt(doc.id.substr(3)); 
+        if (currentPONo > maxPONo) {
+          maxPONo = currentPONo;
+        }
+        });
+        const documentId = `pud${String(maxPONo+1).padStart(4, '0')}`;
         const productPODocRef = doc(db, 'productPO', id);
         setPoDocumentName(poDocumentName);
         const purchaseOrderData = {
@@ -160,7 +167,18 @@ function QuotationDetails() {
     const handleGoBack = () => {
         window.location.href = '/quotation';
     };
-  
+    const handleEdit = () => {
+      console.log(id)
+      console.log(productPOData)
+      const productPOId = id;
+      return (
+        <Editquotation
+          productPOId={productPOId}
+          quotationData={quotationData} 
+          productPOData={productPOData}
+        />
+      );
+    };
   return (
     <div class="main-content">
     <div className={`container ${menuActive ? 'menu-inactive' : 'menu-active'}`}>
@@ -191,12 +209,12 @@ function QuotationDetails() {
             <div className="options-dropdown">
               <button className="options-btn">Options</button>
               <div className="options-dropdown-content">
-                {(!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation') && (
-                  <Link to={`/Editquotation/${quotationData.id}`} className="options-btn edit-btn">Edit Quotation</Link>
-                )}<button onClick={handleCancel} className="options-btn cancel-btn">Cancel Quotation</button>
+              {(!isApproved && status === 'Pending Approval') && (
+                <Link to={`/Editquotation/${id}`} className="options-btn edit-btn">Edit Quotation</Link>
+              )}<button onClick={handleCancel} className="options-btn cancel-btn">Cancel Quotation</button>
               </div>
             </div>
-          </div>
+            </div>
           <div className="quotation-details">
             <h2>Quotation No. {quotationData.id}</h2><br />
             <p>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
@@ -232,11 +250,10 @@ function QuotationDetails() {
                 {productData.map((product, index) => (
                   <tr key={index}>
                     <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{index + 1}</td>
-                    <td className="custom-colors">{product.productName}&nbsp; ({product.color})<br />
-                      Material: {product.material}
+                    <td value={product.id}className="custom-colors">{`${product.productName}, (${product.color}), Material: ${product.material ? product.material + ', ' : ''} Size: ${product.size ? product.size : ''}`}
                     </td>
                     <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{productPOData[`productNo${index + 1}`].quantity}</td>
-                    <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{product.unit}</td>
+                    <td value={product.id} className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{product.unit}</td>
                     <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{productPOData[`productNo${index + 1}`].unitPrice}</td>
                     <td className="custom-colors">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{(productPOData[`productNo${index + 1}`].quantity * productPOData[`productNo${index + 1}`].unitPrice).toFixed(2)}</td>
                   </tr>
@@ -265,10 +282,10 @@ function QuotationDetails() {
               </div>
           </div>
           <div className='approval-container'>
-          {!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation' ? (
+          {!isApproved && status !== 'Waiting for Response' && status !== 'Waiting for receipt creation'&& status !== 'On Hold'&& status !== 'Closed' ? (
             <button className="Approve-btn" onClick={handleApproved}>Approve</button>
           ) : (
-            status !== 'Waiting for receipt creation' && (
+            status !== 'Waiting for receipt creation' && status !== 'On Hold'&& status !== 'Closed' && (
             <button className="Accept-btn" onClick={handleAccepted}>Accept</button>
             )
           )}

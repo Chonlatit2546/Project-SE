@@ -51,9 +51,14 @@
   }
 }
 
-.cellId{
+.ventable a {
+  text-decoration: none;
   color: #193e72;
   font-weight: bold;
+}
+
+.ventable a:hover {
+  text-decoration: underline;
 }
 
 .cellAction {
