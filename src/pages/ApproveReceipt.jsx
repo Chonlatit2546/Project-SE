@@ -19,14 +19,12 @@ function ApproveReceipt() {
    const [total, setTotal] = useState(0);
    const [vat, setVat] = useState(0);
    const [grandTotal, setGrandTotal] = useState(0);
-   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-   const [receiptToDelete, setreceiptToDelete] = useState(null);
    const [menuActive, setMenuActive] = useState(true);
    const [status, setStatus] = useState('');
    const [isApproved, setIsApproved] = useState(false);
-   const [documentIdValue, setDocumentIdValue] = useState('');
-   const [poDocumentName, setPoDocumentName] = useState('');
    const [ShowConfirmModal, setShowConfirmModal] = useState(false);
+   
+   
 
 
 ///fetch data from data base/////////////////////////
