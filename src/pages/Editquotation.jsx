@@ -73,7 +73,6 @@ function Editquotation(){
   useEffect(() => {
     setEditedQuotationData(prevData => ({
       ...prevData,
-      // Update issuedDate and expiredDate based on productPOData changes
       issuedDate: new Date().toISOString().split('T')[0],
       expiredDate: calculateExpirationDate(new Date().toISOString().split('T')[0])
     }));
@@ -102,7 +101,6 @@ function Editquotation(){
     return expiration.toISOString().split('T')[0];
   };
 
-  // Function to handle input change for edited quotation data
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedQuotationData({ ...editedQuotationData, [name]: value });
@@ -200,20 +198,19 @@ function Editquotation(){
         return updateDoc(doc(db, 'productPO', id), {
           [productNoKey]: {
             ...updatedProduct,
-            quantity: updatedProduct.quantity || 0, // Ensure it's always a number
-            unitPrice: updatedProduct.unitPrice || 0, // Ensure it's always a number
+            quantity: updatedProduct.quantity || 0, 
+            unitPrice: updatedProduct.unitPrice || 0, 
           },
         });
       });
   
-      // Save newly added item data to Firestore
       const newItemPromises = quotation.items.map((item, index) => {
         const productNoKey = `productNo${productData.length + index + 1}`;
         return setDoc(doc(db, 'productPO', id), {
           [productNoKey]: {
             description: doc(db, 'product', item.description), 
-            quantity: item.quantity || 0, // Ensure it's always a number
-            unitPrice: item.unitPrice || 0, // Ensure it's always a number
+            quantity: item.quantity || 0, 
+            unitPrice: item.unitPrice || 0, 
           },
         }, { merge: true });
       });
@@ -343,7 +340,6 @@ function Editquotation(){
     </tr>
   </thead>
   <tbody>
-    {/* Render existing product data */}
     {productData.map((product, index) => (
       <tr key={index}>
         <td>{index + 1}</td>
@@ -382,7 +378,6 @@ function Editquotation(){
         </td>
       </tr>
     ))}
-    {/* Render newly added items */}
     {quotation.items.map((item, index) => (
       <tr key={index}>
         <td>{productData.length + index + 1}</td>
