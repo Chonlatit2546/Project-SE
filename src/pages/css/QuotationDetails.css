@@ -118,6 +118,8 @@
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
   z-index: 1;
   padding: 12px 16px;
+  margin-left: -10px;
+  margin-top: -39px;
 }
 
 .options-dropdown-content a {
