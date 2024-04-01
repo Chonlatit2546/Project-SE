@@ -34,7 +34,7 @@ function App() {
           <Route path='/Navbar' element = {<Navbar/>}></Route>
           <Route path='/Createquotation' element = {<Createquotation/>}></Route>
           <Route path='/Addvendor' element = {<Addvendor/>}></Route>
-          <Route path='/Editquotation' element = {<Editquotation/>}></Route>
+          <Route path='/Editquotation/:id' element = {<Editquotation/>}></Route>
           <Route path='/Purchaseorder' element = {<Purchaseorder/>}></Route>
           <Route path='/PurchaseOrderDetails/:id' element={<PurchaseOrderDetails/>}></Route>
           <Route path='/AddProduct' element = {<AddProduct/>}></Route>
