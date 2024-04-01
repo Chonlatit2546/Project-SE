@@ -75,16 +75,19 @@
   
 }  
 
-.link{
+link {
   text-decoration: none;
   text-align: center;
   color: rgb(255, 255, 255);
-  border: 1px solid ;
+  border: 1px solid;
   background-color: #1d438a;
   padding: 5px;
   border-radius: 25px;
   cursor: pointer;
-  width: 150px;
+  width: 100px;
+  height: 25px;
+  align-content: center;
+  margin-right: 350px;
 }
 
 .loading {
